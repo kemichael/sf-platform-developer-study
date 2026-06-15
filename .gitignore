@@ -1,0 +1,14 @@
+# 依存パッケージ（Playwright など。公開不要）
+node_modules/
+
+# 検証用スクリーンショット・デザイン作業フォルダ
+design_iterations/
+
+# 教材の原本バックアップ（公開不要）
+base-text.orig/
+
+# ログ・OS 生成物
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
