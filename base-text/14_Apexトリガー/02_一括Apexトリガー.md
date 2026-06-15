@@ -34,16 +34,26 @@ Apex トリガーは一括処理向けに最適化されています。一括設
 >
 > 一括化していないコードは、件数が増えると上限に達して例外（`System.LimitException`）で止まります。
 
-```text
-   一括化していないコード               一括化したコード
-   ─────────────────              ─────────────────
-   for (各レコード) {                SOQL を1回だけ実行（ループ外）
-       SOQL を実行  ← ✗ 件数分発行     for (各レコード) {
-       DML を実行   ← ✗ 件数分実行         結果をリストに溜める
-   }                                  }
-                                      DML を1回だけ実行（ループ外）
-   200件 → SOQL/DML が200回           200件 → SOQL/DML が各1回
-   → すぐ制限超過                      → 制限に余裕
+```mermaid
+flowchart LR
+    subgraph NB["一括化していない（NG）"]
+        direction TB
+        N1(["200 件を処理"]) --> N2["for（各レコード）"]
+        N2 --> N3["ループ内で SOQL 実行<br/>件数分 = 200 回 発行"]
+        N3 --> N4["ループ内で DML 実行<br/>件数分 = 200 回 実行"]
+        N4 --> N5(["すぐ制限超過"])
+    end
+    subgraph B["一括化した（OK）"]
+        direction TB
+        B1(["200 件を処理"]) --> B2["SOQL を1回だけ実行<br/>（ループ外）"]
+        B2 --> B3["for（各レコード）<br/>結果をリストに溜める"]
+        B3 --> B4["DML を1回だけ実行<br/>（ループ外）"]
+        B4 --> B5(["制限に余裕"])
+    end
+    classDef bad fill:#FCE8E8,stroke:#C23934,color:#5C1F1A;
+    classDef good fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class N3,N4 bad;
+    class B2,B4 good;
 ```
 
 ---
@@ -228,6 +238,25 @@ trigger DmlTriggerBulk on Account(after update) {
 >
 > SOQL のループ外集約と並ぶ一括化の二大原則です。
 
+この黄金パターンの流れを図にすると次のとおりです。
+
+```mermaid
+flowchart TD
+    S(["開始"]) --> L["空のリストを用意<br/>oppsToUpdate"]
+    L --> F["for（関連商談を反復）"]
+    F --> C{"更新対象？"}
+    C -->|"はい"| ADD["リストに add するだけ<br/>（DML は呼ばない）"]
+    C -->|"いいえ"| SKIP["何もしない"]
+    ADD --> F
+    SKIP --> F
+    F -->|"ループ終了"| DML["ループの外で<br/>update を1回だけ実行"]
+    DML --> E(["完了"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class DML hl;
+    class ADD soft;
+```
+
 ---
 
 ## 一括設計パターンの動作：関連レコードを取得する例
@@ -239,6 +268,22 @@ trigger DmlTriggerBulk on Account(after update) {
 > [!用語] Trigger.operationType と switch ステートメント
 >
 > `Trigger.operationType` は実行中の操作を表す列挙値（`AFTER_INSERT`、`AFTER_UPDATE` など）を返します。`switch on ... when ...` と組み合わせると「挿入のときはこの処理、更新のときはあの処理」と分岐を見やすく書けます。`if (Trigger.isInsert)` を多重に書くより読みやすくなります。
+
+`Trigger.operationType` による分岐で、処理対象（`toProcess`）の決め方が変わります。
+
+```mermaid
+flowchart TD
+    Q{"Trigger.operationType は？"}
+    Q -->|"AFTER_INSERT"| INS["toProcess = Trigger.New<br/>挿入直後は子商談がないので<br/>クエリ不要"]
+    Q -->|"AFTER_UPDATE"| UPD["SOQL で商談がない取引先だけ取得<br/>Id NOT IN サブクエリ<br/>toProcess に割り当て"]
+    INS --> L["for で toProcess を反復<br/>oppList に商談を add"]
+    UPD --> L
+    L --> DML["ループの外で<br/>insert oppList を1回だけ"]
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    class INS,UPD soft;
+    class DML hl;
+```
 
 ```apex
 List<Account> toProcess = null;

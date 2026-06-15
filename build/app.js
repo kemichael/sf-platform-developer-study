@@ -29,6 +29,8 @@
   applyTheme(localStorage.getItem(LS.theme) || 'light');
   document.getElementById('themeToggle').addEventListener('click', () => {
     applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    // Mermaid 図のテーマを切り替えるため、ユニット表示中なら再描画
+    if (location.hash.indexOf('#/') === 0 && document.getElementById('searchResults').hidden) route();
   });
 
   // ----- marked 設定 -----
@@ -117,6 +119,15 @@
       const pre = code.parentElement;
       const cls = (code.className || '').match(/language-([\w-]+)/);
       const lang = cls ? cls[1] : '';
+
+      // mermaid フェンスは後で SVG に描画するためのプレースホルダに置き換える
+      if (lang === 'mermaid') {
+        const ph = document.createElement('div');
+        ph.className = 'mermaid-src';
+        ph.setAttribute('data-code', code.textContent);
+        pre.replaceWith(ph);
+        return;
+      }
 
       // 言語なし/text フェンスは「図解・例」パネルとして描画(コード扱いしない)
       if (!lang || lang === 'text' || lang === 'plain' || lang === 'plaintext') {
@@ -255,8 +266,46 @@
 
     buildToc(body);
     syncNavState(u.id);
+    renderMermaidIn(articleEl);
     contentEl.scrollTop = 0; window.scrollTo(0, 0);
     document.title = u.title + ' | Platform デベロッパー学習ノート';
+  }
+
+  // ----- Mermaid 図のレンダリング -----
+  let mermaidSeq = 0;
+  function renderMermaidIn(container) {
+    if (!window.mermaid) return;
+    const nodes = [].slice.call(container.querySelectorAll('.mermaid-src'));
+    if (!nodes.length) return;
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    try {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: dark ? 'dark' : 'default',
+        securityLevel: 'loose',
+        fontFamily: 'inherit',
+        flowchart: { curve: 'basis', useMaxWidth: true },
+        themeVariables: { fontSize: '14px' },
+      });
+    } catch (e) {}
+    nodes.forEach(node => {
+      const codeText = node.getAttribute('data-code') || '';
+      const id = 'mmd-' + (++mermaidSeq) + '-' + Math.floor(Math.random() * 1e6);
+      mermaid.render(id, codeText).then(res => {
+        const fig = document.createElement('figure');
+        fig.className = 'diagram is-figure mermaid-fig';
+        fig.innerHTML = '<span class="diagram-tag">図解</span>' + res.svg;
+        if (node.parentNode) node.replaceWith(fig);
+      }).catch(() => {
+        // 失敗時はコードをそのまま図解パネルに表示(壊さない)
+        const fig = document.createElement('figure');
+        fig.className = 'diagram';
+        const pre = document.createElement('pre');
+        pre.textContent = codeText;
+        fig.appendChild(pre);
+        if (node.parentNode) node.replaceWith(fig);
+      });
+    });
   }
 
   // ----- オンページ目次 + スクロールスパイ -----

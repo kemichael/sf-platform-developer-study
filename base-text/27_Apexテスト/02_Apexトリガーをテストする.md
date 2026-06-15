@@ -127,6 +127,20 @@ private with sharing class TestAccountDeletion {
 
 このテストは、商談のあるテスト取引先を設定し、削除して `AccountDeletion` トリガーを発火させます。`Database.delete()` の戻り値 `Database.DeleteResult` を調べ、削除が行われず、エラーメッセージが取得されたことを確認します。
 
+```mermaid
+sequenceDiagram
+    participant T as テストメソッド
+    participant DB as データベース
+    participant TR as AccountDeletion トリガー
+    T->>DB: insert（取引先＋商談を作成）
+    T->>DB: Database.delete（取引先, false）
+    DB->>TR: before delete で発火
+    TR->>TR: 関連商談を SOQL で確認
+    TR-->>DB: addError（削除を中止）
+    DB-->>T: DeleteResult（isSuccess=false, エラーあり）
+    T->>T: Assert で isSuccess=false とメッセージを検証
+```
+
 > [!用語] DML（Data Manipulation Language／データ操作言語）
 >
 > レコードを**追加（insert）・更新（update）・削除（delete）**などする操作の総称。`insert acct;` のように書きます。トリガーはこの DML を引き金（トリガー）に発火します。
@@ -176,16 +190,16 @@ private with sharing class TestAccountDeletion {
 
 このテストでは、データ設定に 2 つの DML（取引先と商談の `insert`）を使います。本番ロジックがガバナ制限内で実行されることをテストするには、**データ設定の使用制限をテストの使用制限と切り離す**必要があります。テストコールを `Test.startTest()`〜`Test.stopTest()` で囲んで切り離します。このブロックは**非同期 Apex のテスト**にも使います。
 
-```text
-テストメソッドの典型的な構造（AAA パターン）
-──────────────────────────────────────────
- ① Arrange（準備）   テストデータを insert
-                     ↓ ここまでの制限は計測対象外にしたい
- ② Act（実行）       Test.startTest();
-                       └ トリガーを発火させる DML を実行 ← 新しい制限セット
-                     Test.stopTest();   ← 非同期処理はここで完了
- ③ Assert（検証）    Assert.xxx() で結果を確認
-──────────────────────────────────────────
+```mermaid
+flowchart TD
+    A["① Arrange（準備）<br/>テストデータを insert<br/>ここまでの制限は計測対象外にしたい"] --> S["Test.startTest()<br/>新しいガバナ制限セット開始"]
+    S --> B["② Act（実行）<br/>トリガーを発火させる DML を実行"]
+    B --> P["Test.stopTest()<br/>非同期処理はここで同期完了"]
+    P --> C["③ Assert（検証）<br/>Assert.xxx() で結果を確認"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class S,P hl;
+    class A,B,C soft;
 ```
 
 > [!ポイント] startTest / stopTest の3つの役割（試験頻出）

@@ -78,6 +78,19 @@ public with sharing class TestDataFactory {
 
 静的メソッド `createAccountsWithOpps()` は、取引先数（`numAccts`）と取引先ごとの関連商談数（`numOppsPerAcct`）を受け取ります。
 
+```mermaid
+flowchart TD
+    S(["createAccountsWithOpps(numAccts, numOppsPerAcct)"]) --> L1["ループ：取引先を numAccts 件作成し<br/>リスト accts に溜める"]
+    L1 --> I1["insert accts<br/>（ループ外でまとめて1回）"]
+    I1 --> L2["二重ループ：各取引先に<br/>商談を numOppsPerAcct 件作成し<br/>リスト opps に溜める"]
+    L2 --> I2["insert opps<br/>（ループ外でまとめて1回）"]
+    I2 --> R(["取引先のリストを返す<br/>DML は合計 2 回のみ"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class I1,I2 hl;
+    class L1,L2,R soft;
+```
+
 > [!手順] メソッドが何をしているか（1ステップずつ）
 >
 > 1. 最初のループで `numAccts` 件の取引先を作成し `accts` リストに保存する。
@@ -106,9 +119,14 @@ public with sharing class TestDataFactory {
 >
 > **取引先 2 件・商談 6 件**が作られます。
 >
-> ```text
->   TestAccount0 ── Opportunity 0 / 1 / 2
->   TestAccount1 ── Opportunity 0 / 1 / 2
+> ```mermaid
+> flowchart LR
+>     A0["取引先 TestAccount0"] --> O00["商談 Opportunity 0"]
+>     A0 --> O01["商談 Opportunity 1"]
+>     A0 --> O02["商談 Opportunity 2"]
+>     A1["取引先 TestAccount1"] --> O10["商談 Opportunity 0"]
+>     A1 --> O11["商談 Opportunity 1"]
+>     A1 --> O12["商談 Opportunity 2"]
 > ```
 > 戻り値は取引先 2 件のリスト（`List<Account>`）です。
 
@@ -276,17 +294,12 @@ private with sharing class TestAccountDeletion {
 
 > [!ポイント] テストメソッドからの呼び出し関係（全体像）
 >
-> ```text
->  TestAccountDeletion（@IsTest, private）
->        │  各テストメソッドが共通で呼ぶ
->        ▼
->  TestDataFactory.createAccountsWithOpps(件数, 商談数)
->        │  取引先＋商談をまとめて insert
->        ▼
->  Account / Opportunity レコード（テスト終了でロールバック）
->        │  Database.delete を実行
->        ▼
->  AccountDeletion トリガーが発火 → 結果を Assert で検証
+> ```mermaid
+> flowchart TD
+>     T["TestAccountDeletion<br/>（@IsTest, private）"] -->|"各テストメソッドが共通で呼ぶ"| F["TestDataFactory.createAccountsWithOpps(件数, 商談数)"]
+>     F -->|"取引先＋商談をまとめて insert"| R["Account / Opportunity レコード<br/>（テスト終了でロールバック）"]
+>     R -->|"Database.delete を実行"| TR["AccountDeletion トリガーが発火"]
+>     TR --> A["結果を Assert で検証"]
 > ```
 
 ---

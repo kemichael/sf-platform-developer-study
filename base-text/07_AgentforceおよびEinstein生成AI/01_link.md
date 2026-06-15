@@ -78,27 +78,45 @@ Salesforce では「営業メールの自動生成」「ケースの要約」「
 > | **グラウンディング** | 自社データを文脈として与えること |
 > | **Einstein Trust Layer** | 安全性・プライバシーを守る保護層 |
 
+ブランド・部品の関係を図にすると次のとおりです。Einstein という総称ブランドの下に予測AIと生成AIがあり、生成AIは「プロンプトテンプレートでグラウンディング → Trust Layer で保護 → LLM が生成」という流れで動きます。
+
+```mermaid
+flowchart TD
+    E["Einstein<br/>（AI機能の総称ブランド）"] --> Pred["予測AI<br/>スコアリング"]
+    E --> Gen["生成AI<br/>コンテンツ生成"]
+    Gen --> Agent["Agentforce<br/>自律型AIエージェント基盤"]
+    Gen --> PT["プロンプトテンプレート<br/>（Prompt Builder で作成）"]
+    PT -->|"レコード項目を差し込み"| Ground["グラウンディング<br/>自社データを文脈化"]
+    Ground --> TL["Einstein Trust Layer<br/>マスキング・監査・ゼロデータ保持"]
+    TL --> LLM["外部 LLM<br/>大規模言語モデル本体"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class E hl;
+    class Gen,TL hl;
+    class Pred,Agent,PT,Ground,LLM soft;
+```
+
 ---
 
 ## 生成AIが応答を返すまでの流れ
 
-```text
-  ユーザー / アプリ
-        │ 依頼（例：この商談を要約して）
-        ▼
-  プロンプトテンプレート ──┐
-        │ レコード項目を差し込み（グラウンディング）
-        ▼                 │
-  Einstein Trust Layer     │ 機密データのマスキング・監査
-        │ 安全に整形         │
-        ▼                 │
-   外部 LLM（大規模言語モデル）│
-        │ 文章を生成         │
-        ▼                 │
-  Einstein Trust Layer ◀───┘ 応答の検査・ログ記録
-        │
-        ▼
-   ユーザー / アプリ に応答を返す
+ユーザーの依頼が、プロンプトテンプレートでの組み立て、Trust Layer による保護、外部 LLM での生成、再び Trust Layer での検査を経て応答として返るまでの**時間的なやり取り**です。
+
+```mermaid
+sequenceDiagram
+    participant U as ユーザー / アプリ
+    participant PT as プロンプトテンプレート
+    participant TL as Einstein Trust Layer
+    participant LLM as 外部 LLM
+    U->>PT: 依頼（例：この商談を要約して）
+    PT->>PT: レコード項目を差し込み（グラウンディング）
+    PT->>TL: 整形したプロンプトを渡す
+    TL->>TL: 機密データのマスキング・監査
+    TL->>LLM: 安全に整形したプロンプトを送信
+    LLM->>LLM: 文章を生成
+    LLM-->>TL: 生成テキストを返す
+    TL->>TL: 応答の検査・ログ記録
+    TL-->>U: 応答を返す
 ```
 
 > [!注意] 外部 LLM にデータが「学習」されない仕組み

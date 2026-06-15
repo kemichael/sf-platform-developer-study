@@ -78,14 +78,23 @@ AsyncApexJob jobInfo = [
 
 ジョブは**先入れ先出し（FIFO）**で処理されるが、保留中はキューの順序を入れ替えられる。システムリソースが空くと、システムが Flex キュー先頭のジョブを一括処理ジョブキューに移し、状況が **[Holding（保留）]** から **[Queued（キュー）]** に変わる。組織ごとに**最大 5 件**を同時処理でき、キュー内のジョブはシステムが処理可能になったときに実行される。[Apex Jobs] ページで監視できる。
 
-```text
-[Apex Flex キュー]                 [一括処理ジョブキュー]
-最大 100 件・順序入れ替え可          同時実行は最大 5 件
-┌───┬───┬───┬───┐                  ┌───┬───┬───┬───┬───┐
-│ J1│ J2│ J3│...│ ──先頭から取得──▶ │実行│実行│実行│実行│実行│
-└───┴───┴───┴───┘                  └───┴───┴───┴───┴───┘
-状況：Holding                       状況：Queued → 実行
-（FIFO だが順序変更できる）
+```mermaid
+flowchart LR
+    subgraph FLEX["Apex Flex キュー（最大 100 件・順序入れ替え可）"]
+        direction TB
+        J1["J1"] --> J2["J2"] --> J3["J3"] --> Jn["..."]
+    end
+    subgraph RUN["一括処理ジョブキュー（同時実行は最大 5 件）"]
+        direction TB
+        R1["実行中"]
+        R2["実行中"]
+        R3["実行中"]
+    end
+    FLEX -->|"システムが先頭から取得<br/>Holding → Queued"| RUN
+    classDef hold fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    classDef run fill:#0176D3,stroke:#032D60,color:#fff;
+    class J1,J2,J3,Jn hold;
+    class R1,R2,R3 run;
 ```
 
 > [!ポイント] Flex キューの数値を覚える
@@ -177,6 +186,17 @@ SELECT COUNT() FROM CronTrigger WHERE CronJobDetail.JobType = '7' WITH USER_MODE
 > | スケジュール済み Apex | いいえ | `CronTrigger` / `CronJobDetail` |
 >
 > **Flex キューに現れるのは一括処理ジョブだけ**。future・Queueable・スケジュール済みは現れない。
+
+```mermaid
+flowchart TD
+    S(["ジョブを監視したい"]) --> Q{"ジョブ種別は？"}
+    Q -->|"future"| AAJ["AsyncApexJob を SOQL<br/>（Flex キューには現れない）"]
+    Q -->|"Apex 一括処理（Batch）"| FLEX["AsyncApexJob を SOQL<br/>＋ Flex キューで順序変更可"]
+    Q -->|"Queueable"| AAJ
+    Q -->|"スケジュール済み"| CRON["CronTrigger / CronJobDetail を SOQL<br/>（Flex キューには現れない）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    class FLEX hl;
+```
 
 ---
 

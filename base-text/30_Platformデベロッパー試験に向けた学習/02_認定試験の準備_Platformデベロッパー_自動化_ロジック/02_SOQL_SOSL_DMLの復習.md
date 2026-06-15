@@ -30,6 +30,20 @@
 >
 > レコードを**作成・更新・削除・復元**する操作。Apex では `insert` / `update` / `upsert` / `delete` / `undelete` / `merge`。SOQL/SOSL が「読み取り」なのに対し DML は「書き込み」。
 
+```mermaid
+flowchart LR
+    A["DML 操作の種類"] --> B["insert<br/>新規レコードを登録"]
+    A --> C["update<br/>既存レコードを更新"]
+    A --> D["upsert<br/>あれば更新・なければ登録"]
+    A --> E["delete<br/>レコードを削除（ごみ箱へ）"]
+    A --> F["undelete<br/>削除レコードを復元"]
+    A --> G["merge<br/>重複レコードを統合"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class A hl;
+    class B,C,D,E,F,G soft;
+```
+
 ```sql
 -- SOQL：取引先を照会する（読み取り）
 SELECT Id, Name, AnnualRevenue
@@ -54,6 +68,21 @@ insert acc;   // insert ステートメントでレコードを登録
 > - 「条件が明確な特定の取引先を取得」→ **SOQL**。
 > - 「どのオブジェクトのどの項目にあるか不明な文字列を横断検索」→ **SOSL**。
 > - 試験では「**全文検索／複数オブジェクト横断なら SOSL**」「**1オブジェクトの条件指定なら SOQL**」の見分けが頻出。
+
+```mermaid
+flowchart TD
+    A["データに対する操作を選ぶ"] --> B{"読み取り？<br/>それとも書き込み？"}
+    B -->|"書き込み（作成・更新・削除）"| C["DML を使う<br/>insert / update / delete"]
+    B -->|"読み取り"| D{"探す対象は<br/>1オブジェクトに絞れる？"}
+    D -->|"はい（条件が明確）"| E["SOQL を使う<br/>SELECT FROM WHERE"]
+    D -->|"いいえ（どこにあるか不明）"| F{"テキストの<br/>全文検索が必要？"}
+    F -->|"はい（複数オブジェクト横断）"| G["SOSL を使う<br/>FIND IN RETURNING"]
+    F -->|"いいえ"| E
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class C,E,G hl;
+    class A soft;
+```
 
 | 比較項目 | SOQL | SOSL | DML |
 | --- | --- | --- | --- |
@@ -105,17 +134,16 @@ try {
 }
 ```
 
-```text
-   try/catch/finally の流れ
-   ┌──────────┐  例外発生   ┌──────────┐
-   │  try     │ ─────────▶ │  catch   │  例外を捕捉して対処
-   │ (本処理) │            └────┬─────┘
-   └────┬─────┘  例外なし        │
-        │  ────────────────────┐ │
-        ▼                       ▼ ▼
-                          ┌──────────┐
-                          │ finally  │  必ず実行（後始末）
-                          └──────────┘
+```mermaid
+flowchart TD
+    A["try（本処理を実行）"] --> B{"例外が発生した？"}
+    B -->|"はい"| C["catch<br/>例外を捕捉して対処"]
+    B -->|"いいえ（正常終了）"| D["finally<br/>必ず実行（後始末）"]
+    C --> D
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class A hl;
+    class C,D soft;
 ```
 
 ---

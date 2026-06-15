@@ -132,6 +132,19 @@ ID jobID = System.enqueueJob(updateJob);
 >
 > Queueable ジョブを実行キューに登録するメソッド。リソースが空くと処理される。戻り値として `AsyncApexJob` の**ジョブ ID（`jobID`）が返る**のがポイントで、これで進行状況を監視できる。
 
+```mermaid
+sequenceDiagram
+    participant C as 呼び出し元 Apex
+    participant Q as 実行キュー
+    participant J as AsyncApexJob
+    C->>Q: System.enqueueJob(updateJob)
+    Q->>J: ジョブ記録を作成
+    J-->>C: jobID を返す（future では返らない）
+    Note over Q: リソースが空いた時点で execute() を非同期実行
+    C->>J: jobID で SOQL 監視（Status / NumberOfErrors）
+    J-->>C: 進行状況を取得
+```
+
 ジョブ ID を使い、[Apex Job] ページや SOQL で進行状況を監視できる。
 
 ```sql
@@ -215,14 +228,13 @@ public with sharing class FirstJob implements Queueable {
 }
 ```
 
-```text
-[FirstJob]
-   │ execute() の中で enqueueJob(new SecondJob())
-   ▼
-[SecondJob]
-   │ execute() の中でさらに次を enqueue……
-   ▼
-[ThirdJob] ...（1 親 → 1 子で数珠つなぎ）
+```mermaid
+flowchart TD
+    F["FirstJob<br/>execute()"] -->|"enqueueJob(new SecondJob())"| S["SecondJob<br/>execute()"]
+    S -->|"execute() の中でさらに次を enqueue"| T["ThirdJob<br/>execute()"]
+    T -.->|"1 親 → 1 子で数珠つなぎ<br/>（Developer Edition は最大 5 段）"| More(["..."])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    class F,S,T hl;
 ```
 
 定義済みのスタック深度でチェーンをテストできるが、適用される Apex ガバナ制限に注意。詳細は「Adding a Queueable Job with a Specified Stack Depth」を参照。

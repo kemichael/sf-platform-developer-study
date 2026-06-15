@@ -42,24 +42,24 @@
 
 クイックスタート全体では次の4部品を組み合わせて1つのコンポーネントを完成させます。本ユニットは最初の **(1) Apex コントローラー** を担当します。
 
-```text
- ┌──────────────────────────────────────────────────────────┐
- │  Aura コンポーネント MyContactList（クライアント側）         │
- │                                                          │
- │   (2) マークアップ .cmp ── 画面の見た目                     │
- │   (3) コントローラー .js ── ボタン/初期化の処理              │
- │            │  c.getContacts を呼び出す                     │
- │            ▼                                              │
- └────────────┼─────────────────────────────────────────────┘
-              │ サーバー通信
-              ▼
- ┌──────────────────────────────────────────────────────────┐
- │  (1) Apex コントローラー MyContactListController（サーバー側）│
- │       @AuraEnabled getContacts(Id recordId)              │
- │            │  SOQL で取引先責任者を検索                     │
- │            ▼                                              │
- │        取引先責任者（Contact）のリストを返す                 │
- └──────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph CLIENT["Aura コンポーネント MyContactList（クライアント側）"]
+        CMP["(2) マークアップ .cmp<br/>画面の見た目"]
+        JS["(3) コントローラー .js<br/>ボタン・初期化の処理"]
+    end
+    subgraph SERVER["Apex コントローラー（サーバー側）"]
+        APEX["(1) MyContactListController<br/>@AuraEnabled getContacts（Id recordId）"]
+        RET["取引先責任者 Contact のリストを返す"]
+    end
+    JS -->|"c.getContacts を呼び出す（サーバー通信）"| APEX
+    APEX -->|"SOQL で取引先責任者を検索"| RET
+    RET -.->|"結果を返す"| JS
+    CMP -.->|"取得データを表示"| JS
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class APEX hl;
+    class CMP,JS,RET soft;
 ```
 
 > [!用語] Apex（エイペックス）
@@ -116,6 +116,20 @@ public static List<Contact> getContacts(Id recordId) {
 > [!例] このメソッドが返すもの
 >
 > 取引先「United Oil & Gas Corp」のレコード ID を `recordId` として渡すと、その取引先に紐づく取引先責任者（例：3 名）の Id・名・姓・メール・電話が **リスト** で返されます。これを次のユニットで作るコンポーネントが表示します。
+
+`getContacts` が呼び出されてからデータが返るまでのやり取りは次のとおりです。
+
+```mermaid
+sequenceDiagram
+    participant C as コンポーネント（クライアント）
+    participant A as Apex getContacts
+    participant DB as Salesforce DB
+    C->>A: getContacts（recordId）を呼び出す
+    A->>DB: SOQL「WHERE AccountId = :recordId」を発行
+    DB-->>A: 一致する取引先責任者の行を返す
+    A-->>C: List「Contact」を返す
+    Note over C: 受け取ったリストを画面に表示
+```
 
 ---
 

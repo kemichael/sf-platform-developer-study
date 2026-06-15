@@ -32,17 +32,20 @@ JavaScript は LWC の心臓です。前単元では Aura の属性が JavaScrip
 
 > [!例] ファイル構成の違い（Aura → LWC）
 >
-> ```text
->  Aura コンポーネント                      Lightning Web コンポーネント
->  ─────────────────────                    ─────────────────────────
->  myCmp.cmp        （マークアップ）          myCmp.html  （マークアップ）
->  myCmpController.js（コントローラー）        myCmp.js    （JavaScript：単一）
->  myCmpHelper.js   （ヘルパー）       ──▶
->  myCmpRenderer.js （レンダラー）
->  myCmp.css        （スタイル）              myCmp.css   （スタイル）
-> ```
->
 > 3 つの JavaScript ファイルが 1 つに統合される点がポイントです。
+
+```mermaid
+flowchart LR
+    CMP["myCmp.cmp<br/>（マークアップ）"] --> HTML["myCmp.html<br/>（マークアップ）"]
+    CTRL["myCmpController.js<br/>（コントローラー）"] --> JS["myCmp.js<br/>（JavaScript：単一）"]
+    HELP["myCmpHelper.js<br/>（ヘルパー）"] --> JS
+    REND["myCmpRenderer.js<br/>（レンダラー）"] --> JS
+    CSS1["myCmp.css<br/>（スタイル）"] --> CSS2["myCmp.css<br/>（スタイル）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class JS hl;
+    class CTRL,HELP,REND soft;
+```
 
 Aura のコントローラーは、名前―値ペアのオブジェクトリテラル表記の JavaScript オブジェクトです。`PropertyPaginatorController.js` の例：
 
@@ -113,16 +116,14 @@ export default class Paginator extends LightningElement {
 
 > [!例] Aura の発火と LWC の発火の対応
 >
-> ```text
->  Aura（コントローラー内）                LWC（クラスのメソッド内）
->  ────────────────────────               ──────────────────────────
->  var e = component.getEvent("pagePrevious");
->  e.fire();                       ──▶    this.dispatchEvent(
->                                            new CustomEvent('previous')
->                                          );
-> ```
->
 > どちらも「前ページへ」イベントを発火しますが、LWC は Web 標準の `CustomEvent` と `dispatchEvent` を使う点が違います。
+
+```mermaid
+flowchart LR
+    A["Aura（コントローラー内）<br/>component.getEvent('pagePrevious')<br/>e.fire"] --> L["LWC（メソッド内）<br/>this.dispatchEvent（<br/>new CustomEvent（'previous'））"]
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class L soft;
+```
 
 ---
 
@@ -172,14 +173,16 @@ c-libcaller は utils をインポートし、エクスポートされた isFunc
 
 > [!例] LWC からの共有モジュール利用の流れ
 >
-> ```text
->  c/utils（共有モジュール）          c-libcaller（LWC）
->  ─────────────────────             ────────────────────────
->  export function isFunction(){…}    import { isFunction } from 'c/utils';
->                            ──▶      this.result = isFunction(fn);
-> ```
->
 > `import` で取り込み、ふつうの関数として呼び出すだけです。
+
+```mermaid
+flowchart LR
+    U["c/utils（共有モジュール）<br/>export function isFunction"] -->|"import"| C["c-libcaller（LWC）<br/>import 「isFunction」 from 'c/utils'<br/>this.result = isFunction（fn）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class U hl;
+    class C soft;
+```
 
 同じ utils モジュールを使う `libcallerAura.cmp`：
 
@@ -285,18 +288,20 @@ Aura では `$A.createComponent()` で JavaScript からコンポーネントを
 
 > [!例] 複数テンプレートの切り替えイメージ
 >
-> ```text
->  ┌──────────────── LWC コンポーネント ────────────────┐
->  │  templateA.html  ┐                                  │
->  │  templateB.html  ┘                                  │
->  │                                                     │
->  │  render() {                                         │
->  │    return 条件 ? templateA : templateB;  ◀── 切替    │
->  │  }                                                  │
->  └─────────────────────────────────────────────────────┘
-> ```
->
 > 状況に応じて返すテンプレートを選び、「動的に画面を作る」のと同じ効果を安全な形で実現します。
+
+```mermaid
+flowchart TD
+    R{"render（）<br/>条件で判定"}
+    R -->|"条件が真"| TA["templateA.html"]
+    R -->|"条件が偽"| TB["templateB.html"]
+    TA --> V(["描画"])
+    TB --> V
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class R hl;
+    class TA,TB soft;
+```
 
 ---
 

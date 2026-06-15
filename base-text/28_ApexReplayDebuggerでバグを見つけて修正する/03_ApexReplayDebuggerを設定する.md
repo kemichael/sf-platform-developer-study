@@ -11,6 +11,18 @@
 >
 > 次のステップで、このバグをデバッガーで見つけて修正します。
 
+```mermaid
+flowchart TD
+    A["① Salesforce DX プロジェクトを作成<br/>（debugger-project）"] --> B["② Apex クラス AccountService を作成<br/>（意図的なバグを含む）"]
+    B --> C["③ Apex テスト AccountServiceTest を作成"]
+    C --> D["④ Salesforce CLI でハンズオン組織を承認<br/>（別名 debuggerOrg）"]
+    D --> E(["次ステップ：デバッグで<br/>バグを発見・修正"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class B hl;
+    class A,C,D soft;
+```
+
 > [!用語] Salesforce DX プロジェクト
 >
 > Salesforce のソースやメタデータを**ローカルのフォルダー構造**として管理する形式。`force-app/main/default/` 以下に Apex クラスや項目定義が整理され、CLI や Git でバージョン管理しやすくなります。
@@ -133,6 +145,20 @@ private class AccountServiceTest {
 > [!ポイント] コードのポイント
 >
 > テストメソッド `should_create_account` は、名前「Salesforce」・取引先番号「SFDC」・株式コード「CRM」を指定して `createAccount` を呼び、挿入したレコードを照会して各項目値を確認します。
+
+```mermaid
+sequenceDiagram
+    participant Test as AccountServiceTest
+    participant Svc as AccountService
+    participant DB as データベース
+    Test->>Svc: createAccount（"Salesforce", "SFDC", "CRM"）
+    Note over Svc: バグ：TickerSymbol に accountNumber を代入
+    Svc-->>Test: newAcct（TickerSymbol = "SFDC"）
+    Test->>DB: insert newAcct
+    Test->>DB: SOQL で項目値を照会
+    DB-->>Test: TickerSymbol = "SFDC"
+    Test->>Test: Assert.areEqual（"CRM", "SFDC"）→ 失敗
+```
 
 上記のクラス作成後、`classes` フォルダーには 4 つのファイル（`AccountService.cls`、`AccountServiceTest.cls`、各 `.cls-meta.xml`）が含まれます。
 

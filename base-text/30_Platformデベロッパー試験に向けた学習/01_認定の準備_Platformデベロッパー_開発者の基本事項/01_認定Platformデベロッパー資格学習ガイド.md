@@ -28,6 +28,21 @@ Salesforce 認定 Platform デベロッパー資格は、**Lightning Platform** 
 
 この試験の主なトピックとその配分は以下のとおり。
 
+```mermaid
+flowchart LR
+    EXAM(["Platform デベロッパー試験<br/>合計 100%"]) --> S1["① 開発者の基本事項<br/>27%"]
+    EXAM --> S2["② プロセスの自動化とロジック<br/>28%（最大配点）"]
+    EXAM --> S3["③ ユーザーインターフェース<br/>25%"]
+    EXAM --> S4["④ テスト・デバッグ・リリース<br/>20%"]
+    S1 --> FOCUS["①②で合計 55%<br/>まずここを固める"]
+    S2 --> FOCUS
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class EXAM hl;
+    class S2,FOCUS hl;
+    class S1,S3,S4 soft;
+```
+
 | セクション | 配点（割合） | 主な内容 |
 | --- | --- | --- |
 | **開発者の基本事項** | **27%** | マルチテナント、MVC、データモデル、宣言型 vs プログラミング型 |
@@ -52,15 +67,20 @@ Salesforce 認定 Platform デベロッパー資格は、**Lightning Platform** 
 
 各モジュールは**シナリオ・対話型フラッシュカード・リソースリンク・主要トピック**で構成される。
 
-```text
-   認定 Platform デベロッパー試験 準備モジュール（全4本）
-   ┌────────────────────────────────────────────┐
-   │ ① 開発者の基本事項            … 27%  ◀ 今ここ │
-   │ ② プロセスの自動化とロジック   … 28%          │
-   │ ③ ユーザーインターフェース     … 25%          │
-   │ ④ テスト、デバッグ、リリース   … 20%          │
-   └────────────────────────────────────────────┘
-                合計 100% をカバー
+```mermaid
+flowchart TD
+    R(["認定 Platform デベロッパー試験<br/>準備モジュール（全4本）"]) --> M1["① 開発者の基本事項<br/>27%　◀ 今ここ"]
+    R --> M2["② プロセスの自動化とロジック<br/>28%"]
+    R --> M3["③ ユーザーインターフェース<br/>25%"]
+    R --> M4["④ テスト・デバッグ・リリース<br/>20%"]
+    M1 --> G(["合計 100% をカバー"])
+    M2 --> G
+    M3 --> G
+    M4 --> G
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class M1 hl;
+    class R,M2,M3,M4 soft;
 ```
 
 > [!用語] Trailblazer Community（トレイルブレイザーコミュニティ）
@@ -99,6 +119,22 @@ Salesforce 認定 Platform デベロッパー資格は、**Lightning Platform** 
 > | 試験中に手助けを求める | NG（禁止） |
 > | 試験の内容（問題・解答）をコミュニティに投稿する | NG（禁止） |
 > | 同僚の代わりに試験を受ける（代理受験） | NG（禁止） |
+
+```mermaid
+flowchart TD
+    Q{"どの段階の行為か？"} -->|"準備段階"| P["勉強仲間・メンターと協力<br/>Trailblazer Community で質問"]
+    Q -->|"試験中・試験内容"| N1["受験中に手助けを求める/する"]
+    Q -->|"試験中・試験内容"| N2["問題・解答を共有/投稿"]
+    Q -->|"試験中・試験内容"| N3["代理受験"]
+    P --> OK(["OK（許可）"])
+    N1 --> NG(["NG（禁止）<br/>違反で資格取り消し等"])
+    N2 --> NG
+    N3 --> NG
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class OK soft;
+    class NG hl;
+```
 
 違反時の措置（これらに限定されない）：受験のキャンセル、資格の取得停止・取り消し、プログラムやコミュニティからの除外。
 

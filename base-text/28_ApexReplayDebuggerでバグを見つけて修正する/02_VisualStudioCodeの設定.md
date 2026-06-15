@@ -15,6 +15,22 @@ VS Code が初めての場合は、先に「クイックスタート: Salesforce
 > | **Salesforce Extension Pack** | VS Code に Apex 開発・デバッグ機能を追加する拡張機能群 |
 > | **JDK（Java）** | Apex 言語サポートが内部で利用する実行基盤 |
 
+```mermaid
+flowchart TD
+    S(["環境構築の開始"]) --> A["① Salesforce CLI を<br/>インストール / 更新"]
+    A --> B["② Visual Studio Code を<br/>インストール / 更新"]
+    B --> C["③ Salesforce Extension Pack を<br/>インストールし VS Code を再起動"]
+    C --> D["④ JDK 21（推奨）を<br/>インストールしパスを控える"]
+    D --> E["Java ホームを設定<br/>salesforcedx-vscode-apex.java.home"]
+    E --> V{"sf update / java -version で<br/>動作確認できたか？"}
+    V -->|"はい"| G(["デバッグ開始の準備完了"])
+    V -->|"いいえ"| C
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class E hl;
+    class A,B,C,D soft;
+```
+
 > [!用語] Salesforce CLI
 >
 > ターミナルから Salesforce 組織を操作するツール。`sf` で始まるコマンドで、プロジェクト作成・組織接続・デプロイ・テスト実行などができます。GUI なしで自動化しやすいのが利点です。

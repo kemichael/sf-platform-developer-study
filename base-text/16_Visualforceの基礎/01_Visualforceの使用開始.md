@@ -37,14 +37,17 @@
 
 ### Visualforce の要求処理の流れ
 
-```text
- ┌──────────┐   ①ページ要求(URL)   ┌─────────────────────────┐
- │ ブラウザー │ ───────────────▶ │  Salesforce サーバー       │
- │ (ユーザー) │                    │  ・コントローラーで処理    │
- │          │                    │  ・DB からデータ取得       │
- │          │                    │  ・Visualforce → HTML 変換 │
- │          │ ◀─────────────── │                           │
- └──────────┘   ②HTML を返す      └─────────────────────────┘
+```mermaid
+sequenceDiagram
+    participant B as "ブラウザー（ユーザー）"
+    participant S as "Salesforce サーバー"
+    participant DB as "データベース"
+    B->>S: "①ページ要求（URL アクセス）"
+    S->>S: "②コントローラーで処理"
+    S->>DB: "③データ取得"
+    DB-->>S: "レコード"
+    S->>S: "④Visualforce を HTML に変換"
+    S-->>B: "⑤HTML を返す"
 ```
 
 > [!例] レストランにたとえると
@@ -112,6 +115,24 @@
 > | 7 | カスタムボタン・リンク | 新しいアクションとして追加 |
 >
 > 逆に「**[設定] ページの中** には表示できない」点が、ひっかけ問題で狙われます。
+
+```mermaid
+flowchart TD
+    VF["Visualforce ページ"] --> L1["1.アプリケーションランチャー"]
+    VF --> L2["2.ナビゲーションバー"]
+    VF --> L3["3.標準ページレイアウト内"]
+    VF --> L4["4.Lightning アプリケーションビルダー"]
+    VF --> L5["5.クイックアクション"]
+    VF --> L6["6.標準ボタン・リンクの上書き"]
+    VF --> L7["7.カスタムボタン・リンク"]
+    VF -.->|"表示できない"| NG["[設定] ページの中<br/>（ひっかけ注意）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    classDef ng fill:#FCE8E8,stroke:#C23934,color:#5A1A1A;
+    class VF hl;
+    class L1,L2,L3,L4,L5,L6,L7 soft;
+    class NG ng;
+```
 
 ### 1. アプリケーションランチャー
 

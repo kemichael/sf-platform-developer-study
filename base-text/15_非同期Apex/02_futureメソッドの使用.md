@@ -51,6 +51,20 @@
 >
 > トリガーは DML トランザクションの真っ最中に動く。途中で外部 API へコールアウトすると、応答が返るまで DB ロックを握り続け、ほかのユーザーの処理を妨げる。そこで「コールアウトは future に移し、トランザクション完了後に非同期実行する」設計が必要。
 
+```mermaid
+sequenceDiagram
+    participant U as ユーザー
+    participant T as トリガー（DMLトランザクション）
+    participant F as future メソッド（別スレッド）
+    participant Ext as 外部 Web サービス
+    U->>T: レコード保存（DML 開始）
+    T->>F: future をキューに登録（コールアウトは直接しない）
+    T-->>U: トランザクション完了（待たせない）
+    Note over F: リソースが空いた時点で非同期実行
+    F->>Ext: コールアウト（@future(callout=true)）
+    Ext-->>F: レスポンス
+```
+
 ---
 
 ## future メソッドの構文
@@ -177,6 +191,17 @@ private with sharing class Test_SMSUtils {
 > 3. future メソッド（`sendSMSAsync`）を呼ぶ。この時点ではまだ実行されずキューに溜まる。
 > 4. `Test.stopTest()` を呼ぶ。ここで非同期処理が**同期的に実行**される。
 > 5. `Assert` でレコードが期待どおり作成されたか検証する。
+
+```mermaid
+flowchart TD
+    A["Test.setMock()<br/>疑似コールアウトを登録"] --> B["Test.startTest()"]
+    B --> C["future メソッドを呼ぶ<br/>（まだ実行されずキューに溜まる）"]
+    C --> D["Test.stopTest()"]
+    D --> E["ここで非同期処理が同期実行される"]
+    E --> F["Assert でレコードを検証"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    class D,E hl;
+```
 
 ---
 

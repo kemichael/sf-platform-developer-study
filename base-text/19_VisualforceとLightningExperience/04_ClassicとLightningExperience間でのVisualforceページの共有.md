@@ -74,6 +74,21 @@
 >
 > LEX を表示する設定と権限を持つユーザー（＝要求は LEX）が、LEX 非対応の古いブラウザー（旧 Internet Explorer など）を使うと **実際には LEX を表示できません**。このとき `$User.UITheme` は LEX を、`$User.UIThemeDisplayed` は実際の別デザインを返し、両者がズレます。
 
+「要求された UI」と「実際の UI」がどこで分岐するかを図にすると次のとおりです。
+
+```mermaid
+flowchart TD
+    U(["ユーザー：LEX を要求<br/>（UITheme は Theme4d）"]) --> Q{"ブラウザーは<br/>LEX 対応？"}
+    Q -->|"対応"| OK["実際も LEX を表示<br/>UIThemeDisplayed＝Theme4d<br/>（両者一致）"]
+    Q -->|"非対応（旧 IE 等）"| NG["別デザインを表示<br/>UIThemeDisplayed≠Theme4d<br/>（両者がズレる）"]
+    OK --> USE["コードでは UIThemeDisplayed<br/>＝「現実」で分岐する"]
+    NG --> USE
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class U hl;
+    class USE soft;
+```
+
 > [!ポイント] 原則：コードでは `UIThemeDisplayed` を使う
 >
 > **コードでは `$User.UIThemeDisplayed`（実際に表示されているデザイン）を使うべきです。** ユーザーの「希望」ではなく「現実」に合わせて分岐するのが正しいためです。
@@ -202,13 +217,19 @@ public with sharing class ForceUIExtension {
 > | **JavaScript** | `UITheme.getUITheme()` | クライアント側で判定 |
 > | **Apex** | `UserInfo.getUiTheme()` / `UserInfo.getUiThemeDisplayed()` | 使用はまれ。UI 判定はフロント推奨 |
 
-```text
-  ┌──────────────────────┬───────────────────────────────────────────┐
-  │ Visualforce マークアップ │ $User.UITheme / $User.UIThemeDisplayed     │
-  │ JavaScript            │ UITheme.getUITheme()                       │
-  │ Apex                  │ UserInfo.getUiTheme() / getUiThemeDisplayed()│
-  └──────────────────────┴───────────────────────────────────────────┘
-        いずれも返り値は同じテーマ文字列（Theme3 / Theme4d / Theme4t …）
+```mermaid
+flowchart LR
+    Q{"どこで UI コンテキストを<br/>判別する？"}
+    Q -->|"Visualforce マークアップ"| VF["$User.UITheme<br/>$User.UIThemeDisplayed"]
+    Q -->|"JavaScript"| JS["UITheme.getUITheme()"]
+    Q -->|"Apex"| AP["UserInfo.getUiTheme()<br/>UserInfo.getUiThemeDisplayed()"]
+    VF --> R["返り値は同じテーマ文字列<br/>Theme3／Theme4d／Theme4t …"]
+    JS --> R
+    AP --> R
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class Q hl;
+    class R soft;
 ```
 
 ---

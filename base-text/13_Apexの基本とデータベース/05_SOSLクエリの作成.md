@@ -62,6 +62,15 @@ List<List<SObject>> searchList = [FIND 'SFDC' IN ALL FIELDS
 > - **複数のオブジェクト**を横断してテキスト検索したい → **SOSL**。
 > - 「**単語一致なら SOSL／完全一致なら SOQL**」「**検索（Search）の S は SOSL**」と結びつけると間違えにくいです。
 
+```mermaid
+flowchart TD
+    S(["何を探す？"]) --> Q{"対象オブジェクトと<br/>条件が決まっている？"}
+    Q -->|"はい・1つのオブジェクトを正確に"| SOQL["SOQL<br/>SELECT … FROM …<br/>完全一致で取得"]
+    Q -->|"いいえ・複数を横断テキスト検索"| SOSL["SOSL<br/>FIND … RETURNING …<br/>単語一致で検索"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    class SOQL,SOSL hl;
+```
+
 > [!例] 単語一致と完全一致の違い
 >
 > 「Digital」で検索した場合の結果イメージ。
@@ -158,14 +167,15 @@ FIND 'SearchQuery' [IN SearchGroup] [RETURNING ObjectsAndFields]
 FIND {SearchQuery} [IN SearchGroup] [RETURNING ObjectsAndFields]
 ```
 
-```text
-   FIND  'SearchQuery'   [IN SearchGroup]   [RETURNING ObjectsAndFields]
-    │         │                 │                      │
-    │         │                 │                      └─ 何を返すか（省略可）
-    │         │                 │                         オブジェクトと項目のリスト
-    │         │                 └─ どの項目範囲を検索するか（省略可、既定=全項目）
-    │         └─ 検索する単語／語句（必須）
-    └─ SOSL の開始キーワード
+```mermaid
+flowchart LR
+    F["FIND<br/>SOSL の開始キーワード"] --> SQ["'SearchQuery'<br/>検索する単語・語句（必須）"]
+    SQ --> SG["IN SearchGroup<br/>項目範囲（省略可・既定は全項目）"]
+    SG --> RT["RETURNING ObjectsAndFields<br/>何を返すか（省略可）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class F,SQ hl;
+    class SG,RT soft;
 ```
 
 ### SearchQuery（検索文字列）
@@ -275,18 +285,16 @@ for (Contact c : searchContacts) {
 >
 > 結果配列のインデックスは `RETURNING` 句のオブジェクトの順番と一致します。上の例は `RETURNING Account(...), Contact(...)` の順なので、**`searchList[0]` が Account、`searchList[1]` が Contact** です。`(Account[])` のようにキャストする点も押さえましょう。
 
-```text
- FIND :soslFindClause IN ALL FIELDS RETURNING Account(...), Contact(...)
-                              │
-                              ▼
-                  List<List<sObject>> searchList
-            ┌─────────────────────┴─────────────────────┐
-            ▼                                            ▼
-      searchList[0]                                searchList[1]
-   ┌──────────────┐                            ┌──────────────┐
-   │ Account[]    │                            │ Contact[]    │
-   │ （取引先の配列）│                            │ （責任者の配列）│
-   └──────────────┘                            └──────────────┘
+```mermaid
+flowchart TD
+    Q["FIND :soslFindClause IN ALL FIELDS<br/>RETURNING Account（…）, Contact（…）"]
+    Q --> R["List&lt;List&lt;sObject&gt;&gt; searchList"]
+    R -->|"RETURNING 1番目"| A["searchList[0]<br/>Account[]（取引先の配列）"]
+    R -->|"RETURNING 2番目"| C["searchList[1]<br/>Contact[]（責任者の配列）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class R hl;
+    class A,C soft;
 ```
 
 ---

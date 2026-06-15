@@ -19,6 +19,21 @@
 >
 > 1つの Aura コンポーネントを構成する複数ファイルのまとまり。マークアップ（`.cmp`）・コントローラー（`.js`）・スタイル（`.css`）・ヘルパー・ドキュメントなどが1フォルダにまとまり、開発者コンソールでは右側のボタンパネルから各ファイルを開けます。
 
+コンポーネントバンドルの構成（本クイックスタートで使う主なファイル）は次のとおりです。
+
+```mermaid
+flowchart TD
+    B["MyContactList バンドル"]
+    B --> CMP["MyContactList.cmp<br/>マークアップ（画面の見た目）"]
+    B --> JS["MyContactListController.js<br/>JavaScript コントローラー（動き）"]
+    B --> CSS["MyContactList.css<br/>スタイル（任意）"]
+    B --> ETC["ヘルパー・ドキュメント など"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class B hl;
+    class CMP,JS,CSS,ETC soft;
+```
+
 > [!手順] コンポーネントバンドルを作成する
 >
 > 1. 開発者コンソールで **[File（ファイル）] | [New（新規）] | [Lightning Component（Lightning コンポーネント）]** を選択する。
@@ -105,6 +120,21 @@
 > [!用語] Lightning Data Service（LDS）／ force:recordData
 >
 > Apex を書かずにレコードの取得・作成・更新・削除ができる仕組み。`force:recordData` は現在のレコードの項目を読み込み、`targetFields` に指定した属性へ自動格納します。単純な取得処理ではこちらが推奨されます。今回は取引先名（`Account.Name`）の表示に使用。
+
+`force:recordData` が `recordId` から取引先名をタイトルに表示するまでのやり取りは次のとおりです。
+
+```mermaid
+sequenceDiagram
+    participant V as recordId 属性
+    participant LDS as force:recordData（LDS）
+    participant DB as Salesforce DB
+    participant T as Account 属性 → カードのタイトル
+    V->>LDS: recordId を渡す
+    LDS->>DB: 取引先レコードの項目を取得（Apex 不要）
+    DB-->>LDS: 取引先の項目を返す
+    LDS-->>T: targetFields で Account 属性に格納
+    Note over T: v.Account.Name をタイトルに表示
+```
 
 > [!用語] Lightning 基本コンポーネント（Lightning Base Components）
 >

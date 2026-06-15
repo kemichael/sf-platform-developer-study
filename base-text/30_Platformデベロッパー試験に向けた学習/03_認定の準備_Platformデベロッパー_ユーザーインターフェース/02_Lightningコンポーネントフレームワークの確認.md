@@ -44,17 +44,18 @@
 >
 > コンポーネント間で情報をやり取りする仕組み。**親子の方向**で手段が変わる。子→親は**カスタムイベント**、親→子は**公開プロパティ（@api）やメソッド呼び出し**が基本。
 
-```text
-        ┌──────────────────────────┐
-        │   親コンポーネント         │
-        └────────┬─────────▲───────┘
-   @api プロパティ │         │ CustomEvent
-   / メソッド呼び出し ▼         │（dispatchEvent）
-        ┌──────────────────────────┐
-        │   子コンポーネント         │
-        └──────────────────────────┘
-   親→子：公開プロパティ(@api)・メソッド
-   子→親：カスタムイベント(this.dispatchEvent)
+```mermaid
+flowchart TD
+    P["親コンポーネント"]
+    C["子コンポーネント"]
+    U["無関係なコンポーネント"]
+    P -->|"親→子：公開プロパティ @api・メソッド呼び出し"| C
+    C -->|"子→親：カスタムイベント this.dispatchEvent"| P
+    P <-->|"無関係間：LMS で疎結合通信"| U
+    class P hl
+    class C soft
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
 ```
 
 > [!ポイント] イベントの方向を覚える
@@ -85,6 +86,21 @@ export default class ChildButton extends LightningElement {
 <template>
     <c-child-button onselected={handleSelected}></c-child-button>
 </template>
+```
+
+**カスタムイベントの伝播（子→親）の流れ**
+
+```mermaid
+sequenceDiagram
+    actor User as ユーザー
+    participant Child as 子コンポーネント
+    participant Parent as 親コンポーネント
+    User->>Child: ボタンを押下
+    Child->>Child: handleClick 実行
+    Child->>Parent: dispatchEvent CustomEvent selected
+    Note over Child,Parent: detail にデータを載せて通知
+    Parent->>Parent: onselected ハンドラ handleSelected
+    Parent->>Child: 親→子は @api プロパティで値を返す
 ```
 
 ---
@@ -137,6 +153,26 @@ public with sharing class GreetingAction {
         return results;
     }
 }
+```
+
+**LWC から Apex を呼ぶ2方式（@wire と命令的呼び出し）**
+
+```mermaid
+sequenceDiagram
+    participant LWC as LWC コンポーネント
+    participant Cache as Lightning データキャッシュ
+    participant Apex as Apex メソッド AuraEnabled
+    participant DB as データベース
+    Note over LWC,Cache: 方式1 @wire リアクティブ取得
+    LWC->>Cache: @wire でメソッド購読
+    Cache->>Apex: 未キャッシュなら呼び出し cacheable=true
+    Apex->>DB: SOQL WITH SECURITY_ENFORCED
+    DB-->>Apex: レコード返却
+    Apex-->>Cache: 結果をキャッシュ
+    Cache-->>LWC: data または error を配信
+    Note over LWC,Apex: 方式2 命令的呼び出し import して await
+    LWC->>Apex: import したメソッドを呼ぶ DML も可
+    Apex-->>LWC: Promise で結果を返す
 ```
 
 > [!ポイント] Apex 連携で問われる勘所

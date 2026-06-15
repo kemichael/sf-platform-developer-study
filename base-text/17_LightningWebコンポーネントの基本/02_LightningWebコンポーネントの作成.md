@@ -278,12 +278,17 @@ LWC はコンポーネントのライフサイクルの節目（作成・DOM 追
 | `disconnectedCallback()` | コンポーネントが**DOM から削除**されたとき | タイマー停止・後片付け |
 | `errorCallback()` | 子孫コンポーネントで**エラー**が発生したとき | エラー処理 |
 
-```text
-作成 → DOM に挿入 → 表示 → （使用中） → DOM から削除
-  │        │          │                      │
-  ▼        ▼          ▼                      ▼
-constructor connected  rendered          disconnected
-()          Callback() Callback()        Callback()
+```mermaid
+flowchart LR
+    S(["作成"]) --> A["constructor()<br/>初期化"]
+    A --> B["connectedCallback()<br/>DOM に挿入"]
+    B --> C["renderedCallback()<br/>表示"]
+    C --> D(["使用中"])
+    D --> E["disconnectedCallback()<br/>DOM から削除"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class B hl;
+    class A,C,E soft;
 ```
 
 条件付き表示の例では `connectedCallback()` で DOM 挿入時にコードが自動実行され、3 秒待機後に `ready` を `true` に設定しました。
@@ -420,6 +425,15 @@ export default class Bike extends LightningElement {
 > [!例] 親から子へ値が渡る流れ
 >
 > 親（app）の HTML で `<c-bike bike={bike}>` と書くと、親の `bike` オブジェクトが子（bike）の `@api bike` にコピーされます。子は `@api` のおかげで外部から値を受け取る「窓口」を持ち、`{bike.name}` などで表示します。**`@api` は「このプロパティは親から設定してよい」という公開宣言**です。
+
+```mermaid
+sequenceDiagram
+    participant App as 親 app
+    participant Bike as 子 bike（@api bike）
+    App->>Bike: bike オブジェクトを設定<br/>「c-bike bike={bike}」（下へ）
+    Note over Bike: @api でプロパティを公開し受け取る
+    Bike->>Bike: {bike.name} などで表示
+```
 
 ---
 

@@ -112,6 +112,22 @@ Coral Cloud Resorts の開発チームは、**VS Code と CLI コマンドの両
 >
 > 後半で実行する**設定スクリプトは Node.js に依存**します。先に**グローバルにインストール**しておかないと後の手順で失敗します。
 
+開発環境セットアップの全体像は次のとおりです。**Node.js を先に**用意してから設定スクリプトに進む点に注意してください。
+
+```mermaid
+flowchart TD
+    S(["開発環境の準備を開始"]) --> N["Node.js をインストール<br/>（設定スクリプトの依存）"]
+    N --> V["VS Code をインストール<br/>（最新版に更新）"]
+    V --> E["Salesforce Extension Pack を導入<br/>Agentforce DX / バイブスは自動で追加"]
+    E --> C["Salesforce CLI（sf）をインストール"]
+    C --> G["Git をインストール<br/>（リポジトリのクローン用）"]
+    G --> Done(["環境構築 完了<br/>次はリポジトリのコピーへ"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class N hl;
+    class V,E,C,G soft;
+```
+
 開発ツールの役割は次のとおりです。
 
 | ツール | 役割 |
@@ -192,6 +208,22 @@ VS Code に `afdx-pro-code-testdrive` という標準の Salesforce DX プロジ
 >      ```
 > 2. 各ステップが正常に完了すると**緑のチェックマーク**が表示されます。
 
+設定スクリプトが組織に対して行う処理の流れは次のとおりです。
+
+```mermaid
+sequenceDiagram
+    participant U as 開発者
+    participant S as 設定スクリプト
+    participant Org as Developer Edition 組織
+    U->>S: ./setup または setup.cmd を実行
+    S->>Org: ソースファイルをリリース（deploy）
+    S->>Org: 権限を割り当て
+    S->>Org: エージェントユーザーを作成
+    Org-->>S: 一意のユーザー名を返す
+    S-->>U: 緑のチェックマークとユーザー名を表示
+    Note over U: 表示されたユーザー名を保存（次の単元で使用）
+```
+
 > [!注意] 生成されたユーザー名を必ず保存する
 >
 > このスクリプトで作成される**一意のユーザー名は次の単元で必要**です。ターミナルに表示されたユーザー名を必ず控えてください。
@@ -238,16 +270,18 @@ VS Code に `afdx-pro-code-testdrive` という標準の Salesforce DX プロジ
 
 > [!例] エージェント開発のライフサイクル（全体像）
 >
-> ```text
->  開発        →   公開        →   テスト       →   実装        →   有効化
->  (Develop)       (Publish)       (Test)          (Deploy)        (Activate)
->    │               │               │               │               │
->  .agent を      作成バンドルを   Sandbox/         本番組織に       お客様が
->  コーディング    組織にリリース   スクラッチ組織    メタデータを     利用できる
->  して指示・      しメタデータを   で動作を検証     移行           ように有効化
->  ロジックを定義  生成
+> ```mermaid
+> flowchart LR
+>     D["開発 Develop<br/>.agent を<br/>コーディング"] --> P["公開 Publish<br/>作成バンドルを<br/>組織にリリース"]
+>     P --> T["テスト Test<br/>Sandbox/スクラッチ<br/>組織で検証"]
+>     T --> Dep["実装 Deploy<br/>本番組織へ<br/>メタデータ移行"]
+>     Dep --> A["有効化 Activate<br/>お客様が<br/>利用できる"]
+>     classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+>     classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+>     class D,P hl;
+>     class T,Dep,A soft;
 > ```
-> このバッジでは主に「**開発**」と「**公開**」のステップを扱います。
+> このバッジでは主に「**開発**」と「**公開**」のステップ（青）を扱います。
 
 ---
 

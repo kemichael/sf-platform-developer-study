@@ -28,18 +28,19 @@
 - 各トランザクションは**新しいガバナ制限のセット**で開始されるため、制限内に抑えやすい。
 - いずれかのバッチが失敗しても、正常に処理されたほかは**ロールバックされない**。
 
-```text
-100 万件のレコード
-   │  start() が対象レコードを収集
-   ▼
-┌──────┬──────┬──────┬─────┬──────┐
-│200件 │200件 │200件 │ ... │200件 │  ← 各バッチ = 別トランザクション
-└──┬───┴──┬───┴──┬───┴─────┴──┬───┘
-   ▼      ▼      ▼            ▼
- execute() がバッチごとに 1 回ずつ呼ばれる（制限はバッチ単位でリセット）
-   │
-   ▼
- finish()（全バッチ完了後に 1 回だけ：メール送信などの後処理）
+```mermaid
+flowchart TD
+    S(["100 万件のレコード"]) --> ST["start()<br/>対象レコードを収集（ジョブ開始時に 1 回）"]
+    ST --> SPLIT{"200 件ずつのバッチに分割"}
+    SPLIT --> E1["execute()<br/>バッチ1（別トランザクション）"]
+    SPLIT --> E2["execute()<br/>バッチ2（別トランザクション）"]
+    SPLIT --> E3["execute()<br/>バッチN（別トランザクション）"]
+    E1 --> FIN["finish()<br/>全バッチ完了後に 1 回（メール送信など後処理）"]
+    E2 --> FIN
+    E3 --> FIN
+    FIN --> END(["ジョブ完了"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    class ST,FIN hl;
 ```
 
 > [!例] 1 バッチ失敗してもほかは生きる
@@ -115,6 +116,18 @@ public with sharing class MyBatchClass implements Database.Batchable<sObject> {
 ```apex
 MyBatchClass myBatchObject = new MyBatchClass();
 Id batchId = Database.executeBatch(myBatchObject);
+```
+
+```mermaid
+sequenceDiagram
+    participant C as 呼び出し元 Apex
+    participant P as プラットフォーム
+    participant J as AsyncApexJob
+    C->>P: Database.executeBatch(インスタンス [, scope])
+    P->>J: ジョブ記録を作成
+    P-->>C: batchId（ジョブ ID）を返す
+    C->>J: SOQL で進行状況を照会（Status / JobItemsProcessed など）
+    J-->>C: 状況・処理済みバッチ数・エラー数
 ```
 
 2 つ目の `scope` パラメーターで、バッチごとに `execute` に渡すレコード数を指定できる。

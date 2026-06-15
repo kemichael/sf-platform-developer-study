@@ -92,6 +92,18 @@ LWC は (1) JavaScript ファイル、(2) HTML ファイル、必要に応じて
 >
 > 試験頻出。**LWC で必ず必要なのは「HTML」と「JavaScript」の2つ**。CSS は見た目を整えたいときだけ追加する**省略可能**なファイルです。
 
+```mermaid
+flowchart TD
+    C(["LWC コンポーネント<br/>同じ名前・同じフォルダー"]) --> H["HTML<br/>構造（必須）"]
+    C --> J["JavaScript<br/>ロジック（必須）"]
+    C --> S["CSS<br/>見た目（省略可）"]
+    H <-->|"データバインディング<br/>{message}"| J
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class C hl;
+    class H,J soft;
+```
+
 以下は入力項目に「Hello World」と表示するシンプルな例です。
 
 ### HTML
@@ -139,16 +151,18 @@ input {
 
 既存の Aura コンポーネントはそのまま使い続けられ、Aura と LWC は問題なく共存できます。**Aura コンポーネントに LWC を含めることはできます（その逆はできません）**。純粋な LWC 実装では完全なカプセル化と標準準拠が可能です。
 
-```text
-  できる ○                         できない ✕
-┌──────────────────────┐     ┌──────────────────────┐
-│ Aura コンポーネント   │     │ LWC コンポーネント    │
-│  ┌────────────────┐  │     │  ┌────────────────┐  │
-│  │ LWC を内部に   │  │     │  │ Aura を内部に  │  │
-│  │ 含められる     │  │     │  │ 含められない   │  │
-│  └────────────────┘  │     │  └────────────────┘  │
-└──────────────────────┘     └──────────────────────┘
-        Aura ⊃ LWC                   LWC ⊅ Aura
+```mermaid
+flowchart LR
+    subgraph OK["できる ○"]
+        A1["Aura コンポーネント"] -->|"内部に含められる"| L1["LWC"]
+    end
+    subgraph NG["できない ✕"]
+        L2["LWC コンポーネント"] -.->|"含められない"| A2["Aura"]
+    end
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class A1,L2 hl;
+    class L1,A2 soft;
 ```
 
 > [!ポイント] 「Aura の中に LWC は入れられる／逆は不可」

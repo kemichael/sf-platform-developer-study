@@ -67,19 +67,17 @@ Title__c like '% %' and Performance_rating__c<2 and name like '% %'';
 
 > [!例] インジェクションが起きる仕組みを図解
 >
-> ```text
->  ユーザー入力欄に……
->  ┌─────────────────────────────────────────────┐
->  │ %' and Performance_rating__c<2 and name like '% │ ← 攻撃文字列
->  └─────────────────────────────────────────────┘
->            │ 検証せずにそのまま連結
->            ▼
->  SELECT ... WHERE Title__c like '%[ここに連結]%'
->            │
->            ▼   開発者が書いた ' を攻撃者が閉じてしまう
->  SELECT ... WHERE Title__c like '%' AND Performance_rating__c<2 AND name like '%'
->            ▲                          ▲
->            └─ ここで文字列を脱出 ──────┘ 新しい条件を注入＝構造が変わる
+> ```mermaid
+> sequenceDiagram
+>     participant U as 攻撃者
+>     participant App as アプリ（Apex）
+>     participant DB as データベース
+>     U->>App: 入力「%' and Performance_rating__c<2 and name like '%」
+>     Note over App: 検証せずにクエリ文字列へ連結
+>     App->>App: 開発者の ' を攻撃文字列が閉じる<br/>＝クエリ構造が書き換わる
+>     App->>DB: SELECT ... WHERE Title__c like '%'<br/>AND Performance_rating__c<2 AND name like '%'
+>     DB-->>App: 低評価の人員レコードを返す
+>     App-->>U: 本来見られないデータが露出 ✗
 > ```
 
 > [!注意] 「制限が多い＝安全」ではない
@@ -120,6 +118,20 @@ queryResult = [select id from contact where firstname = :var]
 > [!用語] 静的クエリ／バインド変数（Bind Variable）
 >
 > **静的クエリ**は角括弧 `[ SELECT ... ]` で書く、構造が固定されたクエリ。その中の `:var` のようにコロン付きで埋め込む変数が**バインド変数**。中身は「コード」ではなく**ただの値（データ）**として扱われるため、構造を書き換えられない。
+
+バインド変数を使うと、同じ攻撃入力でも「コード」ではなく「値」として扱われ、攻撃が成立しない。
+
+```mermaid
+sequenceDiagram
+    participant U as 攻撃者
+    participant App as アプリ（Apex）
+    participant DB as データベース
+    U->>App: 入力「test' LIMIT 1」
+    Note over App: 静的クエリ [ ... = :var ]<br/>入力は値としてバインド
+    App->>DB: firstname = 「test' LIMIT 1」を検索
+    DB-->>App: 該当 firstname のレコード（通常 0 件）
+    App-->>U: クエリ構造は不変＝攻撃不成立 ✓
+```
 
 ユーザーが `test' LIMIT 1` を入力しても、DB は「`test' LIMIT 1` という firstname の人」を探すだけで、クエリの外へ脱出できない。バインド変数は次の句でのみ使用できる。
 
@@ -241,23 +253,21 @@ String query = 'select id from user where isActive=' + var.replaceAll('[^\\w]', 
 
 > [!ポイント] 5手法の使い分け早見表（頻出）
 >
-> ```text
->  入力をクエリに使いたい
->        │
->        ▼
->  ┌─ バインド変数（:var）が使える句？ ── YES ─▶ ★静的クエリ＋バインド変数（最推奨）
->  │                                  NO
->  │                                   ▼
->  ├─ 入力は数値/真偽値？ ─────────── YES ─▶ 型キャスト（Integer/Boolean）
->  │                                  NO
->  │                                   ▼
->  ├─ 入力は文字列でクォートに囲まれる？ ─ YES ─▶ escapeSingleQuotes()
->  │                                  NO
->  │                                   ▼
->  ├─ 値の選択肢が限定できる（項目名等）？ YES ─▶ 許可リスト（allowlist）
->  │                                  NO
->  │                                   ▼
->  └─ どれも無理 ──────────────────────────▶ 文字置換（最終手段）
+> ```mermaid
+> flowchart TD
+>     S(["入力をクエリに使いたい"]) --> Q1{"バインド変数 :var が<br/>使える句？"}
+>     Q1 -->|"はい"| BIND["静的クエリ＋バインド変数<br/>（最推奨）"]
+>     Q1 -->|"いいえ"| Q2{"入力は数値・真偽値？"}
+>     Q2 -->|"はい"| CAST["型キャスト<br/>Integer / Boolean"]
+>     Q2 -->|"いいえ"| Q3{"文字列でクォートに<br/>囲まれる？"}
+>     Q3 -->|"はい"| ESC["escapeSingleQuotes()"]
+>     Q3 -->|"いいえ"| Q4{"値の選択肢が<br/>限定できる（項目名等）？"}
+>     Q4 -->|"はい"| ALLOW["許可リスト（allowlist）"]
+>     Q4 -->|"いいえ"| REPL["文字置換（最終手段）"]
+>     classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+>     classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+>     class BIND hl;
+>     class CAST,ESC,ALLOW,REPL soft;
 > ```
 
 > [!ポイント] よく問われる事実

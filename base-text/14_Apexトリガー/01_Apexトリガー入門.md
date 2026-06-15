@@ -101,23 +101,16 @@ trigger TriggerName on ObjectName (trigger_events) {
 - **before トリガー**：レコード保存前に値を更新・検証する場合に使う。
 - **after トリガー**：システム設定の項目（`Id`、`LastModifiedDate` など）へのアクセスや他レコードへの影響を与える場合に使う。after のレコードは参照のみ。
 
-```text
-        DML 操作（insert / update / delete …）
-                      │
-                      ▼
-        ┌─────────────────────────┐
-        │   before トリガー        │  ← 保存前。Trigger.new の値を
-        │                          │     そのまま書き換えできる（DML 不要）
-        └────────────┬────────────┘
-                      ▼
-        ┌─────────────────────────┐
-        │   データベースへ保存      │  ← Id や LastModifiedDate が確定
-        └────────────┬────────────┘
-                      ▼
-        ┌─────────────────────────┐
-        │   after トリガー         │  ← 保存後。レコードは読み取り専用。
-        │                          │     関連レコードの操作に使う
-        └─────────────────────────┘
+```mermaid
+flowchart TD
+    S(["DML 操作<br/>insert / update / delete …"]) --> B["before トリガー<br/>保存前。Trigger.new を<br/>直接書き換え可（DML 不要）"]
+    B --> DB["データベースへ保存<br/>Id・LastModifiedDate が確定"]
+    DB --> A["after トリガー<br/>保存後。レコードは読み取り専用。<br/>関連レコードの操作に使う"]
+    A --> E(["コミット完了"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class DB hl;
+    class B,A soft;
 ```
 
 > [!ポイント] before と after の使い分け（頻出）
@@ -206,6 +199,19 @@ trigger ContextExampleTrigger on Account (before insert, after insert, after del
 > | `Trigger.oldMap` | Id→旧レコードのマップ | update / delete |
 >
 > **`delete` では `Trigger.new` が使えない**、**`insert` では `Trigger.old` が使えない**点が頻出。Id でレコードを引くときは Map 版が便利です。
+
+操作の種類によって使えるコンテキスト変数が変わります。次の図で「どの操作でどれが使えるか」を整理します。
+
+```mermaid
+flowchart TD
+    Q{"どの DML 操作？"}
+    Q -->|"insert"| INS["Trigger.new 使用可<br/>Trigger.old は使用不可"]
+    Q -->|"update"| UPD["Trigger.new / Trigger.old<br/>両方使用可<br/>newMap / oldMap も使用可"]
+    Q -->|"delete"| DEL["Trigger.old / oldMap 使用可<br/>Trigger.new は使用不可"]
+    Q -->|"undelete"| UND["Trigger.new 使用可"]
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class INS,UPD,DEL,UND soft;
+```
 
 ---
 
@@ -431,6 +437,19 @@ trigger CalloutTrigger on Account (before insert, before update) {
 > [!ポイント] トリガーからのコールアウトは必ず非同期
 >
 > トリガーから直接（同期）コールアウトすると「`You have uncommitted work pending`」エラーになります。**`@future(callout=true)` メソッド**（または Queueable）経由で非同期実行するのが定石です。
+
+トリガーが future メソッドを呼び、コールアウトが非同期に行われる流れは次のとおりです。
+
+```mermaid
+sequenceDiagram
+    participant T as トリガー
+    participant F as future メソッド<br/>@future(callout=true)
+    participant W as 外部 Web サービス
+    T->>F: makeCallout() を呼ぶ
+    Note over T,F: トリガー処理はここで完了<br/>応答を待たない
+    F-->>W: HTTP リクエスト（非同期）
+    W-->>F: HTTP レスポンス
+```
 
 ---
 

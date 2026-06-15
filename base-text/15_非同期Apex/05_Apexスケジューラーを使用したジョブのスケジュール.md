@@ -82,6 +82,19 @@ public with sharing class RemindOpptyOwners implements Schedulable {
 
 実行するクラスは、プログラムからでも Apex スケジューラー UI からでもスケジュールできる。
 
+```mermaid
+sequenceDiagram
+    participant Dev as 開発者 / UI
+    participant P as プラットフォーム
+    participant CT as CronTrigger
+    participant Job as Schedulable クラス
+    Dev->>P: System.schedule(名前, CRON 式, インスタンス)
+    P->>CT: CronTrigger を作成（スケジュール登録）
+    P-->>Dev: jobID を返す
+    Note over P,CT: CRON 式で指定した日時まで待機
+    CT->>Job: 指定日時に execute(SchedulableContext ctx) を実行
+```
+
 ---
 
 ## System.Schedule メソッドの使用
@@ -225,6 +238,18 @@ private with sharing class RemindOppyOwnersTest {
 > [!注意] スケジュール済み Apex でコールアウトしたいとき
 >
 > 直接の同期コールアウトはできない。`@future(callout=true)` を付けたメソッドにコールアウトを配置し、それをスケジュール済み Apex から呼び出して**非同期コールアウト**を実行する。なお一括処理ジョブを実行する場合は、**一括処理クラスからコールアウト**できる。
+
+```mermaid
+flowchart TD
+    S(["スケジュール済み Apex から<br/>コールアウトしたい"]) --> Q{"同期コールアウト？"}
+    Q -->|"はい（直接）"| NG["不可<br/>エラーになる"]
+    Q -->|"回避策"| F["@future(callout=true) の<br/>メソッド経由で非同期コールアウト"]
+    Q -->|"回避策"| B["一括処理クラスを起動し<br/>Batch からコールアウト"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef ng fill:#BA0517,stroke:#640103,color:#fff;
+    class F,B hl;
+    class NG ng;
+```
 
 ---
 

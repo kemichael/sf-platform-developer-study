@@ -37,12 +37,68 @@
 > - **Visualforce**：独自マークアップタグ（`<apex:...>`）と **Apex コントローラ**を組み合わせる従来型 UI。サーバーサイドでページを組み立てる。PDF/帳票で今も現役。
 > - **LWC**：HTML・JavaScript・CSS の Web 標準をベースにした最新 UI フレームワーク。**軽量・高速**で、新規開発の第一推奨。
 
+Visualforce は **MVC（Model-View-Controller）** に沿っており、View（VF ページ）とロジック（コントローラ）が分離される。コントローラには3種類があり、用途で使い分ける。
+
+```mermaid
+flowchart LR
+    V["View<br/>Visualforce ページ<br/>apex タグ"] --> C{"コントローラの種類"}
+    C --> SC["標準コントローラ<br/>standardController"]
+    C --> CU["カスタムコントローラ<br/>controller"]
+    C --> EX["拡張コントローラ<br/>extensions"]
+    SC --> M["Model<br/>sObject / データベース"]
+    CU --> M
+    EX --> SC
+    EX --> M
+
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class V hl;
+    class SC,CU,EX,M soft;
+```
+
+Visualforce は **サーバーサイド**でページを組み立てる。要求からレンダリングまでの一連のやり取りは次の通り。
+
+```mermaid
+sequenceDiagram
+    actor U as ユーザー
+    participant B as ブラウザ
+    participant VF as Visualforce エンジン
+    participant CT as Apex コントローラ
+    participant DB as データベース
+    U->>B: ページを開く / 操作
+    B->>VF: ページ要求 HTTP
+    VF->>CT: アクションメソッド呼び出し
+    CT->>DB: SOQL / DML
+    DB-->>CT: レコード返却
+    CT-->>VF: 結果 / 画面遷移
+    VF-->>B: HTML を生成して応答（自動エスケープ）
+    B-->>U: 画面を表示
+```
+
 > [!例] どの UI 技術を選ぶ？
 >
 > - 「最新の推奨フレームワークで再利用可能な UI 部品」→ LWC
 > - 「請求書を PDF で出力」→ Visualforce（`renderAs="pdf"`）
 > - 「コードなしで承認画面」→ 画面フロー（Screen Flow）
 > - 「既存 Aura を保守しつつ新機能」→ Aura に LWC を組み込む
+
+「いつどれを使うか」の判断は次のフローで整理できる（試験頻出）。
+
+```mermaid
+flowchart TD
+    S{"コードを書かずに<br/>業務自動化したい？"}
+    S -->|"はい"| F["フロー Flow<br/>画面フロー / ノーコード"]
+    S -->|"いいえ"| P{"PDF / 帳票 / メールの<br/>出力が必要？"}
+    P -->|"はい"| VF["Visualforce<br/>renderAs=pdf"]
+    P -->|"いいえ"| E{"既存の Aura 資産を<br/>保守する？"}
+    E -->|"はい"| AU["Aura コンポーネント<br/>中に LWC を組み込み可"]
+    E -->|"いいえ（新規開発）"| LWC["LWC<br/>第一推奨・軽量高速"]
+
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class LWC hl;
+    class F,VF,AU soft;
+```
 
 ---
 

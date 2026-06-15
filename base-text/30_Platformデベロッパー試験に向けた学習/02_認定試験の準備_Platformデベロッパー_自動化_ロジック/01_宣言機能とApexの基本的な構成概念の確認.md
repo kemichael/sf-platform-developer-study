@@ -21,13 +21,21 @@
 - Apex 変数、定数、メソッド
 - Apex フロー制御ステートメント
 
-```text
-   モジュール「プロセスの自動化とロジック（28%）」の3単元
-   ┌─────────────────────────────────────────────┐
-   │ ① 宣言機能と Apex の基本的な構成概念   ◀ 今ここ │
-   │ ② SOQL / SOSL / DML の復習                    │
-   │ ③ Apex クラスとトリガーの学習                  │
-   └─────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    M["プロセスの自動化とロジック<br/>試験の 28%（最大配点）"]
+    U1["① 宣言機能と Apex の<br/>基本的な構成概念（今ここ）"]
+    U2["② SOQL / SOSL / DML の復習"]
+    U3["③ Apex クラスとトリガーの学習"]
+    M --> U1
+    M --> U2
+    M --> U3
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class M hl;
+    class U1 hl;
+    class U2 soft;
+    class U3 soft;
 ```
 
 > [!用語] 宣言型プロセスの自動化（Declarative Process Automation）
@@ -73,11 +81,55 @@ for (Account acc : accounts) {              // for：全件を繰り返し
 }
 ```
 
+```mermaid
+flowchart LR
+    R["Apex の基本的な<br/>構成概念"]
+    V["変数<br/>（型を指定して宣言）"]
+    C["定数<br/>（final で宣言）"]
+    M["メソッド<br/>（引数を受け取り戻り値を返す）"]
+    F["フロー制御<br/>ステートメント"]
+    F1["if / else（条件分岐）"]
+    F2["for / while（繰り返し）"]
+    F3["switch（多分岐）"]
+    R --> V
+    R --> C
+    R --> M
+    R --> F
+    F --> F1
+    F --> F2
+    F --> F3
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class R hl;
+    class V soft;
+    class C soft;
+    class M soft;
+    class F soft;
+```
+
 > [!例] 宣言型とプログラミング型のどちらを選ぶ?
 >
 > - 「商談成立で取引先の項目を更新」程度なら **フロー（宣言型）** で十分。
 > - 「複数オブジェクトをまたぐ複雑な計算」「大量レコードの一括処理」「外部連携」なら **Apex（プログラミング型）**。
 > - 試験では「**まず宣言型で実現できないか検討する**」が前提。
+
+```mermaid
+flowchart TD
+    S["自動化したい業務要件"]
+    Q1{"宣言型（フロー・承認プロセス）で<br/>実現できる？"}
+    Q2{"複雑な計算・大量レコードの<br/>一括処理・外部連携が必要？"}
+    A["フロー / 承認プロセス<br/>（宣言型を優先）"]
+    B["Apex<br/>（プログラミング型）"]
+    S --> Q1
+    Q1 -->|"はい"| A
+    Q1 -->|"いいえ"| Q2
+    Q2 -->|"はい"| B
+    Q2 -->|"いいえ"| A
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class A soft;
+    class B hl;
+```
 
 ---
 

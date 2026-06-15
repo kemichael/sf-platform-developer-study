@@ -119,6 +119,20 @@ SELECT Name,Phone FROM Account
 - **SELECT 句**：取得する項目を指定（複数はカンマ区切り、1 つならカンマ不要）。
 - **FROM 句**：取得する標準/カスタムオブジェクトを指定。カスタムオブジェクトは API 参照名の末尾が `__c`（例：`Invoice_Statement__c`）。
 
+SOQL の句は決まった順序で並びます。必須は `SELECT` と `FROM`、残りは省略可能で、書く場合はこの順序を守ります。
+
+```mermaid
+flowchart LR
+    SEL["SELECT 項目<br/>必須"] --> FRM["FROM オブジェクト<br/>必須"]
+    FRM --> WHR["WHERE 条件<br/>省略可"]
+    WHR --> ORD["ORDER BY 並び替え<br/>省略可"]
+    ORD --> LIM["LIMIT 件数<br/>省略可"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class SEL,FRM hl;
+    class WHR,ORD,LIM soft;
+```
+
 主な SOQL の句を整理すると次のとおりです。
 
 | 句 | 役割 | 省略可否 | 例 |
@@ -259,7 +273,21 @@ Contact[] techContacts = [SELECT FirstName,LastName
 
 ## 関連レコードを照会する
 
-Salesforce 内のレコードはリレーション（参照関係または主従関係）でリンクでき、SOQL で関連レコードを照会できます。
+Salesforce 内のレコードはリレーション（参照関係または主従関係）でリンクでき、SOQL で関連レコードを照会できます。取引先と取引先責任者は1対多の関係で、親から子・子から親のどちらの方向にもたどれます。
+
+```mermaid
+erDiagram
+    Account ||--o{ Contact : "Contacts リレーション（1対多）"
+    Account {
+      string Name
+      string Phone
+    }
+    Contact {
+      string FirstName
+      string LastName
+      id AccountId "親 Account への参照"
+    }
+```
 
 ### 親から子を取得する（内部クエリ）
 
@@ -273,16 +301,15 @@ Salesforce 内のレコードはリレーション（参照関係または主従
 SELECT Name, (SELECT LastName FROM Contacts) FROM Account WHERE Name = 'SFDC Computing'
 ```
 
-```text
-        ┌─────────────────────────────┐
-        │  取引先 Account（親）         │
-        │   Name = 'SFDC Computing'    │
-        └─────────────┬───────────────┘
-                      │ Contacts リレーション（1対多）
-          ┌───────────┴───────────┐
-          ▼                       ▼
-   取引先責任者 Contact      取引先責任者 Contact   ← 内部クエリで取得
-   LastName='Ruiz'           LastName='...'
+```mermaid
+flowchart TD
+    P["取引先 Account（親）<br/>Name = 'SFDC Computing'"]
+    P -->|"Contacts リレーション<br/>1対多"| C1["取引先責任者 Contact<br/>LastName='Ruiz'"]
+    P -->|"Contacts リレーション<br/>1対多"| C2["取引先責任者 Contact<br/>内部クエリで取得"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class P hl;
+    class C1,C2 soft;
 ```
 
 次は内部クエリを Apex に埋め込み、`Contacts` リレーション名で子レコードを取得する例です。

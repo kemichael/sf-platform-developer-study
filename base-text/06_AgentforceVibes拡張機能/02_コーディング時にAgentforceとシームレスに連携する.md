@@ -86,6 +86,20 @@ Help me understand the relationships between my custom objects
 
 これらは、Agentforce Vibes が**組織のメタデータと構造を使ってコンテキストに応じた支援**を行うことを示しています。
 
+```mermaid
+sequenceDiagram
+    participant U as 開発者
+    participant V as Agentforce Vibes
+    participant M as Salesforce DX MCP サーバー
+    participant O as Salesforce 組織
+    U->>V: 「商談のトリガーを作って」
+    V->>M: 組織のコンテキストを要求
+    M->>O: メタデータ（命名規則・カスタム項目）を照会
+    O-->>M: メタデータを返す
+    M-->>V: 組織のパターンを提供
+    V-->>U: 既存ルールに沿ったコードを生成
+```
+
 > [!例] 「組織に応じた」生成の効果
 >
 > 命名規則が `XxxxHandler` のチームで「商談のトリガーを作って」と頼むと、組織のメタデータを参照して `OpportunityTriggerHandler` のように**既存ルールに沿った名前**で生成します。汎用 AI のように無関係な名前を勝手につけることを避けられます。
@@ -177,16 +191,18 @@ Agentforce Vibes は**スキル**と**アビリティ**を組み合わせ、**1 
 >
 > 「ルール＝いつも」「スキル＝必要なときだけ」という対比で覚えます。
 
-```text
-   ┌──────────────┐     常に適用      ┌─────────────────────────┐
-   │   ルール      │ ───────────────▶ │  すべての生成・応答      │
-   │（永続的指示） │                   │  （命名規則・標準など）  │
-   └──────────────┘                   └─────────────────────────┘
-
-   ┌──────────────┐  要求が一致した   ┌─────────────────────────┐
-   │   スキル      │  ときだけ有効化   │  そのタスクの実行         │
-   │（指示セット） │ ───────────────▶ │  ＝ アビリティ（具体処理）│
-   └──────────────┘                   └─────────────────────────┘
+```mermaid
+flowchart TD
+    REQ(["開発者の要求"]) --> RULE["ルール（永続的指示）"]
+    RULE -->|"常に適用"| ALL["すべての生成・応答<br/>（命名規則・標準など）"]
+    REQ --> CHK{"要求が<br/>スキルの説明に一致？"}
+    CHK -->|"一致しない"| SKIP["そのスキルは有効化されない"]
+    CHK -->|"一致する"| SKILL["スキル（指示セット）を有効化"]
+    SKILL --> ABILITY["アビリティ（具体処理）<br/>＝ そのタスクを実行"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class RULE,SKILL hl;
+    class ALL,ABILITY soft;
 ```
 
 ---

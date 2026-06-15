@@ -26,6 +26,21 @@
 > - **アクションなし**：「Coral Cloud の天気は？」に一般論しか答えられない。
 > - **アクションあり**：`WeatherService`（天気取得 Apex）を呼び出し、**実際の気温データ**で具体的に回答できる。
 
+```mermaid
+sequenceDiagram
+    actor U as ユーザー
+    participant A as "エージェント Agentforce"
+    participant W as "WeatherService Apex"
+    U->>A: "Coral Cloud の天気は？"
+    alt アクションあり
+        A->>W: "天気取得アクションを実行"
+        W-->>A: "実際の気温データ"
+        A-->>U: "具体的な気温で回答"
+    else アクションなし
+        A-->>U: "一般論だけで回答"
+    end
+```
+
 ---
 
 ## このモジュールのストーリー
@@ -186,6 +201,19 @@ public with sharing class WeatherService {
 > - `@InvocableMethod` を 1 つ付けるだけで、**フロー（宣言型）・外部アプリ（REST）・Agentforce** のすべてから同じ Apex を再利用できる。
 > - アクション用の入力/出力の形を、エージェント向けに整えられる。
 
+```mermaid
+flowchart LR
+    Flow["フロー（宣言型）"] --> Wrapper
+    Rest["外部アプリ（REST）"] --> Wrapper
+    Agent["Agentforce"] --> Wrapper
+    Wrapper["CheckWeather<br/>ラッパークラス<br/>@InvocableMethod"] --> Service["WeatherService<br/>（既存・変更しない）"]
+    Service --> Api["外部天気 API"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class Wrapper hl;
+    class Flow,Rest,Agent,Service soft;
+```
+
 ---
 
 ## 呼び出し可能なメソッド（InvocableMethod）を確認する
@@ -260,35 +288,22 @@ public with sharing class CheckWeather {
 
 エージェントが `CheckWeather` アクションを実行したときのデータの流れです。
 
-```text
-  ユーザー「来週月曜の天気は？」
-            │
-            ▼
-   ┌────────────────────────┐
-   │ Agentforce（AI が推論） │  ← どのアクションを使うか判断
-   └───────────┬────────────┘
-               │ 日付を WeatherRequest に詰める（入力）
-               ▼
-   ┌────────────────────────────────────┐
-   │ CheckWeather.getWeather             │  @InvocableMethod
-   │  入力: List<WeatherRequest>         │
-   └───────────┬────────────────────────┘
-               │ WeatherService を呼び出す
-               ▼
-   ┌────────────────────────────────────┐
-   │ WeatherService.getResortWeather     │
-   │  外部天気 API に HTTP コールアウト   │
-   └───────────┬────────────────────────┘
-               │ 気温データを返す
-               ▼
-   ┌────────────────────────────────────┐
-   │ WeatherResponse（出力）             │  @InvocableVariable
-   │  minTemperature / maxTemperature /  │
-   │  temperatureDescription             │
-   └───────────┬────────────────────────┘
-               │
-               ▼
-     エージェントが回答文を生成してユーザーに返す
+```mermaid
+sequenceDiagram
+    actor U as ユーザー
+    participant A as "Agentforce（AI 推論）"
+    participant C as "CheckWeather<br/>@InvocableMethod"
+    participant W as "WeatherService"
+    participant Api as "外部天気 API"
+    U->>A: "来週月曜の天気は？"
+    Note over A: どのアクションを使うか判断
+    A->>C: "日付を WeatherRequest に詰めて呼び出し（入力）"
+    C->>W: "getResortWeather を呼び出す"
+    W->>Api: "HTTP コールアウト"
+    Api-->>W: "気温データ（JSON）"
+    W-->>C: "Weather オブジェクト"
+    C-->>A: "WeatherResponse（出力）<br/>min/max/temperatureDescription"
+    A-->>U: "回答文を生成して返す"
 ```
 
 ---
@@ -345,6 +360,18 @@ Apex ファイルにアクセスするには適切な権限が必要です。こ
 > 1. **機能の有効化**：Agentforce Studio が組織で有効。
 > 2. **`@InvocableMethod` 化**：Apex が呼び出し可能なメソッドとして公開済み。
 > 3. **権限の付与**：エージェントが Apex クラスにアクセスできる権限を持つ。
+
+```mermaid
+flowchart TD
+    S(["エージェントアクション構築"]) --> P1["1. 機能の有効化<br/>Agentforce Studio が有効"]
+    P1 --> P2["2. @InvocableMethod 化<br/>Apex を呼び出し可能に公開"]
+    P2 --> P3["3. 権限の付与<br/>権限セットで Apex アクセス権"]
+    P3 --> OK(["アクションが動作可能"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class OK hl;
+    class P1,P2,P3 soft;
+```
 
 ---
 

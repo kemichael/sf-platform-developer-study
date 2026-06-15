@@ -52,11 +52,14 @@ FIND {"grand*"} IN ALL FIELDS RETURNING Account(Name), Contact(LastName, FirstNa
 
 このクエリは3つの部分に分けられます。
 
-```text
-FIND {"grand*"}          IN ALL FIELDS          RETURNING Account(Name), Contact(...)
-└────┬───────┘          └────┬──────┘          └──────────────┬──────────────────┘
-   ① 何を探すか            ② どの項目を探すか        ③ どのオブジェクトの何を返すか
-   （FIND 句・必須）         （IN 句）                 （RETURNING 句）
+```mermaid
+flowchart LR
+    F["FIND {「grand*」}<br/>① 何を探すか<br/>（必須）"] --> I["IN ALL FIELDS<br/>② どの項目を探すか<br/>（任意）"]
+    I --> R["RETURNING Account(Name),<br/>Contact(...)<br/>③ どのオブジェクトの何を返すか<br/>（任意）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class F hl;
+    class I,R soft;
 ```
 
 > [!ポイント] SOSL の3部構成（暗記）
@@ -136,6 +139,21 @@ FIND {"grand*"}          IN ALL FIELDS          RETURNING Account(Name), Contact
 >
 > 「複数の無関係なオブジェクトを横断してテキストを探す」→ **SOSL**。「特定オブジェクトを条件で絞り込む」→ **SOQL**。
 
+判断の流れを図にすると次のとおりです。
+
+```mermaid
+flowchart TD
+    S(["データを取得したい"]) --> Q1{"どの項目・<br/>オブジェクトに<br/>あるか分かる？"}
+    Q1 -->|"はい（条件が明確）"| Q2{"対象は単一<br/>オブジェクト<br/>＋関連？"}
+    Q1 -->|"いいえ（場所が不明）"| SOSL["SOSL を使う<br/>FIND で全文検索"]
+    Q2 -->|"はい"| SOQL["SOQL を使う<br/>SELECT で照会"]
+    Q2 -->|"いいえ（無関係な複数）"| SOSL
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class S hl;
+    class SOQL,SOSL soft;
+```
+
 ---
 
 ## SOSL 検索の実行
@@ -188,6 +206,17 @@ FIND {"grand*"}          IN ALL FIELDS          RETURNING Account(Name), Contact
 > [!例] このコードがやっていること
 >
 > 取引先「Test Account」を作成して `insert` すると `acct.ID` に18文字のレコード ID が入ります。それを `acctID` に取り出し、その取引先 ID（`AccountId=acctID`）を持つ取引先責任者「Joseph Wilson」を作成して `insert`。これで親（取引先）と子（取引先責任者）が紐づきます。
+
+```mermaid
+sequenceDiagram
+    participant Apex as Apex コード
+    participant DB as Salesforce DB
+    Apex->>DB: insert acct（取引先を追加）
+    DB-->>Apex: acct.ID に18文字のIDを返す
+    Apex->>Apex: acctID = acct.ID（IDを取り出す）
+    Apex->>DB: insert con（AccountId=acctID で子を追加）
+    DB-->>Apex: 親子が紐づいた取引先責任者を登録
+```
 
 ### 開発者コンソールでの検索
 

@@ -206,14 +206,16 @@ selector.html を編集して `{name}` を追加します。
 
 selector ファイルを含めて保存・リリースすると、ログイン中のユーザー名が表示されます（ページの更新が必要な場合あり）。
 
-```text
-[組織のデータ（User レコード）]
-        │  @wire(getRecord, { recordId: '$userId', fields })
-        ▼
-[selector.js] user.data から getFieldValue で Name を取得 → name ゲッター
-        │  {name} のデータバインディング
-        ▼
-[selector.html] "Available Bikes for ○○（ユーザー名）" と表示
+```mermaid
+sequenceDiagram
+    participant Org as 組織のデータ（User レコード）
+    participant JS as selector.js
+    participant HTML as selector.html
+    JS->>Org: @wire(getRecord, { recordId: '$userId', fields })
+    Org-->>JS: user.data を返す（リアクティブ）
+    Note over JS: getFieldValue で Name を取得 → name ゲッター
+    JS->>HTML: {name} のデータバインディング
+    Note over HTML: 「Available Bikes for ○○（ユーザー名）」と表示
 ```
 
 > [!ポイント] `@wire` の頻出ポイント

@@ -59,7 +59,8 @@ function main() {
   console.log(`トピック: ${data.topics.length} / ユニット: ${unitCount}`);
   const vendorFiles = ['marked.min.js', 'prism-core.min.js', 'prism-markup.min.js', 'prism-clike.min.js',
     'prism-css.min.js', 'prism-javascript.min.js', 'prism-sql.min.js', 'prism-java.min.js',
-    'prism-apex.min.js', 'prism-bash.min.js', 'prism-json.min.js'];
+    'prism-apex.min.js', 'prism-bash.min.js', 'prism-json.min.js',
+    'mermaid.min.js'];
   const vendorJs = vendorFiles.map(f => `/* ${f} */\n${readVendor(f)}`).join('\n;\n');
   const css = fs.readFileSync(path.join(__dirname, 'styles.css'), 'utf8');
   const appJs = fs.readFileSync(path.join(__dirname, 'app.js'), 'utf8');
