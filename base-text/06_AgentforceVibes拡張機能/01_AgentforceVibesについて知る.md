@@ -184,3 +184,39 @@ Agentforce Vibes 拡張機能はデフォルトでデスクトップアプリで
 >
 > - **問 1 → B**：拡張機能は VS Code 用 Salesforce 拡張機能パックに含まれて配布されます。
 > - **問 2 → B**：従来は「提案する」だけ、Agentforce Vibes は「**アクションを実行し、ワークフローを自動化する**」点が決定的な違いです。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元は、Agentforce Vibes が「答えを提案するだけの AI」ではなく「自分でアクションを実行するエージェンティック AI」であること、その2大機能（チャットとインラインオートコンプリート）、そして入手方法と利用前準備を押さえる回でした。
+
+次の図は、拡張機能の入手から利用開始までの全体像を俯瞰します。
+
+```mermaid
+flowchart TD
+    PACK["Salesforce 拡張機能パック<br/>（Visual Studio Marketplace で配布）"] --> Q{"使う IDE は？"}
+    Q -->|"VS Code"| VSC["手動インストール"]
+    Q -->|"Agentforce Vibes IDE"| AVI["事前インストール済み"]
+    VSC --> PREP["利用前準備<br/>テレメトリーを有効化"]
+    AVI --> PREP
+    PREP --> USE["2大機能を利用"]
+    USE --> CHAT["チャット<br/>（アクション実行・自動化）"]
+    USE --> AC["インラインオートコンプリート<br/>（Apex・LWC 対応）"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class PACK hl;
+    class CHAT,AC soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - Agentforce Vibes は**コマンド実行・ワークフロー自動化まで行うエージェンティック AI ツールのスイート**。
+> - 従来 AI との決定的な違いは「**アクションを実行する**」こと（速度・メモリ削減ではない）。
+> - 入手方法は **VS Code 用 Salesforce 拡張機能パックに含まれる形のみ**。
+> - 2大機能は**チャット**（MCP 搭載・組織に直接接続可）と**インラインオートコンプリート**（Apex・LWC 対応）。
+> - 利用前に **Salesforce テレメトリー**の有効化が必要で、生成 AI の出力確認は利用者の責任。
+
+> [!豆知識] 「Vibes」という名前の由来
+>
+> Agentforce Vibes は旧称を「開発者向け Agentforce（Agentforce for Developers）」といいました。近年広まった「バイブコーディング（vibe coding）」— 細かい構文より意図や雰囲気を自然言語で AI に伝えて開発を進めるスタイル — を体現する命名で、「自然言語でノリよく開発する」という製品の方向性がそのまま製品名に表れています。

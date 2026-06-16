@@ -188,3 +188,33 @@ sequenceDiagram
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しながら進めます。評価は英語データに対して行われるため、**英語の値のみ** をコピー＆ペーストします。日本語組織で不合格になった場合は、(1) [地域（Locale）] を [米国（United States）]、(2) [言語（Language）] を [英語（English）] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、画面側の **Aura コンポーネントバンドル** を作り、`controller` で Apex を紐付け、`aura:attribute` でデータの入れ物を用意し、`force:recordData`（Lightning Data Service）で取引先名を取得してカードタイトルに表示するところまでを学びました。
+
+この単元で登場した「マークアップの主要な構成要素」と役割を整理します。
+
+| 要素 | 記述例 | 役割 |
+| --- | --- | --- |
+| `controller` 属性 | `controller="MyContactListController"` | 連携する **Apex クラス**を指定し `getContacts` を呼べるようにする |
+| `implements` | `flexipage:availableForRecordHome` | コンポーネントを **レコードページに配置可能**にする |
+| `implements` | `force:hasRecordId` | 表示中の **recordId を自動受け取り**できるようにする |
+| `aura:attribute` | `name="Contacts" type="Contact"` | コンポーネント内で **データを保持する入れ物（変数）** |
+| `force:recordData` | `targetFields="{!v.Account}"` | **Apex なし**でレコード項目を取得（LDS） |
+| 値プロバイダー `v.` | `{!v.Account.Name}` | マークアップから **属性の値を参照**する式構文 |
+
+> [!まとめ] この単元の要点
+>
+> - Aura コンポーネントは **マークアップ（.cmp）・JavaScript・CSS のバンドル**で構成される。
+> - `controller="..."` で **連携する Apex クラス**を指定する。
+> - `implements="flexipage:availableForRecordHome"` がないと **レコードページに配置できない**。
+> - `force:hasRecordId` を実装すると **recordId 属性が自動設定**される。
+> - `aura:attribute` は **データの入れ物**、`{!v.属性名}` で参照する。
+> - 単純なレコード取得は **`force:recordData`（LDS）で Apex なし**にできる。
+
+> [!豆知識] LDS は「キャッシュを共有する賢いデータ層」
+>
+> Lightning Data Service は、同じレコードを複数のコンポーネントが参照しても **クライアント側で1つのキャッシュを共有**します。あるコンポーネントがレコードを更新すると、同じレコードを表示している他のコンポーネントにも自動で反映されます。Apex を書かずに済むだけでなく、サーバー負荷とデータの不整合を同時に減らせるのが LDS の強みです。

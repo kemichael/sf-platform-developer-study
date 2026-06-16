@@ -317,3 +317,38 @@ Id jobId = System.enqueueJob(new MyQueueableClass(contacts));
 >
 > - **問 1 → D**：大量レコード・コールアウト・処理のオフロードの 3 つすべてが非同期の使いどころです。
 > - **問 2 → D**：実在する非同期タイプは future / Batch / Queueable / Scheduled。「future Apex に戻る」というタイプはありません。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元は「**非同期 Apex の 3 つの使いどころと 4 つの手段**」を学びました。大量レコード・コールアウト・処理のオフロードという目的に対し、future / Batch / Queueable / Scheduled をどう選ぶかが要点です。
+
+次の図は、非同期手段の選び方を 1 枚で俯瞰したものです。
+
+```mermaid
+flowchart TD
+    S(["非同期で処理したい"]) --> Q1{"大量レコードを処理する？"}
+    Q1 -->|"はい"| B["Batch Apex<br/>start・execute・finish<br/>最大 1.5 億件"]
+    Q1 -->|"いいえ"| Q2{"sObject を渡す／監視<br/>／チェーンが必要？"}
+    Q2 -->|"はい"| QU["Queueable Apex<br/>future の上位互換・jobId 取得"]
+    Q2 -->|"いいえ"| F["future メソッド<br/>static・void・プリミティブ引数"]
+    S --> Q3{"決まった時刻に<br/>定期実行したい？"}
+    Q3 -->|"はい"| SC["Scheduled Apex<br/>Schedulable を実装"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class S hl;
+    class B,QU,F,SC soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - 非同期を使う理由は **大量レコード処理・外部コールアウト・処理のオフロード**の 3 つ。
+> - **future**：`@future` を付けるだけで手軽。**`static` / 戻り値 `void` / 引数はプリミティブのみ**。追跡・チェーン不可。
+> - **Batch**：`start` / `execute` / `finish` を実装。**まとまり（既定 200 件）ごとに制限がリセット**され最大 1.5 億件を処理可能。
+> - **Queueable**：future の上位互換。**sObject を渡せ・`jobId` で追跡でき・チェーンもできる**。
+> - **トリガーから直接コールアウトはできない**ため、future / Queueable 経由で行う。
+
+> [!豆知識] Queueable は「いいとこ取り」で生まれた
+>
+> Queueable Apex は、future の手軽さ（クラスを `enqueueJob` で投げるだけ）と Batch の柔軟さ（sObject を保持できる・チェーンできる）の「両方の良い部分」を 1 つにまとめる形で後発で登場しました。そのため公式ドキュメントでも future の制約を解消した存在として紹介され、現場では「迷ったら future より Queueable」と言われることが多いツールです。

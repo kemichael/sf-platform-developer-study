@@ -210,3 +210,40 @@ Successfully authorized <username> with org ID <orgid>
 > - Apex クラスは必ず **[SFDX: Create Apex Class]** で作る（`.cls-meta.xml` が必要）。
 > - わざとバグのある `AccountService`（`TickerSymbol = accountNumber`）と、検証する `AccountServiceTest` を用意した。
 > - Salesforce CLI でハンズオン組織を **`debuggerOrg`** という別名で承認した。
+
+---
+
+## 🎓 この単元のまとめ
+
+このステップでは、デバッグの題材となる Salesforce DX プロジェクトを作り、意図的なバグを含む `AccountService` クラスと、それを検証する `AccountServiceTest` を用意し、ハンズオン組織を CLI で承認しました。次のステップでこのバグを再生デバッガーで見つけて直します。
+
+次の図は、このステップで用意した「バグの仕込み」と「検出のしくみ」の対応関係を俯瞰したものです。
+
+```mermaid
+flowchart LR
+    P["Salesforce DX プロジェクト<br/>debugger-project"] --> S["AccountService<br/>createAccount メソッド"]
+    S --> BUG["バグ：TickerSymbol に<br/>accountNumber を代入"]
+    P --> T["AccountServiceTest<br/>should_create_account"]
+    T --> AS["Assert.areEqual で<br/>TickerSymbol を検証"]
+    AS -->|"期待 CRM ≠ 実際 SFDC"| FAIL["テストが失敗して<br/>バグを検出"]
+    BUG -.->|"誤った値が入る"| FAIL
+    P --> ORG["debuggerOrg として承認"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef bug fill:#FCE8E8,stroke:#C23934,color:#3B0B0B;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class BUG bug;
+    class P hl;
+    class S,T,AS,FAIL,ORG soft;
+```
+
+> [!まとめ] このステップの要点
+>
+> - **Salesforce DX プロジェクト**（`debugger-project`）を作り、ソースを `force-app/main/default/classes` で管理する。
+> - Apex クラスは必ず **[SFDX: Create Apex Class]** で作る（`.cls` と `.cls-meta.xml` の 2 ファイルが必要）。
+> - 仕込んだバグは `TickerSymbol = accountNumber`。コンパイルは通るが**間違った値が入るロジックのバグ**。
+> - `AccountServiceTest` は `Assert.areEqual` で `TickerSymbol = 'CRM'` を期待し、ここで失敗してバグを検出する。
+> - CLI でハンズオン組織を **`debuggerOrg`** という別名で承認しておく。
+
+> [!豆知識] コンパイルが通るバグほど厄介
+>
+> 今回の `TickerSymbol = accountNumber` は文法的に正しく、エディターも警告を出しません。型の不一致や未定義変数のように**コンパイル時に弾かれるバグ**は早期に気づけますが、「正しい型の間違った値を代入する」ロジックのバグは実行して結果を見るまで分かりません。だからこそテストで期待値を突き合わせ、デバッガーで実際の値を確認する工程が効きます。

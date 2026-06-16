@@ -503,3 +503,39 @@ flowchart TD
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しながら進めます。評価は英語データを対象に行われるため、**英語の値のみ**をコピーして貼り付けます。不合格の場合は、(1) [Locale] を [United States]、(2) [Language] を [English] に切り替えてから、(3) [Check Challenge] をクリックしてみてください。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、Apex からレコードを作成・更新・削除する DML の使い方を学びました。6つの DML ステートメント、`upsert` のキー一致挙動、`DmlException` と `try...catch`、部分完了を許す `Database` クラスメソッド、そしてトランザクションとガバナ制限まで、データ操作の全体像を押さえました。
+
+次の図は、DML 操作で「どの命令を選び、エラーをどう扱うか」を俯瞰した分岐です。
+
+```mermaid
+flowchart TD
+    S(["レコードを操作したい"]) --> Q1{"何をする？"}
+    Q1 -->|"新規 / 更新 / 削除"| OP["insert / update / delete<br/>upsert / undelete / merge"]
+    OP --> Q2{"一部失敗を許す？"}
+    Q2 -->|"全件成功させたい"| DML["DML ステートメント<br/>try...catch で DmlException"]
+    Q2 -->|"成功分は残したい"| DBM["Database メソッド<br/>allOrNone=false・結果配列で判定"]
+    DML --> T["トランザクション内で実行<br/>1件失敗で全体ロールバック"]
+    DBM --> T
+    T --> G["リストで一括 DML<br/>150 件制限を回避"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class S hl;
+    class OP,DML,DBM,T,G soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - DML は `insert` / `update` / `delete`（一般）と `upsert` / `undelete` / `merge`（Salesforce 固有）の **6 種類**。読み取りは SOQL。
+> - `insert` 後は引数の sObject 変数の **`Id` に自動で値が入る**。レコードは**リストで一括 DML**（150 件制限対策）。
+> - **upsert** は「あれば更新・なければ挿入」。**0 件→挿入／1 件→更新／2 件以上→エラー**。`merge` は4標準オブジェクトのみ最大3件、`delete` はごみ箱に15日。
+> - **全件確実に→ DML ステートメント（all or none）／部分完了→ Database メソッド（allOrNone=false）**。
+> - DML はトランザクション内で実行され、**1 つ失敗すれば全体がロールバック**される。親と関連レコードは別々の DML で更新する。
+
+> [!豆知識] 「ごみ箱 15 日」は Apex 削除でも有効
+>
+> `delete` で消したレコードは即座に消滅せず、組織のごみ箱に約 15 日間保管されます。これは画面上での削除と同じ仕組みで、Apex から `undelete` で復元できます。さらに `Database.emptyRecycleBin()` を使えばごみ箱を強制的に空にして完全削除することも可能です。「消したつもりが復元できた」のはこのごみ箱猶予期間のおかげです。

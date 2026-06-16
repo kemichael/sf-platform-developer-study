@@ -161,3 +161,29 @@ java -version
 > - JDK は**バージョン 21 推奨**（17・11 も可）。インストール後はパスを控える。
 > - VS Code の `salesforcedx-vscode-apex.java.home` 設定で、拡張機能が使う Java の場所を明示できる。
 > - 各インストール後は VS Code を**再起動**し、`sf update` / `java -version` で動作確認する。
+
+---
+
+## 🎓 この単元のまとめ
+
+このステップでは、Apex Replay Debugger を動かすために必要な 4 つの道具（Salesforce CLI・VS Code・Salesforce Extension Pack・JDK）を順にインストールし、拡張機能が使う Java の場所を `salesforcedx-vscode-apex.java.home` で明示する設定までを行いました。
+
+次の表は、4 つの道具の役割と確認方法をまとめたものです。
+
+| 道具 | 役割 | 動作確認の方法 |
+| --- | --- | --- |
+| **Salesforce CLI** | コマンドから組織を操作・デプロイ・テスト | `sf update` が動く |
+| **Visual Studio Code** | コードを書きデバッガーを動かすエディター | 起動できる |
+| **Salesforce Extension Pack** | VS Code に Apex 開発・デバッグ機能を追加 | インストール後に再起動 |
+| **JDK（21 推奨）** | Apex 言語サポートが内部で使う実行基盤 | `java -version` で 21 系が表示 |
+
+> [!まとめ] このステップの要点
+>
+> - Apex Replay Debugger には **Salesforce CLI / VS Code / Salesforce Extension Pack / JDK** の 4 点が必要。
+> - JDK は**バージョン 21 推奨**（17・11 も可）。インストール後はパスを正確に控える。
+> - 拡張機能が使う Java は `salesforcedx-vscode-apex.java.home` 設定で個別指定でき、複数バージョンが混在しても狙ったものを使わせられる。
+> - インストールや設定の後は VS Code を**再起動**し、`sf update` と `java -version` で必ず動作確認する。
+
+> [!豆知識] Salesforce 拡張機能は「Eclipse 時代」の後継
+>
+> 今でこそ VS Code が定番ですが、かつての Salesforce 開発は Eclipse 用の Force.com IDE プラグインが主流でした。VS Code 向け Salesforce Extension Pack はその後継にあたります。なお Apex の補完や構文チェックを担う言語サーバーは内部で Java を使うため、Apex を書くだけでも JDK が欠かせません。「コードを書くだけなのになぜ Java が要るのか」は、この内部実装が理由です。

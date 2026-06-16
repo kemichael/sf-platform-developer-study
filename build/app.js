@@ -48,13 +48,14 @@
     '注意': { cls: 'warning', label: '注意', icon: 'i-alert' },
     '手順': { cls: 'steps', label: '操作手順', icon: 'i-list' },
     'まとめ': { cls: 'summary', label: 'まとめ', icon: 'i-flag' },
+    '豆知識': { cls: 'trivia', label: '豆知識', icon: 'i-star' },
   };
 
   function transformCallouts(host) {
     host.querySelectorAll('blockquote').forEach(bq => {
       const firstP = bq.querySelector('p');
       if (!firstP) return;
-      const m = firstP.textContent.match(/^\s*\[!(用語|例|ポイント|注意|手順|まとめ)\]\s*(.*)$/);
+      const m = firstP.textContent.match(/^\s*\[!(用語|例|ポイント|注意|手順|まとめ|豆知識)\]\s*(.*)$/);
       if (!m) return;
       const def = CALLOUTS[m[1]];
       const title = (m[2] || '').trim();

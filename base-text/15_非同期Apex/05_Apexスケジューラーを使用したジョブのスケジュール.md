@@ -300,3 +300,38 @@ flowchart TD
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語 Playground で開始し、かっこ内の翻訳を参照しながら進める。評価は英語データに対して行われるため**英語の値のみ**をコピー＆ペーストする。不合格時は、(1) [地域] を [米国]、(2) [言語] を [英語] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがある。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、`Schedulable` インターフェースと `System.schedule()` を使い、CRON 式で指定した日時・周期に Apex を自動実行する「スケジュール済み Apex」を学びました。
+
+次の図は、スケジュール登録から指定日時の実行までの流れを俯瞰したものです。
+
+```mermaid
+flowchart TD
+    S(["Schedulable を実装<br/>execute(SchedulableContext ctx)"]) --> R["System.schedule<br/>（名前 / CRON式 / インスタンス）"]
+    R --> CT["CronTrigger を作成<br/>jobID が返る"]
+    CT --> W{"CRON 式の日時に到達？"}
+    W -->|"まだ"| W
+    W -->|"到達"| EX["execute() を自動実行<br/>ユーザーのタイムゾーン基準"]
+    EX --> E(["処理完了"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class S hl;
+    class R,CT,EX,E soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - 実装は **`Schedulable` インターフェース**、メソッドは **`execute(SchedulableContext ctx)`**、登録は **`System.schedule(名前, CRON 式, インスタンス)`**。
+> - CRON 式の並び：**秒 分 時 日 月 曜日 [年]**。`?` は「日 / 曜日のどちらかを未指定」。
+> - `System.schedule()` は**ユーザーのタイムゾーン**を基準に動く。
+> - スケジュール済みジョブは**一度に最大 100 件**まで設定可能。
+> - **同期コールアウトは不可** → `@future(callout=true)` 経由か、Batch クラスからコールアウトする。
+> - テストは `Test.startTest()` / `Test.stopTest()` で囲み、CRON の時刻に関係なく `stopTest()` 後に同期実行される。
+
+> [!豆知識] CRON 式は Unix 生まれ、でも Salesforce 版は「秒」と「年」が増えている
+>
+> CRON は元々 Unix の定期実行ツール cron に由来し、伝統的には「分 時 日 月 曜日」の 5 フィールドです。Salesforce の CRON 式は先頭に**秒**、末尾に任意の**年**を加えた最大 7 フィールド構成になっており、より細かい時刻指定ができます。テストで未来の年（2042 など）を書くのは、構文を満たしつつ「本番では絶対に発火させない」ための定番テクニックです。

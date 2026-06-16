@@ -399,3 +399,36 @@ flowchart TD
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照して進めます。評価は英語データを対象に行われるため、**英語の値のみ**をコピーして貼り付けます。不合格だった場合は、(1) [Locale (地域)] を [United States (米国)]、(2) [Language (言語)] を [English (英語)] に切り替えてから、(3) [Check Challenge (Challenge を確認)] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、AI エージェントに新しい能力を追加する「エージェントアクション」の正体と、既存の Apex クラスを `@InvocableMethod` で公開してアクション化する準備を学びました。アクションを動かすには「機能の有効化・Apex の公開・権限の付与」という 3 つの前提が必要です。
+
+次の図は、既存の `WeatherService` を直接書き換えず、ラッパークラス `CheckWeather` に `@InvocableMethod` を付けてエージェントから呼び出せるようにする全体構造を俯瞰したものです。
+
+```mermaid
+flowchart LR
+    Org["組織機能<br/>Agentforce Studio を有効化"] --> Agent["Agentforce<br/>AI エージェント"]
+    Agent -->|"会話から推論して選択"| Wrapper["CheckWeather<br/>ラッパー<br/>@InvocableMethod"]
+    Wrapper --> Service["WeatherService<br/>（既存・変更しない）"]
+    Service --> Api["外部天気 API<br/>HTTP コールアウト"]
+    Perm["権限セット<br/>Apex アクセス権付与"] -.->|"なければ動かない"| Wrapper
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class Wrapper hl;
+    class Org,Agent,Service,Api,Perm soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - **エージェントアクション**は、AI エージェントがユーザーの依頼を達成するために実行する具体的な処理。標準・フロー・Apex で作れる。
+> - 既存の Apex は直接書き換えず、**それを呼び出すラッパークラスに `@InvocableMethod` を付ける**のがベストプラクティス（責務の分離・再利用性）。
+> - `@InvocableMethod` のメソッドは **`public`（または `global`）かつ `static`**、引数は **List 型を 1 つ**、戻り値は **List 型** または `void`、1 クラスに **1 メソッド**だけ。
+> - `@InvocableVariable` を入力/出力の変数に付ける。`required`・`description`・データ型は**そのままアクション作成画面に自動反映**される。
+> - アクションを動かす 3 前提は「**機能の有効化・`@InvocableMethod` 化・権限の付与**」。
+
+> [!豆知識] description は「人間向け」ではなく「AI 向け」のコメント
+>
+> 通常のコメントは人間が読むためのものですが、`@InvocableMethod` や `@InvocableVariable` の `description` は **AI エージェントがそのアクションをいつ・どう使うかを判断する材料**として読み込まれます。つまり AI に対する指示書そのもの。曖昧に書くと AI が適切なアクションを選べなくなるため、「何をする処理か」を明確に書くことがそのまま回答精度に直結します。

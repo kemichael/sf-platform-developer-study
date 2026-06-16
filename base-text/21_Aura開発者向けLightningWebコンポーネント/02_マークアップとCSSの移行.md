@@ -537,3 +537,45 @@ flowchart TD
 >
 > - 第 1 問：Aura の `<aura:attribute>` は LWC では **JavaScript プロパティ**（外部公開なら `@api`）になります。→ **C**。
 > - 第 2 問：LWC のスタイルは shadow DOM により**自分自身にのみ**適用され、子にも親にも伝播しません。→ **A**。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、Aura のマークアップ（`.cmp`）と CSS が、LWC の HTML・JavaScript・CSS にどう移行されるかを、属性・式・条件・繰り返し・初期化・スタイルの各観点で対応づけて学びました。
+
+次の図は、Aura のマークアップ要素が LWC のどこ（HTML 側か JavaScript 側か）へ移るのかを俯瞰したものです。
+
+```mermaid
+flowchart LR
+    subgraph AURA["Aura（.cmp に集約）"]
+        A1["属性 aura:attribute"]
+        A2["基本式 {!v.xxx}"]
+        A3["複合式 {!v.page &gt; 1}"]
+        A4["条件 aura:if"]
+        A5["繰り返し aura:iteration"]
+        A6["init イベント"]
+    end
+    A1 --> JS["JavaScript<br/>（@api / getter / connectedCallback）"]
+    A3 --> JS
+    A6 --> JS
+    A2 --> HTML["HTML<br/>（{xxx} / lwc:if / for:each）"]
+    A4 --> HTML
+    A5 --> HTML
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class JS hl;
+    class HTML soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - 属性 `<aura:attribute>` → **JS プロパティ**（公開は `@api`）、基本式 `{!v.xxx}` → `{xxx}`、複合式 → **getter**。
+> - 条件 `<aura:if>` → `lwc:if`/`lwc:elseif`/`lwc:else`、繰り返し `<aura:iteration>` → `for:each`/`for:item`（**`key` 必須**）。
+> - 初期化 `init` イベント → ライフサイクルフック **`connectedCallback()`**。
+> - 基本コンポーネントは **コロン → ダッシュ＋ケバブケース**（`lightning:formattedNumber` → `lightning-formatted-number`）、自己終了タグ不可。
+> - CSS は **`.THIS` を削除**するだけ。**shadow DOM** が自動でスタイルをカプセル化し、LWC のスタイルは自分自身にのみ影響する。
+
+> [!豆知識] LWC の Shadow DOM は「合成シャドウ」で互換性を確保
+>
+> ブラウザーが Shadow DOM にネイティブ対応していない時代を見越し、LWC は「synthetic shadow（合成シャドウ）」という独自実装でカプセル化を再現してきました。そのため古いブラウザーでもスタイルの分離が機能します。最近のブラウザーはネイティブ Shadow DOM に対応したため、LWC でもネイティブシャドウへ移行できる設定が用意されています。「LWC の Shadow DOM は自動で作られ、非対応ブラウザーでも動く」のはこの仕組みのおかげです。

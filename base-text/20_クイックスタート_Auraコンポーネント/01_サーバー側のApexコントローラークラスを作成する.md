@@ -160,3 +160,38 @@ sequenceDiagram
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しながら進めます。評価は英語データに対して行われるため、**英語の値のみ** をコピー＆ペーストします。日本語組織で不合格になった場合は、(1) [地域（Locale）] を [米国（United States）]、(2) [言語（Language）] を [英語（English）] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、Aura コンポーネントが表示するデータの供給源となる **サーバー側 Apex コントローラー** を作り、`@AuraEnabled` を付けてクライアントから呼び出せる状態にするまでを学びました。
+
+次の図は、Apex メソッドが「コンポーネントから呼べる入口」になるための必須条件を俯瞰したものです。
+
+```mermaid
+flowchart TD
+    M(["Apex メソッドを定義"]) --> Q1{"@AuraEnabled が<br/>付いている？"}
+    Q1 -->|"いいえ"| NG["コンポーネントから<br/>呼び出せない"]
+    Q1 -->|"はい"| Q2{"public か global<br/>かつ static？"}
+    Q2 -->|"private や非static"| NG
+    Q2 -->|"はい"| OK["c.メソッド名 で<br/>呼び出せる"]
+    OK --> SOQL["SOQL で取引先責任者を取得<br/>WHERE AccountId = :recordId"]
+    SOQL --> RET(["List「Contact」を返す"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class OK hl;
+    class M,SOQL,RET soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - Aura コンポーネントが表示するデータは **サーバー側 Apex** から取得する。
+> - Apex メソッドに **`@AuraEnabled`** を付けないとコンポーネントから呼び出せない。
+> - 呼び出すメソッドは **`public`（または `global`）かつ `static`** が基本。
+> - データ取得には **SOQL** を使い、`:recordId` の **バインド変数** で安全に値を渡す。
+> - Apex は **ガバナ制限** の対象。ループ内 SOQL を避けるなど上限を意識する。
+
+> [!豆知識] cacheable=true で「速くて省エネ」
+>
+> 読み取り専用の Apex メソッドに `@AuraEnabled(cacheable=true)` を付けると、結果がクライアント側にキャッシュされ、同じ要求でサーバーへ行かずに済みます。LWC ではデータを `@wire` で取得する場合この指定が必須です。「読むだけのメソッドはキャッシュ可能にする」のが性能チューニングの定番です。

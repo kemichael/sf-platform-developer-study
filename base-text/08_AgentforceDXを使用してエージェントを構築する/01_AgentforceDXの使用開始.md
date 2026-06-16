@@ -314,3 +314,37 @@ sequenceDiagram
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しながら進めます。評価は英語データに対して行われるため、**英語の値のみ**をコピー&ペーストします。不合格になった場合は、(1) [Locale] を [United States]、(2) [Language] を [English] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元は、Agentforce DX で**エージェントを「コードとして」開発するための準備**を整える回でした。専用組織のサインアップから機能の有効化、ツールのインストール、リポジトリのクローン、組織の認証、設定スクリプトの実行までを順番に進めます。
+
+次の図は、この単元で行う準備作業の全体の流れを俯瞰したものです。
+
+```mermaid
+flowchart TD
+    A(["専用 Developer Edition に<br/>サインアップ・Trailhead 接続"]) --> B["組織で Einstein / Einstein ボット /<br/>Agentforce を有効化"]
+    B --> C["開発ツール導入<br/>Node.js → VS Code → 拡張 → CLI → Git"]
+    C --> D["サンプルリポジトリを<br/>クローン（afdx-pro-code-testdrive）"]
+    D --> E["組織を別名 agentforce で認証"]
+    E --> F["設定スクリプト実行<br/>deploy・権限割当・エージェントユーザー作成"]
+    F --> G(["準備完了<br/>生成ユーザー名を保存し次の単元へ"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class A hl;
+    class B,C,D,E,F soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - Agentforce DX は、エージェントを**メタデータ（ソースコード）として扱う「プロコード」開発**の仕組み。Git 管理・組織間移動・CI 組み込みができる。
+> - 必要なツールは **VS Code・Salesforce Extension Pack・Salesforce CLI（`sf`）・Node.js・Git**。**Node.js は設定スクリプトの依存なので先に**入れる。
+> - 専用の **Agentforce 搭載 Developer Edition** にサインアップし、**Einstein / Einstein ボット / Agentforce** を有効化する。
+> - サンプルリポジトリ `afdx-pro-code-testdrive` をクローンし、組織を別名 **`agentforce`** で認証する。
+> - 設定スクリプト（`./setup` または `setup.cmd`）が **deploy・権限割当・エージェントユーザー作成**を行い、表示される**ユーザー名は次の単元で必要**。
+
+> [!豆知識] 「DX」は Developer Experience の略
+>
+> Salesforce DX の「DX」は **Developer Experience（開発者体験）** の頭文字です。ブラウザーのクリック操作中心だった構築作業を、エディター・CLI・Git といった「現代の開発者が慣れた道具」で行えるようにする、という思想が名前に込められています。Agentforce DX は、その体験を AI エージェント開発にまで広げたものです。

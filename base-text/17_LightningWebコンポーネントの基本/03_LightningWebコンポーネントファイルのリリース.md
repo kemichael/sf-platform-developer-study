@@ -319,3 +319,37 @@ flowchart TD
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しつつ進めます。評価は英語データに対して行われるため、**英語の値のみ**をコピー&ペーストします。日本語組織で不合格になった場合は、(1) [Locale] を [United States] に、(2) [Language] を [English] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、作成した LWC を `.js-meta.xml` で設定し、組織にリリースして Lightning アプリケーションビルダーで画面に配置するまでの一連の流れを学びました。
+
+次の図は、ファイル作成からビルダー表示までの流れと、ビルダーに表示する2条件を俯瞰したものです。
+
+```mermaid
+flowchart TD
+    A["VS Code でファイル作成<br/>html / js / js-meta.xml"] --> B["js-meta.xml を設定<br/>apiVersion・isExposed・targets"]
+    B --> C{"isExposed が true<br/>かつ target を1つ以上？"}
+    C -->|"いいえ"| NG["ビルダーに表示されない"]
+    C -->|"はい"| D["組織にリリース<br/>SFDX: Deploy This Source to Org"]
+    D --> E["信頼済み URL を登録<br/>外部画像の表示許可"]
+    E --> F(["ビルダーで配置 → 保存 → 有効化<br/>UI に表示"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class F hl;
+    class B,D,E soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - 組織で使うには **`.js-meta.xml` 設定ファイル**が必須（`apiVersion`・`isExposed`・`targets`）。
+> - ビルダーに表示する2条件は **`isExposed` を `true`** ＋ **`<target>` を1つ以上定義**。どちらか欠けると表示されない。
+> - 主な `target`：`lightning__AppPage`・`lightning__RecordPage`・`lightning__HomePage`。
+> - 外部画像などの表示には**信頼済み URL**への登録が必要。
+> - 流れは「**ファイル作成 → リリース → 信頼済み URL → ビルダー配置 → 有効化**」。
+
+> [!豆知識] `apiVersion` は「言語のバージョン」を固定する保険
+
+> `.js-meta.xml` の `apiVersion`（例 `63.0`）は、そのコンポーネントが「どの Salesforce API バージョンの仕様で動くか」を固定します。Salesforce は年3回（Spring／Summer／Winter）バージョンが上がりますが、`apiVersion` を固定しておくと、組織が新バージョンに更新されても**コンポーネントの動作が変わらない**よう保護されます。古いコンポーネントが将来のリリースで急に壊れないための「保険」のような仕組みです。

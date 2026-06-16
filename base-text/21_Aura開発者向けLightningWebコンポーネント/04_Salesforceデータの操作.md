@@ -584,3 +584,38 @@ LWC での外部 API の使用は Aura と同様です。デフォルトでは L
 - B. データを読み取るため
 - C. データを更新するため
 - D. データを削除するため
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、Aura と LWC で Salesforce データを読み書きする手段を対応づけ、特に「読み取りは `@wire`、書き込みは JavaScript API」という使い分けと、Apex を `@wire`／直接コールで呼ぶ条件を学びました。
+
+次の図は、LWC でデータを扱うときの「どの手段を選ぶか」の判断を俯瞰したものです。
+
+```mermaid
+flowchart TD
+    S(["LWC でデータを扱いたい"]) --> Q1{"基本コンポーネントで<br/>足りる？"}
+    Q1 -->|"はい"| F["lightning-record-form 等<br/>（Apex 不要・内部は LDS）"]
+    Q1 -->|"いいえ"| Q2{"読み取り？<br/>書き込み？"}
+    Q2 -->|"読み取り"| Q3{"複雑な SOQL が必要？"}
+    Q2 -->|"書き込み"| W["createRecord /<br/>updateRecord / deleteRecord"]
+    Q3 -->|"いいえ"| WIRE["@wire（uiRecordApi）"]
+    Q3 -->|"はい"| APEX["@AuraEnabled<br/>cacheable=true → @wire"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class S hl;
+    class F,WIRE,W,APEX soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - フォームは Aura も LWC も基本コンポーネント（内部は **LDS**）を使い、CRUD を Apex なしで処理できる。
+> - **読み取りは `@wire`（リアクティブ・自動再取得）、書き込み（C/U/D）は `createRecord` 等の JavaScript API**。書き込みに `@wire` は使わない。
+> - Apex 公開条件は **`static` ＋（`public` または `global`）＋ `@AuraEnabled`**。
+> - 読み取り専用 Apex は **`cacheable=true`** を付けて `@wire` 可。変更系は **直接コール**（`.then()/.catch()`）。
+> - 外部 API は **CSP 信頼済みサイト**登録、外部ライブラリは**静的リソース**が必要。
+
+> [!豆知識] `cacheable=true` を付けると「サーバーに行かない」ことがある
+>
+> `@AuraEnabled(cacheable=true)` を付けた Apex メソッドは、結果がクライアント側のキャッシュ（Lightning データサービスのキャッシュ）に保存されます。同じ引数で再度呼ばれると、サーバーまで往復せずキャッシュから即座に返すため高速です。その代わり「最新データを必ず取りたい」ケースには不向きで、変更を反映するには `refreshApex()` などでキャッシュを更新する必要があります。`cacheable=true` は「速さ」と引き換えに「鮮度」を一部あきらめる宣言、と理解しておくと設計時に迷いません。

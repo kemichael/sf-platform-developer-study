@@ -412,3 +412,38 @@ flowchart TD
 > [!注意] 日本語環境で受講する場合
 >
 > この単元は Trailhead の英語教材の翻訳。コードやキーワード（`with sharing`、`WITH USER_MODE` など）は**英語のまま**正確に記述・コピー&ペーストする。日本語訳は理解の補助。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、Apex が標準でシステムモード（全データアクセス）で動くという前提のもと、「共有ルール（レコードレベル）」と「CRUD/FLS（オブジェクト・項目レベル）」の2階層をどう守るかを学びました。
+
+次の図は、Apex のセキュリティを「レコードレベルの共有」と「オブジェクト・項目レベルの CRUD/FLS」の2系統で俯瞰したものです。
+
+```mermaid
+flowchart TD
+    S(["Apex は標準でシステムモード<br/>全データにアクセス可能"]) --> L1["レコードレベルの制御<br/>＝共有ルール"]
+    S --> L2["オブジェクト・項目レベルの制御<br/>＝CRUD / FLS"]
+    L1 --> SH["with / without / inherited sharing<br/>宣言なしはアンチパターン"]
+    L2 --> UM["ユーザーモード<br/>USER_MODE / as user（最推奨）"]
+    L2 --> SE["WITH SECURITY_ENFORCED<br/>不可項目があれば例外で停止"]
+    L2 --> SI["stripInaccessible()<br/>不可項目を除去して続行（ID は残る）"]
+    L2 --> MAN["isCreateable() 等の手動チェック<br/>漏れやすい"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class S hl;
+    class L1,L2,SH,UM,SE,SI,MAN soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - Apex は標準で**システムモード**＝共有・CRUD・FLS を無視するため、開発者が明示的に保護する。
+> - **共有ルール（レコードレベル）**は `with sharing` / `without sharing` / `inherited sharing` で制御。宣言なしは「不定」でアンチパターン。
+> - **CRUD/FLS（オブジェクト・項目レベル）**の保護は、最推奨が**ユーザーモード**（`USER_MODE` / `as user` / `AccessLevel.USER_MODE`）。
+> - `WITH SECURITY_ENFORCED` は**全か無か（例外で停止）**、`stripInaccessible()` は**除去して続行（ID は残る）**と挙動が対照的。
+> - 削除は CRUD チェックのみ、`executeAnonymous` は常にユーザー権限、`Pricebook2` は共有を無視。
+
+> [!豆知識] ユーザーモードは Spring '23 の新顔
+>
+> `WITH USER_MODE` や `as user` は 2023年春（Spring '23）に正式リリースされた比較的新しい構文です。それ以前は `isAccessible()` 等を1項目ずつ手で書くか `WITH SECURITY_ENFORCED` を使うしかなく、チェック漏れの温床でした。「1行足すだけで共有・CRUD・FLS をまとめて尊重できる」のは、長年の開発者の悩みに対する答えだったわけです。

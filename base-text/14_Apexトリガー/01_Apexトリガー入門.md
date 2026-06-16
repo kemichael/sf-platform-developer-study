@@ -520,3 +520,36 @@ sequenceDiagram
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しながら進めてください。評価は英語データに対して行われるため、**英語の値のみ**をコピー&ペーストします。日本語組織で不合格になった場合は、(1) [Locale] を [United States]、(2) [Language] を [English] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、レコードの保存（挿入・更新・削除・復元）の前後に Apex を自動実行する「トリガー」の作り方と、before / after の使い分け・コンテキスト変数・`addError()` による保存制限・非同期コールアウトまでを学びました。
+
+次の図は、DML 操作をきっかけにトリガーが before → 保存 → after の順で動き、それぞれで何ができるかを俯瞰したものです。
+
+```mermaid
+flowchart TD
+    S(["DML 操作<br/>insert / update / delete / undelete"]) --> BF["before トリガー<br/>Trigger.new を直接書き換え可<br/>addError で保存を止められる"]
+    BF --> SV["データベースへ保存<br/>Id・LastModifiedDate が確定"]
+    SV --> AF["after トリガー<br/>レコードは読み取り専用<br/>関連レコード操作・コールアウト"]
+    AF --> H["ロジックはハンドラークラスへ委譲<br/>（1オブジェクト1トリガー）"]
+    H --> E(["コミット完了"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class SV hl;
+    class BF,AF,H soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - トリガーは `trigger 名前 on オブジェクト (イベント) { ... }` で定義し、`before`/`after` × `insert`/`update`/`delete`/`undelete` を組み合わせる。
+> - **before** は保存前で `Trigger.new` を直接変更でき（DML 不要）、**after** は保存後で `Id` 確定済み・読み取り専用。
+> - コンテキスト変数（`Trigger.new`/`old`/`newMap`/`oldMap`/`isInsert` …）で状況とレコードを取得する。`delete` で `new`、`insert` で `old` は使えない。
+> - 保存を中止したいときは sObject の **`addError()`** を呼ぶ。トリガーからのコールアウトは **`@future(callout=true)`** で非同期にする。
+> - ロジックはハンドラークラスへ委譲し、**1オブジェクト1トリガー**で設計するのがベストプラクティス。
+
+> [!豆知識] 「Trigger」の語源とロボット掃除機
+>
+> トリガー（trigger）は英語で「引き金」。銃の引き金を引くと弾が発射されるように、DML 操作が「引き金」となって Apex コードが自動発射されるイメージから名付けられています。データベースの世界では 1980 年代から「トリガー」という用語が使われており、Salesforce 固有の概念ではなく、Oracle など従来の RDBMS から受け継がれた古典的な仕組みです。

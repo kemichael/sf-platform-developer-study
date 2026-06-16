@@ -474,3 +474,34 @@ export default class Detail extends LightningElement {
 >
 > - 設問1：`c-` 付き・ケバブケースで属性を渡している → **A**。
 > - 設問2：**イベントは子→親（上へ）、プロパティは親→子（下へ）** → **C**。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、複数の LWC を組み合わせる「コンポジション」と、「イベントは上へ、プロパティは下へ」というコンポーネント間通信の鉄則を学びました。
+
+次の図は、tile → list → selector → detail の連鎖で「イベントが上へ、プロパティが下へ」流れる様子を総括したものです。
+
+```mermaid
+flowchart TD
+    Tile["tile<br/>クリック発生"] -->|"① tileclick イベント（上へ）"| List["list"]
+    List -->|"② productselected イベント（上へ）"| Sel["selector"]
+    Sel -->|"③ product-id プロパティ（下へ）"| Detail["detail<br/>詳細を表示"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class Sel hl;
+    class Tile,List,Detail soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - 複数の LWC は**ネスト（コンポジション）**して1つのアプリにできる。
+> - 通信の鉄則は「**イベントは上（子→親）、プロパティは下（親→子）**」。試験最頻出。
+> - 子：`this.dispatchEvent(new CustomEvent('種別名'))` で発火。**種別名は小文字・スペース不可**。
+> - 親：HTML で **`on` ＋ 種別名**（例 `onproductselected`）の属性で待ち受ける。
+> - イベントで運ぶデータは **`detail` にプリミティブ値**を入れるのが安全。
+
+> [!豆知識] イベント名を小文字にするのは「ブラウザーが大文字を消す」から
+
+> `CustomEvent` の種別名を小文字にするのは単なる作法ではなく、技術的な理由があります。HTML の属性名はブラウザーによって**自動的に小文字へ変換**されるため、親が `onProductSelected` のように大文字混じりで書いても `onproductselected` として扱われてしまいます。もしイベント種別を `productSelected` のように大文字混じりにすると、HTML 側のハンドラー名と一致せず**イベントを受け取れません**。だから「種別名は全部小文字」が鉄則なのです。

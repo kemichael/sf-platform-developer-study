@@ -285,3 +285,38 @@ sequenceDiagram
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しつつ進めます。評価は英語データに対して行われるため、**英語の値のみ**をコピー&ペーストします。日本語組織で不合格の場合は、(1) [Locale] を [United States] に、(2) [Language] を [English] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、CSS と SLDS でコンポーネントの見た目を整える方法と、`@wire` サービスで組織のライブデータ（レコード）を取得する方法を学びました。
+
+次の図は、スタイル設定の2つの選択肢と、`@wire` でデータが組織から画面まで流れる様子を俯瞰したものです。
+
+```mermaid
+flowchart TD
+    LWC["LWC コンポーネント"] --> Style{"スタイルの当て方"}
+    Style -->|"独自の見た目"| CSS["CSS ファイル<br/>Shadow DOM でカプセル化"]
+    Style -->|"標準と統一・import 不要"| SLDS["SLDS クラス"]
+    LWC --> Data["@wire サービス<br/>LDS 上・リアクティブ"]
+    Data --> Adapter["アダプターを import<br/>getRecord など"]
+    Data --> SF["@salesforce モジュール<br/>ユーザー ID・項目スキーマ"]
+    Adapter --> Result["data / error で受信<br/>画面にバインド"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class LWC hl;
+    class CSS,SLDS,Adapter,SF,Result soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - **CSS** はコンポーネント単位で適用され、**Shadow DOM** でスタイルがカプセル化される（他に漏れない）。
+> - **SLDS** クラスは import なしで Lightning 標準の見た目を手早く適用できる。
+> - 組織のライブデータは **`@wire` サービス**で取得する。LDS 上に構築され**リアクティブ**。
+> - 手順は「**アダプターを import → `@wire` でデコレート**」。結果は **`data` か `error`** に入る。
+> - **`@salesforce` モジュール**でユーザー ID・項目スキーマを安全に import。設定の **`$変数名`** はリアクティブ参照。
+
+> [!豆知識] `@wire` の「リアクティブ」は裏でキャッシュも効いている
+
+> wire サービスが LDS（Lightning データサービス）上に構築されていることには大きな利点があります。同じレコードを複数のコンポーネントが `@wire` で取得しても、LDS が**共通のキャッシュ**を持つため、サーバーへの問い合わせは一度で済みます。さらに、どこかでそのレコードが更新されると、`@wire` でつながった全コンポーネントの表示が**自動的に最新化**されます。Apex を1行も書かずに「効率的なキャッシュ」と「自動更新」の両方が手に入るのが wire サービスの強みです。

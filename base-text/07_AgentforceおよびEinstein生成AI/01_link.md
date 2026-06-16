@@ -161,3 +161,38 @@ sequenceDiagram
 > - **Einstein Trust Layer の責務**（マスキング・ゼロデータ保持・監査・有害コンテンツ検出）をキーワードで言えるようにする。
 > - **プロンプトテンプレートは宣言的に作り、Apex（ConnectApi）から実行できる**。この呼び出しは**外部コールアウトを伴い、ガバナ制限の対象**になる。
 > - 詳細なハンズオンは上記「学習リソース」の Trailhead / Salesforce ヘルプで進める。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元は、Salesforce の生成AI（Einstein / Agentforce）の登場人物と役割、そして「依頼→グラウンディング→Trust Layer→LLM」という応答が返るまでの流れ、開発者が Apex（ConnectApi）からそれを呼び出す全体像をつかむ導入でした。
+
+次の図は、生成AIの「ブランド・部品・流れ」を1枚で俯瞰したものです。総称ブランド Einstein の下に生成AIがあり、プロンプトテンプレートでグラウンディングし、Trust Layer で保護しながら LLM へ渡し、Apex から実行する関係を示します。
+
+```mermaid
+flowchart TD
+    E["Einstein<br/>AI機能の総称ブランド"] --> Gen["生成AI<br/>新しいコンテンツを生成"]
+    Gen --> Agent["Agentforce<br/>自律型AIエージェント基盤"]
+    Gen --> PT["プロンプトテンプレート<br/>Prompt Builder で作成"]
+    PT -->|"レコード項目を差し込み"| Ground["グラウンディング<br/>自社データを文脈化"]
+    Ground --> TL["Einstein Trust Layer<br/>マスキング・監査・ゼロデータ保持"]
+    TL --> LLM["外部 LLM<br/>大規模言語モデル本体"]
+    Apex["Apex（ConnectApi）<br/>業務処理に組み込み"] -->|"テンプレートを実行"| PT
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class E hl;
+    class Gen,TL hl;
+    class Agent,PT,Ground,LLM,Apex soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - **生成AI**は新しいコンテンツを生み出す AI で、裏側では**LLM**が動く。LLM への指示が**プロンプト**、その再利用形が**プロンプトテンプレート**。
+> - **Einstein**＝AI機能の総称ブランド、**Agentforce**＝自律型AIエージェント基盤、**LLM**＝モデル本体。この3つの役割を混同しない。
+> - **グラウンディング**は自社の実データを文脈として与えること。**Einstein Trust Layer** はマスキング・ゼロデータ保持・監査・有害コンテンツ検出で安全性を担保する。
+> - プロンプトテンプレートは**宣言的（Prompt Builder）に作り、Apex（ConnectApi）から実行**するのが基本パターンで、内部的に**外部コールアウト**を伴いガバナ制限の対象になる。
+
+> [!豆知識] 「Trust Layer」が解く本当の課題
+>
+> 個人向けの生成AIツールに業務データを貼り付けると、その内容がモデルの再学習に使われる懸念があります。Einstein Trust Layer の**ゼロデータ保持（Zero Data Retention）** は、送信データを LLM 提供側に保存・再学習させない契約・技術的な取り決めで、これが「企業で安心して使える生成AI」と「個人ツール」を分ける決定的なポイントです。

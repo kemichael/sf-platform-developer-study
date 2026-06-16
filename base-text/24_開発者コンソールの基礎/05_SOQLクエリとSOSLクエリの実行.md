@@ -266,3 +266,37 @@ for (Contact c : searchContacts) {
 > [!注意] 日本語環境で受講する場合
 >
 > Challenge は日本語の Trailhead Playground で開始し、かっこ内の翻訳を参照しながら進めます。評価は英語データに対して行われるため、**英語の値のみ**をコピー&ペーストします。日本語組織で不合格になった場合は、(1) [Locale] を [United States] に、(2) [Language] を [English] に切り替えてから、(3) [Check Challenge] をクリックすると通ることがあります。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、レコードを読み込む **SOQL** とテキストを横断検索する **SOSL** の違いを理解し、それぞれを**クエリエディター**と **Apex コード（インライン）** の両方で実行する方法を学びました。「SOQL = 1オブジェクト・完全一致・SELECT」「SOSL = 複数オブジェクト横断・単語一致・FIND」という対比が核心です。
+
+次の図は、目的に応じた SOQL / SOSL の選択と、それぞれの実行場所・受け取り方を俯瞰したものです。
+
+```mermaid
+flowchart TD
+    Q{"複数オブジェクトを横断して<br/>テキストを探す？"} -->|"はい・単語一致"| SOSL["SOSL<br/>FIND {…} IN … RETURNING …"]
+    Q -->|"いいえ・特定オブジェクトを読む"| SOQL["SOQL<br/>SELECT … FROM … WHERE …"]
+    SOSL --> P1["実行：クエリエディター / Apex"]
+    SOQL --> P2["実行：クエリエディター / Apex"]
+    P1 --> R1["Apex の戻り値<br/>List リストのリスト"]
+    P2 --> R2["Apex の戻り値<br/>型 配列 = 角括弧の SOQL"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class SOSL hl;
+    class SOQL,P1,P2,R1,R2 soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - **SOQL**：`SELECT ... FROM ... WHERE ...`。**1オブジェクト**を**完全一致**で読み込む。
+> - **SOSL**：`FIND {...} IN ... RETURNING ...`。**複数オブジェクトを横断**して**単語一致**で検索。
+> - 実行場所は **クエリエディター** と **Apex コード（インライン）** の2通り。
+> - Apex 内の SOQL は `Type[] var = [SELECT ...];`、SOSL の戻り値は `List<List<sObject>>`（リストのリスト）。
+> - `WHERE`（条件）・`ORDER BY`（並び順）・`LIKE`／ワイルドカード（あいまい検索）を押さえる。`USER_DEBUG` だけ見るなら **[Debug Only]**。
+
+> [!豆知識] 読みは「ソークル」と「ソッスル」
+>
+> SOQL は "sockle（ソークル）"、SOSL は "sozzle（ソッスル）" と発音するのが Salesforce コミュニティの慣習です。綴りが1文字（Q と S）しか違わないため聞き分けにくいのですが、「Q＝Query（読み込み）」「2つ目の S＝Search（検索）」と頭文字の意味で覚えると混同しにくくなります。試験でも両者の用途を入れ替えた選択肢がよく出ます。

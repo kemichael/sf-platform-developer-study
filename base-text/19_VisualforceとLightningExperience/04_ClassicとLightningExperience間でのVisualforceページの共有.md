@@ -366,3 +366,39 @@ SELECT UserPreferencesLightningExperiencePreferred FROM User WHERE Id = 'Current
 > [!ポイント] 解答の考え方
 >
 > 正解は **B**。SOQL で得られるのは「選好値」であり、ブラウザー非対応などの理由で「実際に表示されている UX」と一致しないことがあります。実際の UX は `UIThemeDisplayed` 系で判別すべき、という単元の主旨どおりです。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、1 つの Visualforce ページを Classic と LEX で共有するメリットと、現在の UI コンテキストを「テーマ（Theme）」文字列で判別する 3 通りの方法を学びました。
+
+次の図は、「どこで判別するか」によって使う API が分かれること、そしていずれも同じテーマ文字列を返すことを俯瞰したものです。
+
+```mermaid
+flowchart TD
+    Q{"UI コンテキストを<br/>どこで判別する？"}
+    Q -->|"Visualforce マークアップ"| VF["$User.UITheme（要求）<br/>$User.UIThemeDisplayed（実際）"]
+    Q -->|"JavaScript"| JS["UITheme.getUITheme()"]
+    Q -->|"Apex"| AP["UserInfo.getUiTheme()<br/>UserInfo.getUiThemeDisplayed()"]
+    VF --> R["同じテーマ文字列を返す<br/>Theme3＝Classic／Theme4d＝LEX／Theme4t＝モバイル"]
+    JS --> R
+    AP --> R
+    R --> RULE(["コードでは原則 UIThemeDisplayed<br/>＝「現実」で分岐する"])
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class Q hl;
+    class R,RULE soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - ページ共有のメリットは **コードが少なく済む** ことと **同じページが常に使われる場面に適合する** こと。
+> - **`UITheme`＝要求された UI、`UIThemeDisplayed`＝実際の UI**。ブラウザー非対応などでズレ得るため、コードでは原則 **Displayed** を使う。
+> - 主要テーマ値：**Theme3＝Classic、Theme4d＝LEX デスクトップ、Theme4t＝Salesforce モバイル**。
+> - 判別の 3 方法 ＝ **Visualforce（`$User.UITheme*`）／JavaScript（`UITheme.getUITheme()`）／Apex（`UserInfo.getUiTheme*()`）**。UI 出し分けはフロントエンド推奨。
+> - **SOQL での選好照会（`UserPreferencesLightningExperiencePreferred`）は非推奨**。選好値と実際の UX が一致しないことがあるため。
+
+> [!豆知識] テーマ番号は Salesforce UI の「世代」を表す
+>
+> Theme1・Theme2・Theme3 はそれぞれ初期・2005 年・2010 年の Classic UI の世代に対応し、Theme4 系（4d／4t／4u）が Lightning 世代です。末尾の文字は d＝desktop、t＝touch（モバイル）、u＝console を表します。つまり `Theme4d` は「Lightning 世代のデスクトップ」という意味を 1 つの文字列に込めているわけで、値の付け方を知っておくと暗記が一気に楽になります。

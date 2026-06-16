@@ -258,3 +258,38 @@ flowchart TD
 > [!ポイント] 解答の考え方
 >
 > 正解は **D**。カスタムアプリケーション・カスタムタブ・クイックアクションのいずれでも Visualforce を使用できます。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、既存の Visualforce ページが Lightning Experience（LEX）でも基本的にそのまま動くこと、検討すべき例外、そして LEX 内で Visualforce を配置できる場所を学びました。
+
+次の図は、LEX という大きなコンテナの中に Visualforce ページがどこから入ってくるかを俯瞰したものです。
+
+```mermaid
+flowchart TD
+    VF(["既存の Visualforce ページ"]) --> LEX["Lightning Experience<br/>（外側のコンテナ）"]
+    LEX --> NAV["ナビゲーションバー／<br/>アプリケーションランチャー"]
+    LEX --> REC["レコード詳細<br/>レイアウト埋め込み・アクション・ボタン上書き"]
+    LEX --> BUILD["Lightning アプリケーションビルダー<br/>Visualforce コンポーネント"]
+    VF --> CHK{"JS でフレーム制御や<br/>LEX 風スタイルが必要？"}
+    CHK -->|"いいえ"| ASIS(["とりあえず機能<br/>（書き換え不要）"])
+    CHK -->|"はい"| FIX["ナビゲーション API・SLDS で対応"]
+    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;
+    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;
+    class VF hl;
+    class LEX,NAV,REC,BUILD,ASIS soft;
+```
+
+> [!まとめ] この単元の要点
+>
+> - Visualforce は重要な例外を除き、LEX で **「とりあえず機能」** する（「すべて壊れる」は誤り）。
+> - 使う前の検討事項は主に **JavaScript の挙動** と **スタイル（見た目）** の 2 点。
+> - 標準コンポーネントは LEX でも **Classic 風の見た目** のまま表示される。
+> - 配置できる場所は **アプリケーションランチャー／ナビゲーションバー／標準ページレイアウト／Lightning アプリケーションビルダー／クイックアクション／標準ボタン・リンクの上書き／カスタムボタン・リンク** の 7 つ。
+> - LEX では **JavaScript ボタン・リンクは非サポート**（Visualforce・URL ボタンは可）。
+
+> [!豆知識] 「out of the box」は本当に箱から出してすぐ
+>
+> 「とりあえず機能（works as is / out of the box）」は IT 業界で「箱から出してそのまま使える」という意味の定番フレーズです。Salesforce が既存 Visualforce 資産の互換性をここまで重視するのは、十数年分のカスタム画面を抱える大企業が LEX へ移行する際に「全部作り直し」になると移行が止まってしまうため。互換性は単なる親切ではなく、新 UI を普及させるための経営判断でもあります。

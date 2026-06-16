@@ -373,3 +373,31 @@ JavaScript の移行は 1 行ごとの変換ではなく、コンポーネント
 > - サードパーティライブラリは**静的リソース**にアップロードし、Aura は `<ltng:require>`、LWC は `loadScript` / `loadStyle` で読み込む。
 > - **`$A.createComponent()` による動的作成は LWC にはない**。複数テンプレートと `render()` で代替する。
 > - 移行は機械的な変換ではなく、**ES6 標準を活かして設計を見直す好機**である。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、Aura の独自オブジェクトリテラル形式・複数ファイル構成の JavaScript が、LWC では標準の ES6 モジュール・単一ファイルへ移行されること、そしてコード共有・外部ライブラリ・動的作成の扱いの違いを学びました。
+
+次の表が、JavaScript 移行の核心となる対応を凝縮した俯瞰です。
+
+| 観点 | Aura | LWC |
+| --- | --- | --- |
+| ファイル構成 | コントローラー・ヘルパー・レンダラー（複数） | 単一の `.js`（ES6 モジュール） |
+| イベント発火 | `cmp.getEvent('x').fire()` | `this.dispatchEvent(new CustomEvent('x'))` |
+| コード共有 | マークアップに置き `cmp.find()` で参照 | `import { fn } from 'c/utils'` |
+| 外部ライブラリ | `<ltng:require>` | `loadScript` / `loadStyle` |
+| 動的作成 | `$A.createComponent()` | なし（複数テンプレート＋`render()`） |
+
+> [!まとめ] この単元の要点
+>
+> - Aura の **3 つの JS ファイル（コントローラー・ヘルパー・レンダラー）→ LWC の単一 `.js`（ES6 モジュール）**。
+> - イベント発火は `event.fire()` → **`this.dispatchEvent(new CustomEvent(...))`**。
+> - コード共有は **ES6 モジュール**。LWC は `import`、Aura は `aura:id` ＋ `cmp.find()`。
+> - サードパーティライブラリは**静的リソース**。Aura は `<ltng:require>`、LWC は **`loadScript`/`loadStyle`**。
+> - **`$A.createComponent()` の LWC 版はない**。複数テンプレート＋`render()` で代替する。
+
+> [!豆知識] Aura のコントローラーが波かっこを `( )` で囲む理由
+>
+> Aura のコントローラーは `({ ... })` という独特な形をしています。これは「波かっこ `{}` をブロック文ではなくオブジェクトリテラルとして JavaScript に解釈させる」ための書き方です。`{` で始まる行は文（ブロック）と誤解されやすいため、`( )` で囲んで「これは式（オブジェクト）だ」と明示しています。ES6 モジュールが普及した現在の LWC では `export default class ...` と書くだけで済むため、この古いイディオムは不要になりました。

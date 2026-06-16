@@ -274,3 +274,32 @@ Classic と LEX でページを共有する場合も、**Classic 実行時に使
 > [!ポイント] 解答の考え方
 >
 > 正解は **D**。iframe コンテナの変化により、スタイルシート・クリックジャック設定・JavaScript のいずれも Classic とは挙動が異なり得ます。
+
+---
+
+## 🎓 この単元のまとめ
+
+この単元では、LEX では Visualforce が iframe（子）として LEX（親）の中で動くという「コンテナの違い」を起点に、そこから派生するセキュリティ・スコープ・デフォルト値の変化を学びました。
+
+次の表は、Classic と LEX の相違点と、更新が必要なコードパターンを 1 枚に凝縮したものです。
+
+| 観点 | Salesforce Classic | Lightning Experience |
+| --- | --- | --- |
+| **実行コンテナ** | VF がページ全体を所有 | iframe 内（親＝LEX、子＝VF） |
+| **`showHeader` / `sidebar`** | 指定どおり | 常に抑制（false） |
+| **`standardStylesheets`** | 有効 | 影響を受けない（既定 true・変更可） |
+| **`sforce.one`** | 挿入されない | 自動的に挿入される |
+| **ページ遷移** | `window.location` 直接操作も可 | ナビゲーション API（`sforce.one` 等） |
+| **親フレームへのアクセス** | 制限なし | `window.postMessage` 経由のみ |
+
+> [!まとめ] この単元の要点
+>
+> - Classic と LEX の最大の違いは **実行コンテナ**。LEX では VF が iframe（子）として動き、親の LEX に従う（「他人のものには手を出すな」）。
+> - 更新が必要な 2 大コードパターンは **`window.location` の直接操作** と **`window.parent`／`contentWindow` による親アクセス**。正しくはナビゲーション API と `window.postMessage`。
+> - LEX で変わるデフォルト値は **`showHeader` と `sidebar` が常に false**（`standardStylesheets` は影響なし）。
+> - `sforce.one` は LEX／Salesforce アプリに自動挿入される（Classic には入らない）。
+> - ドメインが変わると **`$Api.Session_ID` の値も変わる**。
+
+> [!豆知識] 「他人のものには手を出すな」は Web の根本ルール
+>
+> iframe 間でお互いの中身に触れられない仕組みは「同一オリジンポリシー」と呼ばれ、1995 年に Netscape が導入した Web セキュリティの基礎です。これがなければ、開いている別タブのネットバンキング画面を悪意あるサイトの JavaScript が自由に読めてしまいます。LEX が Visualforce を iframe で隔離するのは見た目の都合ではなく、こうしたブラウザー本来の安全機構の上に成り立っているのです。
