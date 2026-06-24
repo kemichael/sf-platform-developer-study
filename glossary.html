@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用語集 | Platform デベロッパー</title>
+<style>
+/* ===== カラートークン ===== */
+:root{
+  --blue:#0176D3; --blue-d:#014486; --navy:#032D60;
+  --app-bg:#F3F3F3; --surface:#FFFFFF; --side-bg:#FBFBFD;
+  --text:#181818; --text-2:#5C5C5C; --text-3:#747474;
+  --border:#E5E5E5; --border-2:#EDEDED;
+  --ok:#2E844A; --ok-bg:#EAF5EC;
+  --code-bg:#F6F8FA; --code-border:#E7EBEF; --inline-code:#B5306E; --inline-code-bg:#FBEAF1;
+  --accent:var(--blue); --accent-soft:#E8F2FC;
+  --shadow:0 1px 2px rgba(0,0,0,.06),0 2px 8px rgba(0,0,0,.04);
+  --header-h:58px; --side-w:224px; --read-w:880px;
+  --mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic",Meiryo,system-ui,sans-serif;
+  /* badge colors */
+  --c-apex:#0176D3; --c-apex-bg:#E8F2FC; --c-apex-bd:#C5DEF6;
+  --c-data:#0B7A6E; --c-data-bg:#E6F6F3; --c-data-bd:#BFE7E0;
+  --c-trigger:#B25800; --c-trigger-bg:#FBF0E2; --c-trigger-bd:#F1D9BA;
+  --c-limit:#CF222E; --c-limit-bg:#FCECEA; --c-limit-bd:#F5BEBC;
+  --c-lwc:#8250DF; --c-lwc-bg:#F1EDFB; --c-lwc-bd:#D9CDF2;
+  --c-security:#032D60; --c-security-bg:#E3EAF5; --c-security-bd:#BDD0EE;
+  --c-deploy:#2E844A; --c-deploy-bg:#EAF5EC; --c-deploy-bd:#C5E5CD;
+  --c-async:#6B4FBB; --c-async-bg:#F1EDFB; --c-async-bd:#D9CDF2;
+  --c-auto:#C0398B; --c-auto-bg:#FCEAF4; --c-auto-bd:#F2CBE2;
+}
+[data-theme="dark"]{
+  --blue:#1B96FF; --blue-d:#57ABFF; --navy:#C9E2FF;
+  --app-bg:#16191F; --surface:#1E222B; --side-bg:#13161B;
+  --text:#E6E8EB; --text-2:#9BA1AC; --text-3:#79808B;
+  --border:#2A2F3A; --border-2:#242935;
+  --ok:#4BCA7E; --ok-bg:#193326;
+  --code-bg:#13161B; --code-border:#2A2F3A; --inline-code:#FF9CC7; --inline-code-bg:#2A1B23;
+  --accent:var(--blue); --accent-soft:#13283D;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 16px rgba(0,0,0,.3);
+  --c-apex:#57ABFF; --c-apex-bg:#13283D; --c-apex-bd:#22405C;
+  --c-data:#6FD8C8; --c-data-bg:#132A27; --c-data-bd:#244641;
+  --c-trigger:#F0B36A; --c-trigger-bg:#2C2113; --c-trigger-bd:#4A3820;
+  --c-limit:#FF7B72; --c-limit-bg:#2C1316; --c-limit-bd:#4A2325;
+  --c-lwc:#D2A8FF; --c-lwc-bg:#221C33; --c-lwc-bd:#3A2F55;
+  --c-security:#7CC0FF; --c-security-bg:#132433; --c-security-bd:#22405C;
+  --c-deploy:#5FD18E; --c-deploy-bg:#15291E; --c-deploy-bd:#264A33;
+  --c-async:#C3B0F0; --c-async-bg:#221C33; --c-async-bd:#3A2F55;
+  --c-auto:#F19BD0; --c-auto-bg:#2A1622; --c-auto-bd:#46283A;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--sans); color:var(--text); background:var(--app-bg);
+  font-size:16px; line-height:1.85; -webkit-font-smoothing:antialiased;
+}
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ===== トップバー ===== */
+.topbar{
+  position:sticky;top:0;z-index:40;height:var(--header-h);
+  display:flex;align-items:center;gap:12px;padding:0 18px;
+  background:color-mix(in srgb,var(--surface) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
+.brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,#10B981,#059669);color:#fff}
+.brand-mark .ico{width:20px;height:20px}
+.brand-text{display:flex;flex-direction:column;line-height:1.2}
+.brand-text b{font-size:15px;color:var(--navy);font-weight:700}
+.brand-text small{font-size:11px;color:var(--text-3);letter-spacing:.04em}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--text-2);font-size:13px;text-decoration:none;
+  padding:6px 10px;border-radius:8px;transition:.15s;
+  border:1px solid var(--border-2);background:var(--side-bg);
+}
+.back-link:hover{color:var(--text);border-color:var(--border);background:var(--surface)}
+.back-link .ico{width:15px;height:15px}
+.icon-btn{
+  display:grid;place-items:center;width:36px;height:36px;border-radius:8px;
+  border:1px solid var(--border-2);background:transparent;cursor:pointer;
+  color:var(--text-2);transition:.15s;
+}
+.icon-btn:hover{color:var(--text);background:var(--border-2)}
+[data-theme="light"] .ico-moon{display:none}
+[data-theme="dark"] .ico-sun{display:none}
+
+/* ===== 検索バー ===== */
+.gloss-search-wrap{
+  flex:1;max-width:440px;position:relative;
+}
+.gloss-search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--text-3)}
+#glossSearch{
+  width:100%;height:38px;padding:0 12px 0 36px;
+  border-radius:10px;border:1px solid var(--border);
+  background:var(--side-bg);color:var(--text);
+  font-family:inherit;font-size:14px;outline:none;transition:.15s;
+}
+#glossSearch:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+/* ===== レイアウト ===== */
+.gloss-layout{
+  display:flex;min-height:calc(100vh - var(--header-h));
+}
+.gloss-sidebar{
+  width:var(--side-w);flex-shrink:0;
+  position:sticky;top:var(--header-h);height:calc(100vh - var(--header-h));
+  overflow-y:auto;padding:20px 16px;
+  background:var(--side-bg);border-right:1px solid var(--border);
+  scrollbar-width:thin;
+}
+.gloss-main{
+  flex:1;min-width:0;padding:28px 28px 80px;
+  max-width:var(--read-w);
+}
+@media(max-width:768px){
+  .gloss-layout{flex-direction:column}
+  .gloss-sidebar{
+    width:100%;position:static;height:auto;
+    display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;
+    border-right:none;border-bottom:1px solid var(--border);
+  }
+  .alpha-section{display:none}
+  .gloss-main{padding:20px 16px 60px}
+  .brand-text small{display:none}
+}
+
+/* ===== アルファベットナビ ===== */
+.alpha-section{margin-bottom:20px}
+.alpha-section h3{font-size:11px;font-weight:600;color:var(--text-3);letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+.alpha-grid{display:flex;flex-wrap:wrap;gap:4px}
+.alpha-btn{
+  display:grid;place-items:center;width:28px;height:28px;
+  border-radius:6px;font-size:13px;font-weight:600;
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text-2);transition:.12s;text-decoration:none;
+}
+.alpha-btn:hover,.alpha-btn.has-entries:hover{background:var(--accent-soft);color:var(--accent)}
+.alpha-btn.has-entries{color:var(--accent)}
+.alpha-btn.disabled{color:var(--border);cursor:default;pointer-events:none}
+
+/* ===== カテゴリーフィルター ===== */
+.cat-section h3{font-size:11px;font-weight:600;color:var(--text-3);letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+.cat-filters{display:flex;flex-direction:column;gap:4px}
+@media(max-width:768px){
+  .cat-section{flex:1}
+  .cat-filters{flex-direction:row;flex-wrap:wrap}
+}
+.cat-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;cursor:pointer;
+  border:none;background:transparent;font-family:inherit;font-size:13px;
+  color:var(--text-2);transition:.12s;text-align:left;width:100%;
+}
+.cat-btn:hover{background:var(--border-2);color:var(--text)}
+.cat-btn.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cat-count{margin-left:auto;font-size:12px;color:var(--text-3)}
+@media(max-width:768px){
+  .cat-btn{width:auto;padding:5px 10px}
+  .cat-count{display:none}
+}
+
+/* ===== 件数表示 ===== */
+.count-bar{
+  font-size:13px;color:var(--text-3);margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.count-num{font-weight:700;color:var(--text-2)}
+
+/* ===== 文字セクション ===== */
+.letter-group{margin-bottom:32px}
+.letter-group.hidden{display:none}
+.letter-head{
+  font-size:22px;font-weight:800;color:var(--accent);
+  margin:0 0 14px;padding-bottom:8px;
+  border-bottom:2px solid var(--accent-soft);
+  letter-spacing:.05em;
+}
+
+/* ===== 用語カード ===== */
+.term-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;margin-bottom:10px;
+  transition:.15s;
+}
+.term-card:hover{border-color:var(--accent);box-shadow:var(--shadow)}
+.term-card.hidden{display:none}
+.term-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.term-name{font-size:16px;font-weight:700;color:var(--text);line-height:1.3;flex:1 1 auto}
+.badges{display:flex;flex-wrap:wrap;gap:5px;flex-shrink:0}
+.badge{
+  font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;
+  white-space:nowrap;letter-spacing:.03em;
+}
+.badge.apex{color:var(--c-apex);background:var(--c-apex-bg);border:1px solid var(--c-apex-bd)}
+.badge.data{color:var(--c-data);background:var(--c-data-bg);border:1px solid var(--c-data-bd)}
+.badge.trigger{color:var(--c-trigger);background:var(--c-trigger-bg);border:1px solid var(--c-trigger-bd)}
+.badge.limit{color:var(--c-limit);background:var(--c-limit-bg);border:1px solid var(--c-limit-bd)}
+.badge.lwc{color:var(--c-lwc);background:var(--c-lwc-bg);border:1px solid var(--c-lwc-bd)}
+.badge.security{color:var(--c-security);background:var(--c-security-bg);border:1px solid var(--c-security-bd)}
+.badge.deploy{color:var(--c-deploy);background:var(--c-deploy-bg);border:1px solid var(--c-deploy-bd)}
+.badge.async{color:var(--c-async);background:var(--c-async-bg);border:1px solid var(--c-async-bd)}
+.badge.auto{color:var(--c-auto);background:var(--c-auto-bg);border:1px solid var(--c-auto-bd)}
+.term-def{margin:0;font-size:14px;color:var(--text-2);line-height:1.75}
+.term-def code{
+  font-family:var(--mono);font-size:12.5px;
+  background:var(--code-bg);border:1px solid var(--code-border);
+  color:var(--inline-code);padding:1px 5px;border-radius:4px;
+}
+.term-note{
+  margin-top:8px;font-size:13px;color:var(--text-3);
+  padding-top:8px;border-top:1px solid var(--border-2);
+}
+.term-note strong{color:var(--text-2)}
+
+/* ===== 空表示 ===== */
+.no-results{
+  text-align:center;padding:60px 20px;color:var(--text-3);
+  display:none;
+}
+.no-results.show{display:block}
+.no-results svg{width:48px;height:48px;stroke:var(--border);margin-bottom:12px}
+.no-results p{margin:0;font-size:15px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.5" y1="4.5" x2="6.6" y2="6.6"/><line x1="17.4" y1="17.4" x2="19.5" y2="19.5"/><line x1="4.5" y1="19.5" x2="6.6" y2="17.4"/><line x1="17.4" y1="6.6" x2="19.5" y2="4.5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><line x1="4" y1="19" x2="4" y2="5"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 21V4h13l-2 4 2 4H4"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17.5" x2="12" y2="17.5"/></symbol>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-mark"><svg class="ico"><use href="#i-book"/></svg></span>
+    <span class="brand-text"><b>用語集</b><small>Platform デベロッパー</small></span>
+  </a>
+  <div class="gloss-search-wrap">
+    <svg class="ico gloss-search-ico"><use href="#i-search"/></svg>
+    <input type="search" id="glossSearch" placeholder="用語を検索..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="nav-actions">
+    <a class="back-link" href="index.html"><svg class="ico"><use href="#i-arrow-left"/></svg>学習ノートへ</a>
+    <a class="back-link" href="summary.html"><svg class="ico"><use href="#i-flag"/></svg>まとめへ</a>
+    <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
+      <svg class="ico ico-sun"><use href="#i-sun"/></svg>
+      <svg class="ico ico-moon"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="gloss-layout">
+  <!-- サイドバー -->
+  <aside class="gloss-sidebar" id="glossSidebar">
+    <div class="alpha-section">
+      <h3>アルファベット</h3>
+      <div class="alpha-grid" id="alphaGrid"></div>
+    </div>
+    <div class="cat-section">
+      <h3>カテゴリー</h3>
+      <div class="cat-filters" id="catFilters">
+        <button class="cat-btn active" data-cat="all">
+          <span class="cat-dot" style="background:#888"></span>すべて<span class="cat-count" id="cnt-all"></span>
+        </button>
+        <button class="cat-btn" data-cat="apex">
+          <span class="cat-dot" style="background:var(--c-apex)"></span>Apex<span class="cat-count" id="cnt-apex"></span>
+        </button>
+        <button class="cat-btn" data-cat="data">
+          <span class="cat-dot" style="background:var(--c-data)"></span>データ / SOQL<span class="cat-count" id="cnt-data"></span>
+        </button>
+        <button class="cat-btn" data-cat="trigger">
+          <span class="cat-dot" style="background:var(--c-trigger)"></span>トリガー<span class="cat-count" id="cnt-trigger"></span>
+        </button>
+        <button class="cat-btn" data-cat="limit">
+          <span class="cat-dot" style="background:var(--c-limit)"></span>ガバナー制限<span class="cat-count" id="cnt-limit"></span>
+        </button>
+        <button class="cat-btn" data-cat="lwc">
+          <span class="cat-dot" style="background:var(--c-lwc)"></span>LWC<span class="cat-count" id="cnt-lwc"></span>
+        </button>
+        <button class="cat-btn" data-cat="security">
+          <span class="cat-dot" style="background:var(--c-security)"></span>セキュリティ<span class="cat-count" id="cnt-security"></span>
+        </button>
+        <button class="cat-btn" data-cat="deploy">
+          <span class="cat-dot" style="background:var(--c-deploy)"></span>デプロイ<span class="cat-count" id="cnt-deploy"></span>
+        </button>
+        <button class="cat-btn" data-cat="async">
+          <span class="cat-dot" style="background:var(--c-async)"></span>非同期処理<span class="cat-count" id="cnt-async"></span>
+        </button>
+        <button class="cat-btn" data-cat="auto">
+          <span class="cat-dot" style="background:var(--c-auto)"></span>自動化<span class="cat-count" id="cnt-auto"></span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="gloss-main" id="glossMain">
+    <div class="count-bar" id="countBar">
+      <span class="count-num" id="countNum">0</span> 件の用語
+    </div>
+
+    <!-- A -->
+    <section class="letter-group" id="gl-a">
+      <h2 class="letter-head">A</h2>
+
+      <article class="term-card" data-cats="apex" data-term="abstract class 抽象クラス">
+        <div class="term-head">
+          <span class="term-name">Abstract Class（抽象クラス）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def"><code>abstract</code> キーワードで定義するクラス。直接インスタンス化できず、<code>extends</code> するサブクラスが <code>abstract</code> メソッドを実装する必要がある。</p>
+        <p class="term-note"><strong>例：</strong> <code>public abstract class AnimalHandler { abstract void handle(List&lt;Animal__c&gt; records); }</code></p>
+      </article>
+
+      <article class="term-card" data-cats="apex lwc" data-term="@AuraEnabled aura enabled アノテーション">
+        <div class="term-head">
+          <span class="term-name">@AuraEnabled</span>
+          <div class="badges"><span class="badge apex">Apex</span><span class="badge lwc">LWC</span></div>
+        </div>
+        <p class="term-def">ApexメソッドをLightning Web ComponentおよびAuraコンポーネントから呼び出し可能にするアノテーション。<code>cacheable=true</code> を設定するとクライアントサイドキャッシュが有効になる。</p>
+        <p class="term-note"><strong>例：</strong> <code>@AuraEnabled(cacheable=true) public static List&lt;Account&gt; getAccounts() {...}</code></p>
+      </article>
+
+      <article class="term-card" data-cats="apex" data-term="apex アペックス プログラミング言語">
+        <div class="term-head">
+          <span class="term-name">Apex</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">Salesforceのプロプライエタリなオブジェクト指向プログラミング言語。Javaに似た構文を持ち、サーバーサイドで実行される。強型付けで、ガバナー制限の下で動作する。</p>
+      </article>
+    </section>
+
+    <!-- B -->
+    <section class="letter-group" id="gl-b">
+      <h2 class="letter-head">B</h2>
+
+      <article class="term-card" data-cats="async limit" data-term="batch apex バッチ 非同期 大量データ">
+        <div class="term-head">
+          <span class="term-name">Batch Apex（バッチ Apex）</span>
+          <div class="badges"><span class="badge async">非同期</span><span class="badge limit">ガバナー制限</span></div>
+        </div>
+        <p class="term-def"><code>Database.Batchable</code> インターフェースを実装し、大量レコードをチャンク単位で分割処理する非同期Apex。1チャンクあたり最大200件（デフォルト）。<code>start()</code> → <code>execute()</code> → <code>finish()</code> の3メソッドを実装する。</p>
+        <p class="term-note"><strong>制限：</strong> 一度にキューに入れられるジョブは最大5件</p>
+      </article>
+
+      <article class="term-card" data-cats="trigger" data-term="before after trigger タイミング">
+        <div class="term-head">
+          <span class="term-name">before / after（トリガータイミング）</span>
+          <div class="badges"><span class="badge trigger">トリガー</span></div>
+        </div>
+        <p class="term-def"><strong>before</strong>：DML操作がDBに反映される前に実行。<code>Trigger.new</code> の値を変更可能。<strong>after</strong>：DBへの書き込み後に実行。レコードのIdが確定しているため参照に使用。</p>
+      </article>
+
+      <article class="term-card" data-cats="data limit" data-term="bulkification 一括処理 bulk apex ベストプラクティス">
+        <div class="term-head">
+          <span class="term-name">Bulkification（一括処理化）</span>
+          <div class="badges"><span class="badge data">データ</span><span class="badge limit">ガバナー制限</span></div>
+        </div>
+        <p class="term-def">SOQLクエリやDML操作をループ内に置かず、<code>List</code> や <code>Map</code> でまとめて処理するApexのベストプラクティス。一括操作によってガバナー制限への抵触を防ぐ。</p>
+        <p class="term-note"><strong>NG：</strong> for ループ内で <code>insert record;</code> → <strong>OK：</strong> まとめて <code>insert recordList;</code></p>
+      </article>
+    </section>
+
+    <!-- C -->
+    <section class="letter-group" id="gl-c">
+      <h2 class="letter-head">C</h2>
+
+      <article class="term-card" data-cats="async" data-term="callout http soap コールアウト 外部連携">
+        <div class="term-head">
+          <span class="term-name">Callout（コールアウト）</span>
+          <div class="badges"><span class="badge async">非同期</span></div>
+        </div>
+        <p class="term-def">ApexからHTTP/SOAPを使って外部サービスを呼び出す機能。トリガー内で直接コールアウトは不可（<code>@future(callout=true)</code> や Queueable 経由が必要）。事前にリモートサイト設定で許可URLを登録する。</p>
+      </article>
+
+      <article class="term-card" data-cats="deploy" data-term="custom label カスタムラベル 翻訳 多言語">
+        <div class="term-head">
+          <span class="term-name">Custom Label（カスタムラベル）</span>
+          <div class="badges"><span class="badge deploy">デプロイ</span></div>
+        </div>
+        <p class="term-def">組織全体で使用できる翻訳可能なテキスト値。Apexでは <code>System.Label.LabelName</code>、Formulaでは <code>$Label.LabelName</code> で参照。環境をまたいでデプロイ可能。</p>
+      </article>
+
+      <article class="term-card" data-cats="deploy" data-term="custom metadata type カスタムメタデータ 設定 環境">
+        <div class="term-head">
+          <span class="term-name">Custom Metadata Type（カスタムメタデータ型）</span>
+          <div class="badges"><span class="badge deploy">デプロイ</span></div>
+        </div>
+        <p class="term-def">アプリケーション設定値をメタデータとして保存する仕組み。Custom Settingsと違い、サンドボックスから本番環境へのデプロイやパッケージングが容易。Apexから <code>CMDT__mdt</code> としてSOQLで取得可能。</p>
+      </article>
+
+      <article class="term-card" data-cats="security" data-term="custom permission カスタム権限 パーミッションセット">
+        <div class="term-head">
+          <span class="term-name">Custom Permission（カスタム権限）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">独自の権限単位を定義できる機能。プロファイルやパーミッションセットに付与し、Apexでは <code>FeatureManagement.checkPermission('PermName')</code>、Formulaでは <code>$Permission.PermName</code> で参照。</p>
+      </article>
+    </section>
+
+    <!-- D -->
+    <section class="letter-group" id="gl-d">
+      <h2 class="letter-head">D</h2>
+
+      <article class="term-card" data-cats="data" data-term="database class insert update delete dml 部分コミット">
+        <div class="term-head">
+          <span class="term-name">Database クラス</span>
+          <div class="badges"><span class="badge data">データ</span></div>
+        </div>
+        <p class="term-def">DML操作を行うシステムクラス。<code>Database.insert(list, false)</code> のように第2引数 <code>allOrNone=false</code> を指定すると部分コミットが可能（一部失敗してもロールバックしない）。<code>Database.SaveResult</code> でエラー内容を確認できる。</p>
+      </article>
+
+      <article class="term-card" data-cats="data" data-term="dml data manipulation language insert update delete upsert merge undelete">
+        <div class="term-head">
+          <span class="term-name">DML（Data Manipulation Language）</span>
+          <div class="badges"><span class="badge data">データ</span></div>
+        </div>
+        <p class="term-def">sObjectに対するデータ操作。<code>insert</code> / <code>update</code> / <code>delete</code> / <code>upsert</code> / <code>merge</code> / <code>undelete</code> の6種類。1トランザクションあたり最大150回まで実行可能。</p>
+      </article>
+
+      <article class="term-card" data-cats="data" data-term="dynamic soql 動的クエリ database.query 文字列">
+        <div class="term-head">
+          <span class="term-name">Dynamic SOQL（動的SOQL）</span>
+          <div class="badges"><span class="badge data">データ</span></div>
+        </div>
+        <p class="term-def">クエリ文字列を実行時に組み立て、<code>Database.query(String)</code> で実行するSOQLの記述方法。柔軟性が高い一方、SOQLインジェクション対策として <code>String.escapeSingleQuotes()</code> によるサニタイズが必要。</p>
+      </article>
+    </section>
+
+    <!-- E -->
+    <section class="letter-group" id="gl-e">
+      <h2 class="letter-head">E</h2>
+
+      <article class="term-card" data-cats="async" data-term="email service メールサービス 受信 apex">
+        <div class="term-head">
+          <span class="term-name">Email Service（メールサービス）</span>
+          <div class="badges"><span class="badge async">非同期</span></div>
+        </div>
+        <p class="term-def">特定のSalesforceメールアドレス宛にメールを送信することで、<code>Messaging.InboundEmailHandler</code> インターフェースを実装したApexクラスを実行できる仕組み。メール受信をトリガーとしたデータ処理が可能。</p>
+      </article>
+    </section>
+
+    <!-- F -->
+    <section class="letter-group" id="gl-f">
+      <h2 class="letter-head">F</h2>
+
+      <article class="term-card" data-cats="async apex" data-term="@future future メソッド 非同期 アノテーション">
+        <div class="term-head">
+          <span class="term-name">@future（フューチャーメソッド）</span>
+          <div class="badges"><span class="badge async">非同期</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">メソッドを非同期で実行するアノテーション。引数はプリミティブ型（またはそのコレクション）のみ。戻り値は <code>void</code> のみ。コールアウトには <code>@future(callout=true)</code> を指定する。</p>
+        <p class="term-note"><strong>制限：</strong> 1トランザクションあたり最大50回呼び出し可能</p>
+      </article>
+
+      <article class="term-card" data-cats="auto" data-term="flow フロー ローコード 自動化 screen autolaunched">
+        <div class="term-head">
+          <span class="term-name">Flow（フロー）</span>
+          <div class="badges"><span class="badge auto">自動化</span></div>
+        </div>
+        <p class="term-def">Salesforceのローコードプロセス自動化ツール。Screen Flow（UI有）、AutoLaunched Flow（Apex/Processから起動）、Scheduled Flow（定期実行）などの種類がある。Workflow Rule・Process Builderの後継として移行が推奨されている。</p>
+      </article>
+    </section>
+
+    <!-- G -->
+    <section class="letter-group" id="gl-g">
+      <h2 class="letter-head">G</h2>
+
+      <article class="term-card" data-cats="limit" data-term="governor limits ガバナー制限 上限 マルチテナント">
+        <div class="term-head">
+          <span class="term-name">Governor Limits（ガバナー制限）</span>
+          <div class="badges"><span class="badge limit">ガバナー制限</span></div>
+        </div>
+        <p class="term-def">Salesforceがマルチテナント環境の安定性を保つためのリソース使用上限値。主要な制限：SOQLクエリ数100回、DML操作150回、ヒープサイズ6MB（同期）、CPU時間10秒（同期）、コールアウト100回。</p>
+      </article>
+
+      <article class="term-card" data-cats="data apex" data-term="getdescribe schema describe メタデータ フィールド情報">
+        <div class="term-head">
+          <span class="term-name">getDescribe() / Schema.describe</span>
+          <div class="badges"><span class="badge data">データ</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">オブジェクトやフィールドのメタ情報を実行時に取得する。<code>Schema.SObjectType.Account.getDescribe()</code> でオブジェクト情報、<code>Schema.SObjectType.Account.fields.Name.getDescribe()</code> でフィールド情報を取得できる。</p>
+      </article>
+    </section>
+
+    <!-- H -->
+    <section class="letter-group" id="gl-h">
+      <h2 class="letter-head">H</h2>
+
+      <article class="term-card" data-cats="limit" data-term="heap size limit ヒープサイズ 上限 メモリ">
+        <div class="term-head">
+          <span class="term-name">Heap Size Limit（ヒープサイズ制限）</span>
+          <div class="badges"><span class="badge limit">ガバナー制限</span></div>
+        </div>
+        <p class="term-def">1トランザクションあたりのメモリ使用上限。同期処理では <strong>6MB</strong>、非同期処理（@future, Batchなど）では <strong>12MB</strong>。大量のデータをメモリ上に保持する場合に注意が必要。</p>
+      </article>
+    </section>
+
+    <!-- I -->
+    <section class="letter-group" id="gl-i">
+      <h2 class="letter-head">I</h2>
+
+      <article class="term-card" data-cats="apex" data-term="@istest test テストクラス アノテーション">
+        <div class="term-head">
+          <span class="term-name">@isTest</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">テストクラス・テストメソッドに付与するアノテーション。本番のガバナー制限に影響せず専用リミットを使用。Apexコードは <strong>75%以上</strong> のカバレッジが本番デプロイに必要。テストメソッドには <code>@isTest</code> または <code>testMethod</code> キーワードを付与する。</p>
+      </article>
+
+      <article class="term-card" data-cats="apex" data-term="interface インターフェース implements 多重実装">
+        <div class="term-head">
+          <span class="term-name">Interface（インターフェース）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def"><code>interface</code> キーワードで定義する型。実装クラスは <code>implements</code> キーワードを使い、複数のインターフェースを同時に実装可能。メソッドシグネチャのみを定義し、実装は持たない。</p>
+      </article>
+
+      <article class="term-card" data-cats="trigger" data-term="isinsert isupdate isdelete isbefore isafter trigger コンテキスト変数">
+        <div class="term-head">
+          <span class="term-name">isInsert / isUpdate / isDelete / isBefore / isAfter</span>
+          <div class="badges"><span class="badge trigger">トリガー</span></div>
+        </div>
+        <p class="term-def">トリガー内で使用できる <code>Trigger</code> クラスの静的コンテキスト変数。例：<code>if (Trigger.isBefore &amp;&amp; Trigger.isInsert)</code> のように組み合わせてトリガーの実行条件を判定する。</p>
+      </article>
+    </section>
+
+    <!-- L -->
+    <section class="letter-group" id="gl-l">
+      <h2 class="letter-head">L</h2>
+
+      <article class="term-card" data-cats="limit apex" data-term="limits class リミット消費 getqueries getdmlrows">
+        <div class="term-head">
+          <span class="term-name">Limits クラス</span>
+          <div class="badges"><span class="badge limit">ガバナー制限</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">現在のトランザクションでのリミット消費量を取得するシステムクラス。<code>Limits.getQueries()</code>（消費済みSOQL数）/ <code>Limits.getLimitQueries()</code>（上限値）のようにペアで使用することが多い。</p>
+      </article>
+
+      <article class="term-card" data-cats="lwc" data-term="lwc lightning web component ライトニングウェブコンポーネント web標準">
+        <div class="term-head">
+          <span class="term-name">LWC — Lightning Web Component</span>
+          <div class="badges"><span class="badge lwc">LWC</span></div>
+        </div>
+        <p class="term-def">Web標準（Custom Elements, Shadow DOM, ES Modules）に基づくSalesforceのUIコンポーネントフレームワーク。HTML / JavaScript / CSS の3ファイルで構成される。Aura Componentより軽量で高パフォーマンス。</p>
+      </article>
+
+      <article class="term-card" data-cats="apex" data-term="list リスト コレクション 順序付き">
+        <div class="term-head">
+          <span class="term-name">List（リスト）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">順序付き可変長コレクション型。重複要素を許容する。<code>new List&lt;Account&gt;()</code> で生成。インデックスアクセス（<code>list[0]</code>）が可能。SOQLの結果は <code>List&lt;sObject&gt;</code> で受け取るのが基本。</p>
+      </article>
+    </section>
+
+    <!-- M -->
+    <section class="letter-group" id="gl-m">
+      <h2 class="letter-head">M</h2>
+
+      <article class="term-card" data-cats="apex" data-term="map マップ コレクション id キーバリュー">
+        <div class="term-head">
+          <span class="term-name">Map（マップ）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">キーと値のペアを保持するコレクション型。<code>Map&lt;Id, Account&gt;</code> 形式でSOQLの結果をIdで高速検索する用途が多い。<code>new Map&lt;Id, Account&gt;([SELECT Id FROM Account])</code> のショートカット初期化が便利。</p>
+      </article>
+
+      <article class="term-card" data-cats="data security" data-term="mixed dml error セットアップオブジェクト user group 同一トランザクション">
+        <div class="term-head">
+          <span class="term-name">Mixed DML Error</span>
+          <div class="badges"><span class="badge data">データ</span><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">セットアップオブジェクト（User, Group, GroupMemberなど）と非セットアップオブジェクトを同一トランザクションで操作した際に発生するエラー。解決策は <code>@future</code> でいずれかの操作を別トランザクションに分離する。</p>
+      </article>
+
+      <article class="term-card" data-cats="async apex" data-term="mockhttpcallout httpcalloutmock テスト モック コールアウト">
+        <div class="term-head">
+          <span class="term-name">HttpCalloutMock / MockHttpCallout</span>
+          <div class="badges"><span class="badge async">非同期</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">テスト内でHTTPコールアウトをモック化するためのインターフェース。<code>HttpCalloutMock</code> を実装したクラスを作成し、<code>Test.setMock(HttpCalloutMock.class, new MockClass())</code> で登録して使用する。</p>
+      </article>
+    </section>
+
+    <!-- O -->
+    <section class="letter-group" id="gl-o">
+      <h2 class="letter-head">O</h2>
+
+      <article class="term-card" data-cats="trigger" data-term="order of execution 実行順序 レコード保存 before after トリガー validation workflow">
+        <div class="term-head">
+          <span class="term-name">Order of Execution（レコード保存の実行順序）</span>
+          <div class="badges"><span class="badge trigger">トリガー</span></div>
+        </div>
+        <p class="term-def">レコード保存時の処理順序（主要部分）：<br>
+        ① 旧値の読み込み → ② システム検証 → ③ Apex <strong>before</strong> トリガー → ④ カスタム入力規則 → ⑤ DB保存（未コミット）→ ⑥ Apex <strong>after</strong> トリガー → ⑦ 割り当てルール → ⑧ 自動応答ルール → ⑨ ワークフロー → ⑩ コミット</p>
+      </article>
+
+      <article class="term-card" data-cats="security" data-term="owd organization-wide default 組織全体の共有設定 private public">
+        <div class="term-head">
+          <span class="term-name">OWD（Organization-Wide Default / 組織全体の共有設定）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">データアクセスのベースライン設定。<strong>Public Read/Write</strong>（全員が参照・編集可）/ <strong>Public Read Only</strong>（全員が参照可）/ <strong>Private</strong>（所有者のみ）の3種。OWDより広い権限は共有ルール・ロール階層で付与する。</p>
+      </article>
+    </section>
+
+    <!-- P -->
+    <section class="letter-group" id="gl-p">
+      <h2 class="letter-head">P</h2>
+
+      <article class="term-card" data-cats="security" data-term="permission set パーミッションセット 追加権限 ユーザー">
+        <div class="term-head">
+          <span class="term-name">Permission Set（パーミッションセット）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">プロファイルに追加の権限を付与するための設定セット。1ユーザーに複数のパーミッションセットを割り当て可能。プロファイルを変更せずに特定ユーザーだけに追加権限を付与する場合に使用。</p>
+      </article>
+
+      <article class="term-card" data-cats="async auto" data-term="platform event プラットフォームイベント pub sub イベントバス リアルタイム">
+        <div class="term-head">
+          <span class="term-name">Platform Event（プラットフォームイベント）</span>
+          <div class="badges"><span class="badge async">非同期</span><span class="badge auto">自動化</span></div>
+        </div>
+        <p class="term-def"><code>__e</code> サフィックスを持つカスタムオブジェクト。EventBusを介したパブリッシュ/サブスクライブ型のリアルタイム通信を実現する。Apexの <code>EventBus.publish()</code> でパブリッシュ、Apex トリガーや LWC でサブスクライブできる。</p>
+      </article>
+
+      <article class="term-card" data-cats="security" data-term="profile プロファイル 権限 ユーザー基本設定">
+        <div class="term-head">
+          <span class="term-name">Profile（プロファイル）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">ユーザーに割り当てる基本権限設定。オブジェクト権限（CRUD）、フィールドレベルセキュリティ（FLS）、タブ表示設定、アプリケーション設定などを管理する。1ユーザーに1つだけ割り当て可能。</p>
+      </article>
+    </section>
+
+    <!-- Q -->
+    <section class="letter-group" id="gl-q">
+      <h2 class="letter-head">Q</h2>
+
+      <article class="term-card" data-cats="async apex" data-term="queueable apex キュー可能 非同期 ジョブ チェーン">
+        <div class="term-head">
+          <span class="term-name">Queueable Apex</span>
+          <div class="badges"><span class="badge async">非同期</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def"><code>System.Queueable</code> インターフェースを実装してキューに追加する非同期Apexジョブ。@futureより柔軟で、引数にオブジェクト型を使用可能。<code>System.enqueueJob()</code> で起動し、ジョブのチェーン実行もサポート。</p>
+      </article>
+    </section>
+
+    <!-- R -->
+    <section class="letter-group" id="gl-r">
+      <h2 class="letter-head">R</h2>
+
+      <article class="term-card" data-cats="security" data-term="role hierarchy ロール階層 データアクセス 上位ロール">
+        <div class="term-head">
+          <span class="term-name">Role Hierarchy（ロール階層）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">ロール階層に基づくデータアクセス管理。上位ロールのユーザーは下位ロールのユーザーが所有するレコードに自動的にアクセスできる。OWDが Private の場合でも、ロール階層を通じてアクセスが拡大される。</p>
+      </article>
+    </section>
+
+    <!-- S -->
+    <section class="letter-group" id="gl-s">
+      <h2 class="letter-head">S</h2>
+
+      <article class="term-card" data-cats="deploy" data-term="sandbox サンドボックス テスト 開発環境 full partial developer">
+        <div class="term-head">
+          <span class="term-name">Sandbox（サンドボックス）</span>
+          <div class="badges"><span class="badge deploy">デプロイ</span></div>
+        </div>
+        <p class="term-def">本番組織から複製したテスト・開発用の隔離環境。種類：<strong>Developer</strong>（200MB）/ <strong>Developer Pro</strong>（1GB）/ <strong>Partial Copy</strong>（5GB、一部データ）/ <strong>Full</strong>（本番と同等）。</p>
+      </article>
+
+      <article class="term-card" data-cats="async apex" data-term="scheduled apex スケジュール 定期実行 schedulable cron">
+        <div class="term-head">
+          <span class="term-name">Scheduled Apex（スケジュール Apex）</span>
+          <div class="badges"><span class="badge async">非同期</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def"><code>System.Schedulable</code> インターフェースを実装した定期実行Apexジョブ。<code>System.schedule('Job Name', cronExp, new MyScheduledClass())</code> で登録。クーロン式で実行スケジュールを指定する。</p>
+      </article>
+
+      <article class="term-card" data-cats="apex" data-term="set セット コレクション 重複なし contains">
+        <div class="term-head">
+          <span class="term-name">Set（セット）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">重複要素を持たないコレクション型。重複排除や <code>contains()</code> による存在チェック（O(1)）に使用。<code>new Set&lt;Id&gt;()</code> や <code>new Set&lt;String&gt;()</code> が典型的な使い方。</p>
+      </article>
+
+      <article class="term-card" data-cats="data" data-term="sobject オブジェクト account contact カスタムオブジェクト">
+        <div class="term-head">
+          <span class="term-name">sObject</span>
+          <div class="badges"><span class="badge data">データ</span></div>
+        </div>
+        <p class="term-def">Salesforceのデータモデルオブジェクトの基底型。Account、Contact、Opportunity などすべての標準オブジェクトとカスタムオブジェクト（<code>__c</code> サフィックス）が sObject を継承する。</p>
+      </article>
+
+      <article class="term-card" data-cats="data" data-term="soql salesforce object query language クエリ select where from">
+        <div class="term-head">
+          <span class="term-name">SOQL（Salesforce Object Query Language）</span>
+          <div class="badges"><span class="badge data">データ</span></div>
+        </div>
+        <p class="term-def">Salesforceのリレーショナルクエリ言語。基本構文：<code>SELECT Id, Name FROM Account WHERE Industry = 'Technology' LIMIT 200</code>。リレーションシップクエリ（親子・子親）が可能。1トランザクションあたり最大100クエリまで。</p>
+      </article>
+
+      <article class="term-card" data-cats="data" data-term="sosl salesforce object search language find 全文検索 複数オブジェクト">
+        <div class="term-head">
+          <span class="term-name">SOSL（Salesforce Object Search Language）</span>
+          <div class="badges"><span class="badge data">データ</span></div>
+        </div>
+        <p class="term-def">複数のSalesforceオブジェクトをまたぐ全文検索クエリ言語。<code>FIND 'keyword' IN ALL FIELDS RETURNING Account(Id, Name), Contact(Id, Name)</code> のように複数オブジェクトの検索結果を一度に取得できる。</p>
+      </article>
+    </section>
+
+    <!-- T -->
+    <section class="letter-group" id="gl-t">
+      <h2 class="letter-head">T</h2>
+
+      <article class="term-card" data-cats="apex" data-term="test.starttest test.stoptest テスト ガバナーリミット リセット 非同期">
+        <div class="term-head">
+          <span class="term-name">Test.startTest() / Test.stopTest()</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def"><code>Test.startTest()</code> でガバナー制限のカウンターをリセットし、テスト本体のコードを実際の制限内で動作させる。<code>Test.stopTest()</code> を呼ぶと <code>@future</code> / <code>Queueable</code> などの非同期処理が強制的に実行される。</p>
+      </article>
+
+      <article class="term-card" data-cats="trigger" data-term="trigger トリガー apex before after dml イベントハンドラ">
+        <div class="term-head">
+          <span class="term-name">Trigger（トリガー）</span>
+          <div class="badges"><span class="badge trigger">トリガー</span></div>
+        </div>
+        <p class="term-def">DML操作（insert / update / delete / undelete）に反応してApexコードを実行するイベントハンドラ。<code>trigger TriggerName on ObjectName (before insert, after update) { ... }</code> の構文で定義。1オブジェクトに1つのトリガーを推奨（TriggerHandlerパターン）。</p>
+      </article>
+
+      <article class="term-card" data-cats="trigger" data-term="trigger.new trigger.old コンテキスト変数 新旧レコード">
+        <div class="term-head">
+          <span class="term-name">Trigger.new / Trigger.old</span>
+          <div class="badges"><span class="badge trigger">トリガー</span></div>
+        </div>
+        <p class="term-def">トリガー内で利用できるコンテキスト変数。<code>Trigger.new</code>：新しいレコードのリスト（insert/updateで使用可）。<code>Trigger.old</code>：古いレコードのリスト（update/deleteで使用可）。<code>Trigger.newMap</code> / <code>Trigger.oldMap</code> でIdをキーにしたMapとして取得も可能。</p>
+      </article>
+
+      <article class="term-card" data-cats="trigger apex" data-term="triggerhandler トリガーハンドラー パターン 設計 ベストプラクティス クラス分離">
+        <div class="term-head">
+          <span class="term-name">TriggerHandler パターン</span>
+          <div class="badges"><span class="badge trigger">トリガー</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">トリガーのロジックをHandlerクラスに委譲するベストプラクティス設計パターン。トリガーファイルは薄く保ち（呼び出しのみ）、ビジネスロジックはHandlerクラスに集約することでテスト・保守が容易になる。</p>
+      </article>
+    </section>
+
+    <!-- U -->
+    <section class="letter-group" id="gl-u">
+      <h2 class="letter-head">U</h2>
+
+      <article class="term-card" data-cats="data" data-term="upsert アップサート insert update 外部id">
+        <div class="term-head">
+          <span class="term-name">upsert</span>
+          <div class="badges"><span class="badge data">データ</span></div>
+        </div>
+        <p class="term-def">外部IDや標準IDに基づいて、レコードが存在しなければ <code>insert</code>、存在すれば <code>update</code> を自動判別して実行するDML操作。<code>upsert recordList ExternalId__c;</code> のように外部IDフィールドを指定可能。</p>
+      </article>
+    </section>
+
+    <!-- V -->
+    <section class="letter-group" id="gl-v">
+      <h2 class="letter-head">V</h2>
+
+      <article class="term-card" data-cats="auto" data-term="validation rule 入力規則 条件検証 エラーメッセージ">
+        <div class="term-head">
+          <span class="term-name">Validation Rule（入力規則）</span>
+          <div class="badges"><span class="badge auto">自動化</span></div>
+        </div>
+        <p class="term-def">レコード保存前にFormulaで条件を評価し、条件が <code>true</code> の場合にエラーメッセージを表示してレコードの保存を防ぐルール。before Apexトリガーの後、DBへの書き込み前に実行される。</p>
+      </article>
+
+      <article class="term-card" data-cats="apex" data-term="virtual class 仮想クラス override extends 継承">
+        <div class="term-head">
+          <span class="term-name">Virtual Class（仮想クラス）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def"><code>virtual</code> キーワードで修飾されたクラス。サブクラスが <code>extends</code> してメソッドを <code>override</code> できる。<code>abstract</code> クラスと違い、直接インスタンス化可能でメソッドにデフォルト実装を持てる。</p>
+      </article>
+    </section>
+
+    <!-- W -->
+    <section class="letter-group" id="gl-w">
+      <h2 class="letter-head">W</h2>
+
+      <article class="term-card" data-cats="security apex" data-term="with sharing without sharing 共有ルール crud fls sharing mode">
+        <div class="term-head">
+          <span class="term-name">with sharing / without sharing</span>
+          <div class="badges"><span class="badge security">セキュリティ</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">Apexクラスに適用する共有モード宣言。<code>with sharing</code>：実行ユーザーのOWD・共有ルール・ロール階層を適用（FLSは別途チェックが必要）。<code>without sharing</code>：共有設定を無視して全レコードを操作可能。宣言省略時は呼び出し元のモードを継承。</p>
+      </article>
+
+      <article class="term-card" data-cats="auto" data-term="workflow rule ワークフロールール 廃止 flow 移行">
+        <div class="term-head">
+          <span class="term-name">Workflow Rule（ワークフロールール）</span>
+          <div class="badges"><span class="badge auto">自動化</span></div>
+        </div>
+        <p class="term-def">条件を満たしたレコード保存時にアクション（メール送信・項目更新など）を実行する旧来の自動化ツール。Salesforceによる廃止が発表されており、<strong>Flowへの移行が推奨</strong>されている。</p>
+      </article>
+    </section>
+
+    <div class="no-results" id="noResults">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <p>該当する用語が見つかりませんでした</p>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  // テーマ切替
+  const html = document.documentElement;
+  const saved = localStorage.getItem('sf-study-theme');
+  if(saved) html.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    const t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', t);
+    localStorage.setItem('sf-study-theme', t);
+  });
+
+  // 用語カード取得
+  const cards = Array.from(document.querySelectorAll('.term-card'));
+  const letterGroups = Array.from(document.querySelectorAll('.letter-group'));
+  const countNum = document.getElementById('countNum');
+  const noResults = document.getElementById('noResults');
+
+  // カテゴリーカウント初期化
+  const cats = ['all','apex','data','trigger','limit','lwc','security','deploy','async','auto'];
+  const catCounts = {};
+  cats.forEach(c => catCounts[c] = 0);
+  catCounts['all'] = cards.length;
+  cards.forEach(card => {
+    const cardCats = card.dataset.cats.split(' ');
+    cardCats.forEach(c => { catCounts[c] = (catCounts[c]||0) + 1; });
+  });
+  cats.forEach(c => {
+    const el = document.getElementById('cnt-' + c);
+    if(el) el.textContent = catCounts[c] || '';
+  });
+  countNum.textContent = cards.length;
+
+  // 状態
+  let activeCat = 'all';
+  let searchQ = '';
+
+  function applyFilters(){
+    let visible = 0;
+    cards.forEach(card => {
+      const cardCats = card.dataset.cats.split(' ');
+      const matchCat = activeCat === 'all' || cardCats.includes(activeCat);
+      const matchSearch = !searchQ || card.dataset.term.includes(searchQ);
+      const show = matchCat && matchSearch;
+      card.classList.toggle('hidden', !show);
+      if(show) visible++;
+    });
+    countNum.textContent = visible;
+    noResults.classList.toggle('show', visible === 0);
+
+    // 文字グループの表示/非表示
+    letterGroups.forEach(group => {
+      const hasVisible = Array.from(group.querySelectorAll('.term-card')).some(c => !c.classList.contains('hidden'));
+      group.classList.toggle('hidden', !hasVisible);
+    });
+  }
+
+  // カテゴリーフィルター
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      activeCat = this.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  // 検索
+  document.getElementById('glossSearch').addEventListener('input', function(){
+    searchQ = this.value.toLowerCase().trim();
+    applyFilters();
+  });
+
+  // アルファベットナビ生成
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const existingLetters = new Set(letterGroups.map(g => g.id.replace('gl-','').toUpperCase()));
+  const alphaGrid = document.getElementById('alphaGrid');
+  letters.forEach(letter => {
+    const a = document.createElement('a');
+    a.className = 'alpha-btn' + (existingLetters.has(letter) ? ' has-entries' : ' disabled');
+    a.textContent = letter;
+    if(existingLetters.has(letter)){
+      a.href = '#gl-' + letter.toLowerCase();
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        const target = document.getElementById('gl-' + letter.toLowerCase());
+        if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    }
+    alphaGrid.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>
