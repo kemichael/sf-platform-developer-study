@@ -1,0 +1,1756 @@
+<title>Apex サンプルコード集 | Salesforce Platform Developer 試験対策</title>
+<style>
+:root {
+  --bg: #07111e;
+  --surf: #0c1a29;
+  --surf2: #112033;
+  --border: #1c3048;
+  --accent: #009fd4;
+  --accent-glow: #00bfff22;
+  --text: #c4d8ea;
+  --muted: #5a7a92;
+  --dim: #2d4a60;
+  --kw: #5fa8d3;
+  --ctrl: #c792ea;
+  --str: #f0a070;
+  --cmt: #4a7a45;
+  --num: #b5cea8;
+  --ann: #e5c07b;
+  --type: #3dc9b0;
+  --obj: #88ccf8;
+  --sys: #61afef;
+  --dml: #c792ea;
+  --soql: #d4a96a;
+  --kwval: #56b6c2;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh}
+
+/* Header */
+#hdr{background:var(--surf);border-bottom:1px solid var(--border);padding:0 1.5rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:.75rem}
+.logo-icon{width:32px;height:32px;flex-shrink:0}
+.logo-title{font-size:.95rem;font-weight:700;color:#fff;letter-spacing:-.01em}
+.logo-sub{font-size:.72rem;color:var(--muted);display:block;margin-top:1px}
+.hdr-stats{display:flex;gap:1.5rem}
+.stat{text-align:center}
+.stat-n{font-size:1.1rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.stat-l{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+/* Layout */
+#layout{display:flex;height:calc(100vh - 56px);overflow:hidden}
+
+/* Sidebar */
+#nav{width:220px;flex-shrink:0;background:var(--surf);border-right:1px solid var(--border);overflow-y:auto;padding:1rem 0}
+#nav::-webkit-scrollbar{width:4px}
+#nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.nav-group-label{font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:.5rem 1.25rem .25rem}
+.nav-item{display:block;padding:.4rem 1.25rem;color:var(--muted);text-decoration:none;font-size:.82rem;border-left:2px solid transparent;transition:color .15s,border-color .15s,background .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-item:hover{color:var(--text);background:var(--surf2)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:var(--accent-glow)}
+.nav-num{color:var(--dim);font-size:.72rem;margin-right:.35rem;font-variant-numeric:tabular-nums}
+
+/* Main */
+#main{flex:1;overflow-y:auto;padding:2rem 2.5rem 4rem}
+#main::-webkit-scrollbar{width:6px}
+#main::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Section */
+.section{margin-bottom:3.5rem}
+.sec-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem}
+.sec-title{display:flex;align-items:center;gap:.75rem}
+.sec-num{font-size:.72rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;background:var(--accent-glow);border:1px solid var(--accent);border-radius:4px;padding:.15rem .45rem;letter-spacing:.05em}
+.sec-title h2{font-size:1.25rem;font-weight:700;color:#fff;letter-spacing:-.02em}
+.sec-badges{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.badge{font-size:.68rem;padding:.2rem .6rem;border-radius:12px;font-weight:600;letter-spacing:.02em;border:1px solid}
+.badge-blue{color:#7dd3fc;border-color:#1e4d6e;background:#0c2a40}
+.badge-purple{color:#c4b5fd;border-color:#4a3568;background:#241540}
+.badge-green{color:#6ee7b7;border-color:#1e5040;background:#0c2820}
+.badge-gold{color:#fcd34d;border-color:#5a4010;background:#2a1e08}
+.freq{font-size:.8rem;color:#d4a96a;letter-spacing:.05em}
+.sec-desc{color:var(--muted);font-size:.83rem;margin-bottom:1.25rem;max-width:68ch;line-height:1.65}
+.sec-divider{border:none;border-top:1px solid var(--border);margin:2.5rem 0}
+
+/* Code card */
+.code-card{margin-bottom:1.25rem;border-radius:8px;border:1px solid var(--border);overflow:hidden}
+.code-hdr{background:var(--surf2);border-bottom:1px solid var(--border);padding:.55rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.code-name{font-size:.75rem;font-weight:600;color:var(--text);letter-spacing:.03em}
+.code-lang{font-size:.68rem;color:var(--muted);background:var(--border);padding:.15rem .5rem;border-radius:4px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+pre{background:#060e1a;overflow-x:auto;padding:1.1rem 1.25rem;margin:0}
+pre code{font-family:'Cascadia Code','JetBrains Mono','Fira Code',Consolas,'Courier New',monospace;font-size:.815rem;line-height:1.7;white-space:pre}
+pre::-webkit-scrollbar{height:4px}
+pre::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* Syntax tokens */
+.kw{color:var(--kw)}
+.ctrl{color:var(--ctrl)}
+.str{color:var(--str)}
+.cmt{color:var(--cmt);font-style:italic}
+.num{color:var(--num)}
+.ann{color:var(--ann)}
+.typ{color:var(--type)}
+.obj{color:var(--obj)}
+.sys{color:var(--sys)}
+.dml{color:var(--dml)}
+.soql{color:var(--soql)}
+.kv{color:var(--kwval)}
+
+/* Point box */
+.point-box{background:var(--surf);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:6px;padding:.85rem 1.1rem;margin-top:.75rem}
+.point-box h4{font-size:.75rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.point-box ul{padding-left:1.1rem;font-size:.8rem;color:var(--muted);display:flex;flex-direction:column;gap:.3rem}
+.point-box li{line-height:1.55}
+.point-box strong{color:var(--text)}
+
+/* Two-column code comparison */
+.code-compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:900px){.code-compare{grid-template-columns:1fr}}
+.compare-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;padding:.3rem .75rem;border-radius:4px 4px 0 0;margin-bottom:0}
+.label-bad{background:#3a0f0f;color:#f87171}
+.label-good{background:#0f2d1a;color:#4ade80}
+
+/* Scroll target offset */
+.section{scroll-margin-top:72px}
+</style>
+
+<div id="hdr">
+  <div class="logo">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <path d="M13.3 6.4a5.2 5.2 0 0 1 9.6 1.8 4 4 0 0 1 4.9 3.8 4 4 0 0 1-4 4H7a4.4 4.4 0 0 1-.7-8.7A5.2 5.2 0 0 1 13.3 6.4z" fill="#009fd4"/>
+      <rect x="8" y="19" width="16" height="1.5" rx=".75" fill="#004c8c"/>
+      <rect x="10" y="22" width="12" height="1.5" rx=".75" fill="#004c8c"/>
+      <rect x="13" y="25" width="6" height="1.5" rx=".75" fill="#004c8c"/>
+    </svg>
+    <div>
+      <span class="logo-title">Apex サンプルコード集</span>
+      <span class="logo-sub">Salesforce Platform Developer I 試験対策</span>
+    </div>
+  </div>
+  <div class="hdr-stats">
+    <div class="stat"><div class="stat-n">10</div><div class="stat-l">カテゴリ</div></div>
+    <div class="stat"><div class="stat-n">40+</div><div class="stat-l">サンプル</div></div>
+    <div class="stat"><div class="stat-n">PDI</div><div class="stat-l">完全対応</div></div>
+  </div>
+</div>
+
+<div id="layout">
+  <nav id="nav">
+    <div class="nav-group-label">セクション一覧</div>
+    <a class="nav-item" href="#s1"><span class="nav-num">01</span>Apex基礎</a>
+    <a class="nav-item" href="#s2"><span class="nav-num">02</span>SOQL / SOSL</a>
+    <a class="nav-item" href="#s3"><span class="nav-num">03</span>DML操作</a>
+    <a class="nav-item" href="#s4"><span class="nav-num">04</span>トリガー開発</a>
+    <a class="nav-item" href="#s5"><span class="nav-num">05</span>ガバナ制限</a>
+    <a class="nav-item" href="#s6"><span class="nav-num">06</span>例外処理</a>
+    <a class="nav-item" href="#s7"><span class="nav-num">07</span>非同期 Apex</a>
+    <a class="nav-item" href="#s8"><span class="nav-num">08</span>テスト</a>
+    <a class="nav-item" href="#s9"><span class="nav-num">09</span>OOP</a>
+    <a class="nav-item" href="#s10"><span class="nav-num">10</span>セキュリティ</a>
+  </nav>
+
+  <main id="main">
+
+    <!-- S1 -->
+    <section class="section" id="s1">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">01</span><h2>Apex 基礎</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-blue">プロセス自動化・ロジック</span>
+          <span class="freq">★★★★★</span>
+        </div>
+      </div>
+      <p class="sec-desc">Apexのデータ型、コレクション、制御フローは試験の基礎。すべての問題に関わるため確実に押さえること。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">データ型と変数</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s1-types"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">コレクション（List / Set / Map）</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s1-collections"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">制御フロー（if / for / switch on）</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s1-control"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li><strong>Integer</strong> は整数、<strong>Decimal</strong> は小数（通貨）、<strong>Long</strong> は大きな整数</li>
+          <li><strong>List</strong> は順序あり・重複あり、<strong>Set</strong> は順序なし・重複なし、<strong>Map</strong> はキー→値</li>
+          <li>Apex の <code>switch on</code> は Java と異なり <strong>fall-through がない</strong></li>
+          <li>Null 参照に対してメソッド呼び出しすると <strong>NullPointerException</strong> が発生する</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S2 -->
+    <section class="section" id="s2">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">02</span><h2>SOQL / SOSL</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-gold">データモデリング・管理</span>
+          <span class="freq">★★★★★</span>
+        </div>
+      </div>
+      <p class="sec-desc">データ取得の要。リレーションクエリ、集計関数、バインド変数（インジェクション対策）、動的SOQLまで幅広く出題される。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">基本クエリ・フィルタ・並び替え</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s2-basic"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">リレーションクエリ（親→子 / 子→親）</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s2-relation"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">集計クエリ（GROUP BY / HAVING）</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s2-aggregate"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">動的 SOQL / SOSL</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s2-dynamic"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li>バインド変数（<strong>:variable</strong>）を使うとSOQLインジェクションを防げる</li>
+          <li>子→親リレーションは <strong>ドット記法</strong>（<code>Contact.Account.Name</code>）</li>
+          <li>親→子はサブクエリ（<code>SELECT Id, (SELECT Id FROM Contacts) FROM Account</code>）</li>
+          <li><strong>WITH SECURITY_ENFORCED</strong> でFLS・CRUDをSOQLレベルで強制できる</li>
+          <li>SOSLは複数オブジェクトを横断検索、SOQLは単一オブジェクト</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S3 -->
+    <section class="section" id="s3">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">03</span><h2>DML 操作</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-blue">プロセス自動化・ロジック</span>
+          <span class="freq">★★★★☆</span>
+        </div>
+      </div>
+      <p class="sec-desc">insert / update / upsert / delete / undelete の使い方と、エラーハンドリングを許容する Database.* メソッドの使い分けが頻出。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">標準 DML ステートメント</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s3-dml"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">Database.* メソッド（部分成功・SaveResult）</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s3-database"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li>標準DML（<code>insert list</code>）は <strong>allOrNone=true</strong>（1件エラーで全件ロールバック）</li>
+          <li><strong>Database.insert(list, false)</strong> はエラーレコードをスキップして残りを保存</li>
+          <li><code>upsert</code> は外部IDフィールドを指定しない場合はSalesforce IDで判定</li>
+          <li>DML制限は1トランザクションで <strong>150回</strong>、対象レコードは <strong>10,000件</strong></li>
+          <li><code>Database.Savepoint</code> でロールバックポイントを設定できる</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S4 -->
+    <section class="section" id="s4">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">04</span><h2>トリガー開発</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-blue">プロセス自動化・ロジック</span>
+          <span class="freq">★★★★★</span>
+        </div>
+      </div>
+      <p class="sec-desc">試験最重要トピック。バルク対応（ループ内SOQL/DML禁止）、ハンドラーパターン、Trigger.*コンテキスト変数の使い方を完全習得すること。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">AccountTrigger — トリガー本体（ハンドラーへ委譲）</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s4-trigger"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">AccountTriggerHandler — バルク対応ハンドラー</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s4-handler"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li><strong>Trigger.new</strong>（挿入・更新後の値）/ <strong>Trigger.old</strong>（更新・削除前の値）</li>
+          <li><strong>Trigger.newMap / Trigger.oldMap</strong> は Id → sObject のマップ</li>
+          <li>before trigger で <code>Trigger.new</code> のフィールドを直接変更できる（DML不要）</li>
+          <li>after trigger では <code>Trigger.new</code> は読み取り専用</li>
+          <li>ループ内でSOQL/DMLを実行すると101件超でガバナ制限エラー → <strong>必ずループ外で一括処理</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S5 -->
+    <section class="section" id="s5">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">05</span><h2>ガバナ制限</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-purple">テスト・デバッグ</span>
+          <span class="freq">★★★★☆</span>
+        </div>
+      </div>
+      <p class="sec-desc">Salesforce のマルチテナント環境を守る制限。「何件まで？」という数値と、制限を回避するパターンが問われる。</p>
+
+      <div class="code-compare">
+        <div>
+          <div class="compare-label label-bad">NG — ループ内でSOQL実行</div>
+          <div class="code-card" style="margin-bottom:0;border-radius:0 0 8px 8px">
+            <pre><code data-key="s5-bad"></code></pre>
+          </div>
+        </div>
+        <div>
+          <div class="compare-label label-good">OK — ループ外でSOQL一括実行</div>
+          <div class="code-card" style="margin-bottom:0;border-radius:0 0 8px 8px">
+            <pre><code data-key="s5-good"></code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="code-card" style="margin-top:1rem">
+        <div class="code-hdr"><span class="code-name">Limits クラス — 使用量をリアルタイムで確認</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s5-limits"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>主要ガバナ制限（同期トランザクション）</h4>
+        <ul>
+          <li>SOQL クエリ: <strong>100回</strong> / SOQL 取得レコード: <strong>50,000件</strong></li>
+          <li>DML ステートメント: <strong>150回</strong> / DML 対象レコード: <strong>10,000件</strong></li>
+          <li>CPU 時間: <strong>10,000ms</strong> / ヒープサイズ: <strong>6MB</strong></li>
+          <li>Callout: <strong>100回</strong> / Callout タイムアウト: <strong>120秒</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S6 -->
+    <section class="section" id="s6">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">06</span><h2>例外処理</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-blue">プロセス自動化・ロジック</span>
+          <span class="freq">★★★☆☆</span>
+        </div>
+      </div>
+      <p class="sec-desc">try/catch/finally の構造、例外の種類（DmlException / QueryException など）、カスタム例外クラスの実装が出題される。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">try / catch / finally と例外の種類</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s6-trycatch"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">カスタム例外クラス</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s6-custom"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li>カスタム例外は <strong>extends Exception</strong> で定義する</li>
+          <li><strong>finally</strong> ブロックは例外の有無に関わらず必ず実行される</li>
+          <li><strong>DmlException.getDmlMessage(0)</strong> で最初のエラーメッセージを取得</li>
+          <li>LWC / Aura からのエラーは <strong>AuraHandledException</strong> でラップしてスローする</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S7 -->
+    <section class="section" id="s7">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">07</span><h2>非同期 Apex</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-blue">プロセス自動化・ロジック</span>
+          <span class="freq">★★★★★</span>
+        </div>
+      </div>
+      <p class="sec-desc">@future / Batch / Queueable / Scheduled の4種類の使い分けが頻出。それぞれのインターフェース・制約・実行方法を覚えること。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">@future — 非同期・コールアウト対応</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s7-future"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">Batch Apex — 大量レコードの一括処理</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s7-batch"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">Queueable Apex — ジョブチェーン対応</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s7-queueable"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">Scheduled Apex — cron でスケジュール実行</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s7-scheduled"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li><strong>@future</strong>: 引数はプリミティブ型か <code>Set&lt;Id&gt;</code>。sObjectは渡せない</li>
+          <li><strong>Batch</strong>: <code>start / execute / finish</code> の3メソッド。デフォルトチャンク200件</li>
+          <li><strong>Database.Stateful</strong> を implements するとバッチ間で変数を保持できる</li>
+          <li><strong>Queueable</strong> はジョブのチェーン（連結）が可能。テスト時は1ジョブのみ</li>
+          <li><strong>Scheduled</strong>: cron 式で最大同時100ジョブ。スケジュール済みジョブは削除できない</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S8 -->
+    <section class="section" id="s8">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">08</span><h2>テスト</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-green">テスト・デバッグ・デプロイ</span>
+          <span class="freq">★★★★★</span>
+        </div>
+      </div>
+      <p class="sec-desc">本番へのデプロイには75%以上のコードカバレッジが必要。@testSetup、Test.startTest()、HttpCalloutMock、アサーションの使い方が必須。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">テストクラスの基本構造（@testSetup・正常系・異常系・バルク）</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s8-test"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">HttpCalloutMock — 外部APIのモック</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s8-mock"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li>テストクラスは <strong>@isTest</strong> アノテーションを付与し、本番コードをカウントしない</li>
+          <li><strong>Test.startTest() / Test.stopTest()</strong> でガバナ制限をリセットし、非同期処理を完了させる</li>
+          <li><strong>@testSetup</strong> で共有テストデータを1回だけ作成（各テストは自動ロールバック）</li>
+          <li>コールアウトのテストは必ず <strong>Test.setMock()</strong> で HttpCalloutMock を設定</li>
+          <li>テストデータは <strong>Test.isRunningTest()</strong> などで本番データと分離する</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S9 -->
+    <section class="section" id="s9">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">09</span><h2>オブジェクト指向（OOP）</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-blue">プロセス自動化・ロジック</span>
+          <span class="freq">★★★☆☆</span>
+        </div>
+      </div>
+      <p class="sec-desc">アクセス修飾子、abstract / virtual クラス、インターフェース、継承（extends）の構文と動作原理が問われる。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">インターフェース・抽象クラス・継承・オーバーライド</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s9-oop"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li><strong>abstract クラス</strong>はインスタンス化不可。<code>abstract</code> メソッドはサブクラスで必ず実装</li>
+          <li><strong>virtual クラス</strong>はインスタンス化可能で、<code>virtual</code> メソッドはオーバーライド可能</li>
+          <li>インターフェースはメソッドシグネチャのみ定義（実装なし）</li>
+          <li>Apex はシングル継承（extends 1クラスのみ）、インターフェースは複数実装可能</li>
+          <li>アクセス修飾子: <strong>private &lt; protected &lt; public &lt; global</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- S10 -->
+    <section class="section" id="s10">
+      <div class="sec-header">
+        <div class="sec-title"><span class="sec-num">10</span><h2>セキュリティ</h2></div>
+        <div class="sec-badges">
+          <span class="badge badge-purple">Salesforce 基礎</span>
+          <span class="freq">★★★★☆</span>
+        </div>
+      </div>
+      <p class="sec-desc">with sharing / without sharing の使い分け、CRUD・FLSの検証、Security.stripInaccessible の活用。セキュリティ問題は毎回出題される。</p>
+
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">with sharing / without sharing / inherited sharing</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s10-sharing"></code></pre>
+      </div>
+      <div class="code-card">
+        <div class="code-hdr"><span class="code-name">CRUD / FLS チェック・Security.stripInaccessible</span><span class="code-lang">Apex</span></div>
+        <pre><code data-key="s10-security"></code></pre>
+      </div>
+      <div class="point-box">
+        <h4>試験のポイント</h4>
+        <ul>
+          <li><strong>with sharing</strong>: OWD・共有ルールを適用（推奨デフォルト）</li>
+          <li><strong>without sharing</strong>: 共有設定を無視（管理者専用処理など最小限に限定）</li>
+          <li><strong>inherited sharing</strong>: 呼び出し元クラスの設定を引き継ぐ</li>
+          <li>共有キーワードを省略すると <strong>without sharing と同等</strong>（危険）</li>
+          <li><strong>Security.stripInaccessible</strong> はアクセス不可フィールドを自動で除去する（推奨）</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const EXAMPLES = {
+
+'s1-types': `// ====== プリミティブ型 ======
+String  greeting  = 'Hello, Salesforce!';
+Integer count     = 100;
+Long    bigNum    = 9999999999L;
+Decimal revenue   = 1234567.89;
+Double  ratio     = 3.14159;
+Boolean isActive  = true;
+Date    today     = Date.today();
+DateTime  now     = DateTime.now();
+Time    startTime = Time.newInstance(9, 0, 0, 0);
+Id      userId    = UserInfo.getUserId();
+Blob    data      = Blob.valueOf('binary content');
+
+// ====== String 便利メソッド ======
+String s = '  Apex Developer  ';
+System.debug(s.trim());           // 前後の空白除去
+System.debug(s.toUpperCase());    // 大文字変換
+System.debug(s.contains('Apex')); // 部分一致: true
+System.debug(s.startsWith(' '));  // 先頭一致: true
+System.debug(String.isBlank(s));  // null or 空白のみ: false
+System.debug(String.valueOf(42)); // 数値→文字列変換
+
+// ====== Null 安全操作 ======
+String val = null;
+Integer len = (val != null) ? val.length() : 0;
+System.debug('Length: ' + len); // 0`,
+
+'s1-collections': `// ====== List（順序あり・重複あり）======
+List<String> fruits = new List<String>{'Apple', 'Banana', 'Cherry'};
+fruits.add('Date');             // 末尾に追加
+fruits.add(0, 'Avocado');       // 先頭に挿入
+fruits.remove(1);               // インデックス指定で削除
+fruits.sort();                  // 昇順ソート
+
+System.debug(fruits.size());         // 要素数
+System.debug(fruits.get(0));         // 取得
+System.debug(fruits.contains('Cherry')); // 存在確認
+System.debug(fruits.isEmpty());      // 空確認
+
+// ====== Set（順序なし・重複なし）======
+Set<Id> processedIds = new Set<Id>();
+processedIds.add(UserInfo.getUserId());
+processedIds.addAll(new List<Id>{UserInfo.getUserId()}); // 重複は無視
+Boolean exists = processedIds.contains(UserInfo.getUserId()); // true
+
+// ====== Map（キー→値）======
+Map<String, Integer> scores = new Map<String, Integer>{
+    'Alice' => 95,
+    'Bob'   => 87,
+    'Carol' => 92
+};
+scores.put('Dave', 78);                    // 追加/更新
+Integer aliceScore = scores.get('Alice');  // 取得: 95
+Boolean hasKey = scores.containsKey('Bob'); // true
+
+// キーセット・値コレクション
+Set<String>        keys   = scores.keySet();
+List<Integer>      vals   = scores.values();
+Map<String,Integer> copy  = scores.clone();
+
+// ====== Map を使った効率的なデータ整理 ======
+List<Account> accounts = [SELECT Id, Name FROM Account LIMIT 50];
+Map<Id, Account> accMap = new Map<Id, Account>(accounts); // Id→Account
+Account first = accMap.get(accounts[0].Id);`,
+
+'s1-control': `// ====== if / else if / else ======
+Integer score = 85;
+String grade;
+if (score >= 90) {
+    grade = 'A';
+} else if (score >= 80) {
+    grade = 'B';  // ここに入る
+} else if (score >= 70) {
+    grade = 'C';
+} else {
+    grade = 'F';
+}
+
+// ====== 三項演算子 ======
+String label = (score >= 60) ? '合格' : '不合格';
+
+// ====== for ループ（従来型）======
+for (Integer i = 0; i < 5; i++) {
+    System.debug('i = ' + i);
+}
+
+// ====== for ループ（拡張・コレクション反復）======
+List<String> names = new List<String>{'Alice', 'Bob', 'Carol'};
+for (String name : names) {
+    System.debug('名前: ' + name);
+}
+
+// ====== for ループ（SOQL直接）======
+for (Account acc : [SELECT Id, Name FROM Account LIMIT 200]) {
+    System.debug(acc.Name);
+}
+
+// ====== while ======
+Integer n = 0;
+while (n < 3) {
+    System.debug('n = ' + n);
+    n++;
+}
+
+// ====== switch on（Apexのみ・fall-through なし）======
+String status = 'Active';
+switch on status {
+    when 'Active' {
+        System.debug('有効');
+    }
+    when 'Inactive', 'Closed' {  // 複数値は カンマ区切り
+        System.debug('無効または終了');
+    }
+    when null {
+        System.debug('Null値');
+    }
+    when else {
+        System.debug('不明な状態');
+    }
+}
+
+// ====== switch on（Integer）======
+Integer day = 1;
+switch on day {
+    when 1 { System.debug('月曜日'); }
+    when 2 { System.debug('火曜日'); }
+    when else { System.debug('その他'); }
+}`,
+
+'s2-basic': `// ====== 基本クエリ ======
+List<Account> accounts = [
+    SELECT Id, Name, Industry, AnnualRevenue, Phone
+    FROM Account
+    WHERE Industry = 'Technology'
+      AND AnnualRevenue > 1000000
+      AND Name != null
+    ORDER BY Name ASC, AnnualRevenue DESC
+    LIMIT 100
+    OFFSET 0
+];
+
+// ====== バインド変数（SOQLインジェクション対策・必須）======
+String targetIndustry = 'Technology';
+Decimal minRevenue    = 500000;
+List<Account> bound = [
+    SELECT Id, Name
+    FROM Account
+    WHERE Industry = :targetIndustry
+      AND AnnualRevenue >= :minRevenue
+];
+
+// ====== 日付リテラル ======
+List<Opportunity> recentOpps = [
+    SELECT Id, Name, CloseDate, StageName
+    FROM Opportunity
+    WHERE CloseDate = THIS_QUARTER
+      AND StageName != 'Closed Lost'
+      AND LastModifiedDate > LAST_N_DAYS:30
+];
+
+// ====== IN / NOT IN ======
+Set<String> stages = new Set<String>{'Prospecting', 'Qualification'};
+List<Opportunity> opps = [
+    SELECT Id, Name, StageName
+    FROM Opportunity
+    WHERE StageName IN :stages
+];`,
+
+'s2-relation': `// ====== 子→親 リレーション（ドット記法）======
+// Contact → Account（1レベル）
+List<Contact> contacts = [
+    SELECT Id, FirstName, LastName, Email,
+           Account.Name, Account.Industry, Account.Owner.Name
+    FROM Contact
+    WHERE Account.Industry = 'Technology'
+      AND Account.AnnualRevenue > 500000
+];
+for (Contact c : contacts) {
+    System.debug(c.Account.Name + ' - ' + c.LastName);
+}
+
+// ====== 親→子 リレーション（サブクエリ）======
+// Account → Contacts（子リレーション名はAPIリレーション名）
+List<Account> accsWithContacts = [
+    SELECT Id, Name,
+        (
+            SELECT Id, FirstName, LastName, Email
+            FROM Contacts
+            WHERE IsEmailBounced = false
+            ORDER BY LastName ASC
+        )
+    FROM Account
+    WHERE Name LIKE 'ACME%'
+];
+for (Account acc : accsWithContacts) {
+    System.debug('Account: ' + acc.Name);
+    // サブクエリ結果は List として取得
+    List<Contact> kids = acc.Contacts;
+    if (kids != null) {
+        for (Contact c : kids) {
+            System.debug('  - ' + c.FirstName + ' ' + c.LastName);
+        }
+    }
+}
+
+// ====== カスタムオブジェクト リレーション ======
+// Order__c → Account（Lookup: Account__c フィールド）
+List<Order__c> orders = [
+    SELECT Id, Name, Amount__c, Account__r.Name
+    FROM Order__c
+    WHERE Account__r.Industry = 'Retail'
+];`,
+
+'s2-aggregate': `// ====== 集計関数（COUNT / SUM / AVG / MIN / MAX）======
+AggregateResult[] results = [
+    SELECT Industry,
+           COUNT(Id)               totalCount,
+           SUM(AnnualRevenue)      totalRevenue,
+           AVG(AnnualRevenue)      avgRevenue,
+           MAX(AnnualRevenue)      maxRevenue,
+           MIN(NumberOfEmployees)  minEmp
+    FROM Account
+    WHERE Industry != null
+    GROUP BY Industry
+    HAVING COUNT(Id) >= 5
+    ORDER BY SUM(AnnualRevenue) DESC
+    LIMIT 10
+];
+
+for (AggregateResult ar : results) {
+    String  ind   = (String)  ar.get('Industry');
+    Integer cnt   = (Integer) ar.get('totalCount');
+    Decimal total = (Decimal) ar.get('totalRevenue');
+    System.debug(ind + ': ' + cnt + '件 / 合計 ' + total);
+}
+
+// ====== COUNT() のみ（単純件数）======
+Integer accCount = [SELECT COUNT() FROM Account WHERE IsDeleted = false];
+System.debug('Total accounts: ' + accCount);
+
+// ====== COUNT_DISTINCT ======
+AggregateResult[] distinctIndustries = [
+    SELECT COUNT_DISTINCT(Industry) cnt FROM Account
+];
+Integer distinctCnt = (Integer)distinctIndustries[0].get('cnt');`,
+
+'s2-dynamic': `// ====== 動的 SOQL (Database.query) ======
+// WITH SECURITY_ENFORCED でFLS・CRUDを強制（推奨）
+String objectName = 'Account';
+String filter     = 'Technology';
+String query = 'SELECT Id, Name, Industry '
+             + 'FROM ' + objectName + ' '
+             + 'WHERE Industry = :filter '  // バインド変数は動的SOQLでも使用可
+             + 'WITH SECURITY_ENFORCED '
+             + 'LIMIT 50';
+List<sObject> records = Database.query(query);
+
+// ====== 動的フィールド選択 ======
+List<String> fields = new List<String>{'Id', 'Name', 'Industry'};
+String dynQuery = 'SELECT ' + String.join(fields, ', ')
+                + ' FROM Account LIMIT 10';
+List<Account> dynAccounts = (List<Account>)Database.query(dynQuery);
+
+// ====== SOSL（全文検索・複数オブジェクト横断）======
+String keyword = 'Salesforce*';
+List<List<sObject>> searchResults = [
+    FIND :keyword
+    IN ALL FIELDS
+    RETURNING
+        Account(Id, Name, Industry ORDER BY Name),
+        Contact(Id, FirstName, LastName, Email),
+        Opportunity(Id, Name, StageName)
+    LIMIT 50
+];
+
+List<Account>     foundAccs  = (List<Account>)     searchResults[0];
+List<Contact>     foundCons  = (List<Contact>)     searchResults[1];
+List<Opportunity> foundOpps  = (List<Opportunity>) searchResults[2];
+System.debug('Accounts found: ' + foundAccs.size());
+System.debug('Contacts found: ' + foundCons.size());`,
+
+'s3-dml': `// ====== insert（成功時にIdが自動セット）======
+Account newAcc = new Account(
+    Name          = 'ACME Corporation',
+    Industry      = 'Technology',
+    AnnualRevenue = 5000000,
+    Phone         = '03-0000-0000'
+);
+insert newAcc;
+System.debug('新規Account Id: ' + newAcc.Id); // Idが設定される
+
+// ====== update ======
+newAcc.AnnualRevenue = 6000000;
+newAcc.Rating        = 'Hot';
+update newAcc;
+
+// ====== delete / undelete ======
+delete newAcc;   // ゴミ箱へ移動
+undelete newAcc; // ゴミ箱から復元
+
+// ====== upsert（外部IDで既存判定）======
+Account extAcc = new Account(
+    ExternalId__c = 'EXT-001', // 外部IDフィールド（isExternalId=true）
+    Name          = 'External Corp'
+);
+// 外部IDが一致するレコードがあれば更新、なければ挿入
+upsert extAcc Account.Fields.ExternalId__c;
+
+// ====== バルク DML（List で一括処理・推奨）======
+List<Contact> contacts = new List<Contact>();
+for (Integer i = 0; i < 200; i++) {
+    contacts.add(new Contact(
+        FirstName = 'Test',
+        LastName  = 'User' + i,
+        AccountId = newAcc.Id
+    ));
+}
+insert contacts; // 200件を1回のDMLで挿入
+
+// ====== Savepoint（ロールバックポイント）======
+Savepoint sp = Database.setSavepoint();
+try {
+    Account tmp = new Account(Name = 'Temp');
+    insert tmp;
+    // 何らかの条件でロールバック
+    Database.rollback(sp); // insertが取り消される
+} catch (Exception e) {
+    Database.rollback(sp);
+    throw e;
+}`,
+
+'s3-database': `// ====== Database.insert（allOrNone=false: 部分成功を許可）======
+List<Account> accsToInsert = new List<Account>();
+accsToInsert.add(new Account(Name = 'Valid Account'));
+accsToInsert.add(new Account());             // Name必須フィールドなし→エラー
+accsToInsert.add(new Account(Name = 'Another Valid Account'));
+
+// allOrNone=false: エラーレコードをスキップして残りを保存
+Database.SaveResult[] saveResults = Database.insert(accsToInsert, false);
+
+List<String> errors = new List<String>();
+for (Integer i = 0; i < saveResults.size(); i++) {
+    Database.SaveResult sr = saveResults[i];
+    if (sr.isSuccess()) {
+        System.debug('挿入成功 Id: ' + sr.getId());
+    } else {
+        for (Database.Error err : sr.getErrors()) {
+            String msg = 'インデックス' + i + ' エラー: '
+                       + err.getStatusCode() + ' - ' + err.getMessage();
+            errors.add(msg);
+            System.debug(msg);
+        }
+    }
+}
+
+// ====== Database.update ======
+List<Account> accsToUpdate = [SELECT Id, AnnualRevenue FROM Account LIMIT 10];
+for (Account acc : accsToUpdate) {
+    acc.AnnualRevenue = (acc.AnnualRevenue == null) ? 0 : acc.AnnualRevenue * 1.1;
+}
+Database.SaveResult[] updateResults = Database.update(accsToUpdate, false);
+
+// ====== Database.upsert ======
+Database.UpsertResult[] upsertResults = Database.upsert(accsToInsert, false);
+for (Database.UpsertResult ur : upsertResults) {
+    if (ur.isSuccess()) {
+        System.debug((ur.isCreated() ? '挿入' : '更新') + ' 成功: ' + ur.getId());
+    }
+}`,
+
+'s4-trigger': `// AccountTrigger.trigger
+// ベストプラクティス: トリガーはロジックを持たず、ハンドラーに委譲する
+trigger AccountTrigger on Account (
+    before insert, before update, before delete,
+    after insert,  after update,  after delete, after undelete
+) {
+    AccountTriggerHandler handler = new AccountTriggerHandler();
+
+    if (Trigger.isBefore) {
+        if (Trigger.isInsert)  handler.beforeInsert(Trigger.new);
+        if (Trigger.isUpdate)  handler.beforeUpdate(Trigger.new, Trigger.oldMap);
+        if (Trigger.isDelete)  handler.beforeDelete(Trigger.old);
+    }
+
+    if (Trigger.isAfter) {
+        if (Trigger.isInsert)   handler.afterInsert(Trigger.new, Trigger.newMap);
+        if (Trigger.isUpdate)   handler.afterUpdate(Trigger.new, Trigger.newMap, Trigger.oldMap);
+        if (Trigger.isDelete)   handler.afterDelete(Trigger.old, Trigger.oldMap);
+        if (Trigger.isUndelete) handler.afterUndelete(Trigger.new);
+    }
+}
+
+// ====== Trigger コンテキスト変数一覧 ======
+// Trigger.new       — 新しい値のリスト（insert/update/undelete）
+// Trigger.old       — 古い値のリスト（update/delete）
+// Trigger.newMap    — Id → 新しいsObject のマップ（update/after insert）
+// Trigger.oldMap    — Id → 古いsObject のマップ（update/delete）
+// Trigger.isInsert  — insert トリガーかどうか
+// Trigger.isUpdate  — update トリガーかどうか
+// Trigger.isDelete  — delete トリガーかどうか
+// Trigger.isUndelete— undelete トリガーかどうか
+// Trigger.isBefore  — before トリガーかどうか
+// Trigger.isAfter   — after トリガーかどうか
+// Trigger.size      — 処理対象レコード数`,
+
+'s4-handler': `// AccountTriggerHandler.cls
+public with sharing class AccountTriggerHandler {
+
+    // before insert: フィールドの初期値設定（DML不要、Trigger.newを直接変更）
+    public void beforeInsert(List<Account> newAccounts) {
+        for (Account acc : newAccounts) {
+            // デフォルト値設定
+            if (acc.Rating == null) {
+                acc.Rating = 'Warm';
+            }
+            // 名前の正規化
+            acc.Name = acc.Name != null ? acc.Name.trim() : acc.Name;
+        }
+    }
+
+    // before update: 変更のあったレコードだけ処理（パフォーマンス最適化）
+    public void beforeUpdate(List<Account> newAccounts, Map<Id, Account> oldMap) {
+        for (Account acc : newAccounts) {
+            Account oldAcc = oldMap.get(acc.Id);
+            // フィールドが変更された場合のみ処理
+            if (acc.Industry != oldAcc.Industry && acc.Industry != null) {
+                acc.Description = '業種変更: ' + oldAcc.Industry + ' → ' + acc.Industry;
+            }
+        }
+    }
+
+    // after insert: 関連レコードの作成（DMLが必要なためafter）
+    public void afterInsert(List<Account> newAccounts, Map<Id, Account> newMap) {
+        // 新規Account に対して Task を一括作成
+        List<Task> tasksToCreate = new List<Task>();
+        for (Account acc : newAccounts) {
+            tasksToCreate.add(new Task(
+                Subject      = 'Initial Contact',
+                WhatId       = acc.Id,
+                ActivityDate = Date.today().addDays(7),
+                Status       = 'Not Started'
+            ));
+        }
+        if (!tasksToCreate.isEmpty()) {
+            insert tasksToCreate; // DMLはループ外で一括実行
+        }
+    }
+
+    // after update: 変更のあったAccIdの関連Opportunityを更新（バルク対応）
+    public void afterUpdate(
+        List<Account> newAccounts,
+        Map<Id, Account> newMap,
+        Map<Id, Account> oldMap
+    ) {
+        // ステップ1: 変更対象のIdセットを収集
+        Set<Id> changedAccIds = new Set<Id>();
+        for (Account acc : newAccounts) {
+            if (acc.Industry != oldMap.get(acc.Id).Industry) {
+                changedAccIds.add(acc.Id);
+            }
+        }
+        if (changedAccIds.isEmpty()) return;
+
+        // ステップ2: SOQLはループ外で1回だけ（バルク対応の鉄則）
+        List<Opportunity> opps = [
+            SELECT Id, Description, AccountId
+            FROM Opportunity
+            WHERE AccountId IN :changedAccIds
+              AND IsClosed = false
+        ];
+
+        // ステップ3: 更新リストを作成
+        List<Opportunity> oppsToUpdate = new List<Opportunity>();
+        for (Opportunity opp : opps) {
+            Account acc = newMap.get(opp.AccountId);
+            opp.Description = '業種変更により更新: ' + acc.Industry;
+            oppsToUpdate.add(opp);
+        }
+
+        // ステップ4: DMLもループ外で一括実行
+        if (!oppsToUpdate.isEmpty()) {
+            update oppsToUpdate;
+        }
+    }
+
+    public void beforeDelete(List<Account> oldAccounts) {}
+    public void afterDelete(List<Account> oldAccounts, Map<Id, Account> oldMap) {}
+    public void afterUndelete(List<Account> newAccounts) {}
+}`,
+
+'s5-bad': `// NG: ループ内でSOQL実行
+// 101件を超えるとガバナ制限エラー！
+public static void badPattern(List<Account> accounts) {
+    for (Account acc : accounts) {
+        // ループごとにSOQLが発行される
+        // 200件のAccountがあれば200回のSOQL実行
+        List<Contact> contacts = [
+            SELECT Id, Name
+            FROM Contact
+            WHERE AccountId = :acc.Id
+        ]; // System.LimitException 発生！
+        System.debug(contacts.size());
+    }
+}`,
+
+'s5-good': `// OK: ループ外でSOQLを一括実行
+public static void goodPattern(List<Account> accounts) {
+    // ステップ1: IdのSetを作成
+    Set<Id> accIds = new Set<Id>();
+    for (Account acc : accounts) {
+        accIds.add(acc.Id);
+    }
+
+    // ステップ2: SOQLは1回だけ実行
+    List<Contact> allContacts = [
+        SELECT Id, Name, AccountId
+        FROM Contact
+        WHERE AccountId IN :accIds
+    ];
+
+    // ステップ3: Map で整理
+    Map<Id, List<Contact>> contactsByAcc =
+        new Map<Id, List<Contact>>();
+    for (Contact c : allContacts) {
+        if (!contactsByAcc.containsKey(c.AccountId)) {
+            contactsByAcc.put(c.AccountId, new List<Contact>());
+        }
+        contactsByAcc.get(c.AccountId).add(c);
+    }
+
+    // ステップ4: ループ内はMapにアクセス（SOQL不要）
+    for (Account acc : accounts) {
+        List<Contact> cons = contactsByAcc.get(acc.Id);
+        Integer cnt = (cons != null) ? cons.size() : 0;
+        System.debug(acc.Name + ': ' + cnt + '件');
+    }
+}`,
+
+'s5-limits': `// Limits クラス: 現在のガバナ制限使用量をリアルタイムで確認
+public static void checkLimits() {
+    System.debug('--- ガバナ制限 現在の使用量 ---');
+    System.debug('SOQL クエリ:   ' + Limits.getQueries()
+               + ' / ' + Limits.getLimitQueries());        // 例: 3 / 100
+    System.debug('DML ステートメント: ' + Limits.getDmlStatements()
+               + ' / ' + Limits.getLimitDmlStatements());  // 例: 1 / 150
+    System.debug('DML 対象レコード:  ' + Limits.getDmlRows()
+               + ' / ' + Limits.getLimitDmlRows());        // 例: 200 / 10000
+    System.debug('CPU 時間(ms):  ' + Limits.getCpuTime()
+               + ' / ' + Limits.getLimitCpuTime());        // 例: 512 / 10000
+    System.debug('ヒープサイズ(B): ' + Limits.getHeapSize()
+               + ' / ' + Limits.getLimitHeapSize());       // 例: 1024 / 6291456
+    System.debug('Callout:      ' + Limits.getCallouts()
+               + ' / ' + Limits.getLimitCallouts());       // 例: 0 / 100
+    System.debug('Future キュー: ' + Limits.getFutureCalls()
+               + ' / ' + Limits.getLimitFutureCalls());    // 例: 0 / 50
+}`,
+
+'s6-trycatch': `public with sharing class ExceptionDemo {
+
+    public static void processAccount(Id accountId) {
+        try {
+            // QueryException: レコードが0件または2件以上の場合
+            Account acc = [
+                SELECT Id, Name, AnnualRevenue
+                FROM Account
+                WHERE Id = :accountId
+                LIMIT 1
+            ];
+
+            if (String.isBlank(acc.Name)) {
+                // カスタム例外をスロー
+                throw new MyCustomException('Account名が空です: ' + accountId);
+            }
+
+            acc.AnnualRevenue = (acc.AnnualRevenue ?? 0) + 100000;
+            update acc;
+
+        } catch (QueryException qe) {
+            // レコードが見つからない場合
+            System.debug('クエリエラー: ' + qe.getMessage());
+            // LWC/Aura に返すエラーは AuraHandledException でラップ
+            throw new AuraHandledException('レコードが見つかりません');
+
+        } catch (DmlException dmle) {
+            // DML 操作のエラー（フィールド必須違反など）
+            System.debug('DML エラー (0件目): ' + dmle.getDmlMessage(0));
+            System.debug('DML 項目: ' + dmle.getDmlFieldNames(0));
+            throw new AuraHandledException('保存中にエラーが発生しました');
+
+        } catch (MyCustomException mce) {
+            // 独自例外
+            System.debug('カスタムエラー: ' + mce.getMessage());
+            throw mce;
+
+        } catch (Exception e) {
+            // その他すべての例外
+            System.debug('予期しないエラー: ' + e.getTypeName() + ' - ' + e.getMessage());
+            System.debug('スタックトレース: ' + e.getStackTraceString());
+            throw e;
+
+        } finally {
+            // 例外の有無に関わらず必ず実行（リソース解放など）
+            System.debug('processAccount 終了: ' + accountId);
+        }
+    }
+}`,
+
+'s6-custom': `// ====== カスタム例外クラス（extends Exception 必須）======
+public class MyCustomException extends Exception {}
+
+// プロパティを持つカスタム例外
+public class InsufficientFundsException extends Exception {
+    private final Decimal requiredAmount;
+    private final Decimal currentBalance;
+
+    public InsufficientFundsException(
+        String message,
+        Decimal required,
+        Decimal current
+    ) {
+        this(message);  // 親クラスのコンストラクタ呼び出し
+        this.requiredAmount  = required;
+        this.currentBalance  = current;
+    }
+
+    public Decimal getRequiredAmount()  { return requiredAmount; }
+    public Decimal getCurrentBalance()  { return currentBalance; }
+    public Decimal getShortfall()       { return requiredAmount - currentBalance; }
+}
+
+// ====== カスタム例外の使用例 ======
+public static void processPayment(Decimal amount, Decimal balance) {
+    if (amount > balance) {
+        throw new InsufficientFundsException(
+            '残高不足: ' + amount + '円の請求に対して残高は ' + balance + '円です',
+            amount,
+            balance
+        );
+    }
+    System.debug('支払い処理: ' + amount + '円');
+}
+
+// 呼び出し元
+try {
+    processPayment(50000, 30000);
+} catch (InsufficientFundsException ife) {
+    System.debug('不足額: ' + ife.getShortfall() + '円');
+    System.debug(ife.getMessage());
+}`,
+
+'s7-future': `public class CalloutService {
+
+    // @future: 同期トランザクションから切り離して非同期実行
+    // 制約: 引数はプリミティブ型か Set<Id> のみ（sObject は渡せない）
+    @future(callout=true)  // callout=true: HTTP コールアウトを許可
+    public static void syncToExternalSystem(Set<Id> accountIds) {
+        // 非同期なのでここで改めてSOQLを実行
+        List<Account> accounts = [
+            SELECT Id, Name, Phone, Industry
+            FROM Account
+            WHERE Id IN :accountIds
+        ];
+
+        // 外部API呼び出し
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('https://api.example.com/sync');
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json');
+        req.setTimeout(30000); // 30秒タイムアウト
+        req.setBody(JSON.serialize(accounts));
+
+        Http http = new Http();
+        HttpResponse res = http.send(req);
+
+        if (res.getStatusCode() != 200) {
+            System.debug('API エラー: ' + res.getStatusCode() + ' ' + res.getBody());
+        }
+    }
+
+    // 呼び出し元（トリガーやサービスクラスから）
+    public static void triggerSync(List<Account> accounts) {
+        Set<Id> ids = new Set<Id>();
+        for (Account acc : accounts) {
+            ids.add(acc.Id);
+        }
+        // @future はトランザクション完了後に実行される
+        syncToExternalSystem(ids);
+    }
+}`,
+
+'s7-batch': `// Database.Batchable<sObject> を implements して実装
+// Database.Stateful を追加するとバッチ間で変数を保持できる
+public class AccountCleanupBatch
+    implements Database.Batchable<sObject>, Database.Stateful {
+
+    private Integer totalProcessed = 0;  // Stateful: バッチ間で保持
+    private Integer totalErrors    = 0;
+
+    // ① start: 処理対象レコードの取得（QueryLocator）
+    public Database.QueryLocator start(Database.BatchableContext bc) {
+        return Database.getQueryLocator([
+            SELECT Id, Name, Rating, LastActivityDate
+            FROM Account
+            WHERE LastActivityDate < LAST_N_DAYS:365
+              AND IsDeleted = false
+              AND Type = 'Customer'
+        ]);
+    }
+
+    // ② execute: チャンク単位で処理（デフォルト200件ずつ）
+    public void execute(Database.BatchableContext bc, List<Account> scope) {
+        List<Account> toUpdate = new List<Account>();
+        for (Account acc : scope) {
+            acc.Rating      = 'Cold';
+            acc.Description = '1年間活動なし - ' + Date.today();
+            toUpdate.add(acc);
+        }
+
+        Database.SaveResult[] results = Database.update(toUpdate, false);
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                totalProcessed++;
+            } else {
+                totalErrors++;
+                System.debug('更新エラー: ' + sr.getErrors()[0].getMessage());
+            }
+        }
+    }
+
+    // ③ finish: 全バッチ完了後の後処理
+    public void finish(Database.BatchableContext bc) {
+        System.debug('バッチ完了: 処理 ' + totalProcessed + '件 / エラー ' + totalErrors + '件');
+
+        // 完了通知メール送信
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        mail.setToAddresses(new List<String>{UserInfo.getUserEmail()});
+        mail.setSubject('AccountCleanupBatch 完了');
+        mail.setPlainTextBody('処理: ' + totalProcessed + '件\\nエラー: ' + totalErrors + '件');
+        Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{mail});
+    }
+}
+
+// バッチの実行方法
+// Id jobId = Database.executeBatch(new AccountCleanupBatch(), 200);
+// System.debug('バッチJobId: ' + jobId);`,
+
+'s7-queueable': `// Queueable: @future より柔軟（sObjectを引数に渡せる・チェーン可能）
+public class OpportunityUpdateQueueable implements Queueable, Database.AllowsCallouts {
+
+    private List<Id> opportunityIds;
+    private Integer  batchSize;
+
+    public OpportunityUpdateQueueable(List<Id> ids, Integer size) {
+        this.opportunityIds = ids;
+        this.batchSize      = size;
+    }
+
+    public void execute(QueueableContext context) {
+        // 処理するIDのサブセットを取得
+        List<Id> currentBatch = new List<Id>();
+        List<Id> remaining    = new List<Id>();
+
+        for (Integer i = 0; i < opportunityIds.size(); i++) {
+            if (i < batchSize) {
+                currentBatch.add(opportunityIds[i]);
+            } else {
+                remaining.add(opportunityIds[i]);
+            }
+        }
+
+        // 現在のバッチを処理
+        List<Opportunity> opps = [
+            SELECT Id, StageName FROM Opportunity WHERE Id IN :currentBatch
+        ];
+        for (Opportunity opp : opps) {
+            opp.Description = 'Queueable で更新: ' + DateTime.now();
+        }
+        update opps;
+
+        // 残りがあれば次のジョブをキューに追加（チェーン）
+        // テスト実行中はチェーン不可のためガード
+        if (!remaining.isEmpty() && !Test.isRunningTest()) {
+            System.enqueueJob(new OpportunityUpdateQueueable(remaining, batchSize));
+        }
+    }
+}
+
+// 実行方法
+// Id jobId = System.enqueueJob(new OpportunityUpdateQueueable(oppIds, 50));`,
+
+'s7-scheduled': `// Schedulable インターフェースを実装
+public class DailyCleanupScheduler implements Schedulable {
+
+    public void execute(SchedulableContext sc) {
+        // スケジュールされた処理（バッチ起動など）
+        Database.executeBatch(new AccountCleanupBatch(), 200);
+        System.debug('DailyCleanupScheduler 実行: ' + DateTime.now());
+    }
+}
+
+// ====== スケジュール設定方法 ======
+// Cron 式: 秒 分 時 日 月 曜日 年
+//   '0 0 2 * * ?'    → 毎日午前2時
+//   '0 0 8 ? * MON'  → 毎週月曜日の午前8時
+//   '0 0 12 1 * ?'   → 毎月1日の正午
+//   '0 0 0 1 1 ? *'  → 毎年1月1日の深夜0時
+
+// System.schedule(ジョブ名, cron式, Schedulableインスタンス)
+// String jobId = System.schedule(
+//     'Daily Account Cleanup',
+//     '0 0 2 * * ?',
+//     new DailyCleanupScheduler()
+// );
+
+// ====== スケジュール済みジョブの取得・中断 ======
+// CronTrigger ct = [
+//     SELECT Id, CronExpression, State, NextFireTime
+//     FROM CronTrigger
+//     WHERE CronJobDetail.Name = 'Daily Account Cleanup'
+// ];
+// System.abortJob(ct.Id); // ジョブを削除`,
+
+'s8-test': `@isTest
+private class AccountTriggerHandlerTest {
+
+    // @testSetup: 全テストメソッドで共有するデータを1回だけ作成
+    // 各テストメソッド実行後は自動的にロールバックされる
+    @testSetup
+    static void setupTestData() {
+        List<Account> accounts = new List<Account>();
+        for (Integer i = 0; i < 200; i++) {
+            accounts.add(new Account(
+                Name     = 'Test Account ' + i,
+                Industry = 'Technology'
+            ));
+        }
+        insert accounts;
+    }
+
+    // ====== 正常系テスト ======
+    @isTest
+    static void testBeforeInsert_defaultRating() {
+        Account acc = new Account(Name = 'New Test Account');
+
+        Test.startTest(); // ガバナ制限をリセット・非同期処理の境界
+        insert acc;
+        Test.stopTest();  // 非同期処理が完了するまで待機
+
+        // 再クエリして結果を確認
+        Account result = [SELECT Id, Rating FROM Account WHERE Id = :acc.Id];
+        System.assertEquals('Warm', result.Rating,
+            'デフォルトRatingはWarmであること');
+    }
+
+    // ====== バルクテスト（200件以上でテストが必須）======
+    @isTest
+    static void testBulkInsert_200Records() {
+        List<Account> bulkAccounts = new List<Account>();
+        for (Integer i = 0; i < 200; i++) {
+            bulkAccounts.add(new Account(Name = 'Bulk ' + i));
+        }
+
+        Test.startTest();
+        insert bulkAccounts;
+        Test.stopTest();
+
+        List<Account> inserted = [
+            SELECT Id, Rating FROM Account WHERE Name LIKE 'Bulk%'
+        ];
+        System.assertEquals(200, inserted.size(), '200件全て挿入されること');
+        for (Account acc : inserted) {
+            System.assertEquals('Warm', acc.Rating,
+                '全レコードのRatingがWarmであること');
+        }
+    }
+
+    // ====== 異常系テスト ======
+    @isTest
+    static void testInsert_requiredFieldMissing() {
+        Boolean exceptionThrown = false;
+        try {
+            insert new Account(); // Name が必須のため失敗するはず
+        } catch (DmlException e) {
+            exceptionThrown = true;
+            System.assert(e.getMessage().contains('Required fields are missing'),
+                'DmlException のメッセージに "Required fields are missing" が含まれること');
+        }
+        System.assert(exceptionThrown, 'DmlException がスローされること');
+    }
+
+    // ====== System.assert 系メソッド ======
+    @isTest
+    static void testAssertVariations() {
+        System.assertEquals(10, 5 + 5, '等値チェック');
+        System.assertNotEquals(null, 'value', 'Null でないことチェック');
+        System.assert(true, 'Boolean チェック');
+        System.assertEquals('expected', 'expected', 'String チェック');
+    }
+}`,
+
+'s8-mock': `// ====== HttpCalloutMock の実装 ======
+@isTest
+public class MockHttpCallout implements HttpCalloutMock {
+    private Integer statusCode;
+    private String  body;
+
+    public MockHttpCallout(Integer statusCode, String body) {
+        this.statusCode = statusCode;
+        this.body       = body;
+    }
+
+    // HttpCalloutMock インターフェースの実装メソッド
+    public HttpResponse respond(HttpRequest req) {
+        HttpResponse res = new HttpResponse();
+        res.setStatusCode(statusCode);
+        res.setBody(body);
+        res.setHeader('Content-Type', 'application/json');
+        return res;
+    }
+}
+
+// ====== コールアウトのテスト ======
+@isTest
+private class CalloutServiceTest {
+
+    @isTest
+    static void testSyncSuccess() {
+        // モックを登録（Test.setMock 必須）
+        String mockBody = '{"status":"success","id":"12345"}';
+        Test.setMock(HttpCalloutMock.class, new MockHttpCallout(200, mockBody));
+
+        Set<Id> testIds = new Set<Id>{UserInfo.getUserId()};
+
+        Test.startTest();
+        // @future はテスト中は Test.stopTest() で同期的に実行される
+        CalloutService.syncToExternalSystem(testIds);
+        Test.stopTest();
+
+        // コールアウトが正常に実行されたことを確認
+        // （実際の検証はビジネスロジックに依存）
+        System.assert(true, 'コールアウトが例外なく完了すること');
+    }
+
+    @isTest
+    static void testSyncError() {
+        // エラーレスポンスのモック
+        Test.setMock(HttpCalloutMock.class,
+            new MockHttpCallout(500, '{"error":"Internal Server Error"}'));
+
+        Test.startTest();
+        CalloutService.syncToExternalSystem(new Set<Id>{UserInfo.getUserId()});
+        Test.stopTest();
+
+        // エラーハンドリングの検証
+        System.assert(true, 'エラーレスポンスでも例外が発生しないこと');
+    }
+}`,
+
+'s9-oop': `// ====== インターフェース ======
+// メソッドのシグネチャのみを定義（実装なし）
+public interface Notifiable {
+    void   sendNotification(String message);
+    String getChannelName();
+    Boolean isEnabled();
+}
+
+public interface Loggable {
+    void log(String level, String message);
+}
+
+// ====== 抽象クラス ======
+// インスタンス化不可。共通実装を持てる
+public abstract class BaseNotifier implements Notifiable, Loggable {
+    protected String recipientId;   // protected: サブクラスからアクセス可
+    protected Boolean enabled;
+
+    // 抽象クラスはコンストラクタを持てる
+    public BaseNotifier(String recipientId) {
+        this.recipientId = recipientId;
+        this.enabled     = true;
+    }
+
+    // 共通実装（サブクラスで利用可能）
+    public Boolean isEnabled() { return enabled; }
+
+    // テンプレートメソッドパターン
+    public void sendNotification(String message) {
+        if (!enabled) return;
+        log('INFO', 'Sending via ' + getChannelName() + ': ' + message);
+        doSend(message); // サブクラスで実装する処理を呼び出す
+    }
+
+    public void log(String level, String message) {
+        System.debug('[' + level + '] ' + getChannelName() + ': ' + message);
+    }
+
+    // abstract メソッド: サブクラスで実装必須
+    protected abstract void doSend(String message);
+}
+
+// ====== 具体クラス（継承・オーバーライド）======
+// virtual クラスは extends 可能（abstract と異なりインスタンス化も可能）
+public class EmailNotifier extends BaseNotifier {
+    private String toAddress;
+
+    public EmailNotifier(String recipientId, String email) {
+        super(recipientId);          // 親クラスのコンストラクタ呼び出し
+        this.toAddress = email;
+    }
+
+    // override: 親クラスのメソッドを上書き（virtual or abstract が必要）
+    public override String getChannelName() { return 'Email'; }
+
+    protected override void doSend(String message) {
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        mail.setToAddresses(new List<String>{toAddress});
+        mail.setSubject('Notification');
+        mail.setPlainTextBody(message);
+        Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{mail});
+    }
+}
+
+// ====== ポリモーフィズム ======
+// インターフェース型で参照できる
+Notifiable notifier = new EmailNotifier('001XX', 'user@example.com');
+notifier.sendNotification('テスト通知'); // EmailNotifier.doSend() が実行される
+
+// ====== static メンバー ======
+public class Counter {
+    private static Integer count = 0;          // クラス変数（全インスタンス共有）
+    public final String   name;                // インスタンス変数（不変）
+
+    public Counter(String name) { this.name = name; }
+
+    public static void increment() { count++;  }   // static メソッド
+    public static Integer getCount() { return count; }
+
+    // static 初期化ブロック
+    static { System.debug('Counter クラス初期化'); }
+}`,
+
+'s10-sharing': `// ====== with sharing: OWD・共有ルールを適用（推奨デフォルト）======
+// ユーザーのアクセス権限に基づいてレコードをフィルタリング
+public with sharing class AccountService {
+
+    public List<Account> getMyAccounts() {
+        // ログインユーザーがアクセス可能なレコードのみ返る
+        return [SELECT Id, Name, OwnerId FROM Account];
+    }
+
+    public void updateAccount(Account acc) {
+        // ユーザーに編集権限がないレコードはエラーになる
+        update acc;
+    }
+}
+
+// ====== without sharing: 共有設定を無視（最小限の使用に限定）======
+// システム管理者相当の権限で実行される
+public without sharing class AdminAccountService {
+
+    // 管理者専用のデータ統合処理など、全レコードが必要な場合のみ使用
+    public List<Account> getAllAccounts() {
+        return [SELECT Id, Name, OwnerId FROM Account]; // 全件返る
+    }
+}
+
+// ====== inherited sharing: 呼び出し元の共有設定を引き継ぐ ======
+// サービスクラスやユーティリティクラスに適している
+public inherited sharing class SharedAccountUtility {
+
+    // 呼び出し元が with sharing なら with sharing で動作
+    // 呼び出し元が without sharing なら without sharing で動作
+    public static Account findByName(String name) {
+        List<Account> results = [
+            SELECT Id, Name FROM Account WHERE Name = :name LIMIT 1
+        ];
+        return results.isEmpty() ? null : results[0];
+    }
+}
+
+// ====== 共有キーワード省略は without sharing と同等（危険）======
+// public class UnsafeClass {  // 明示的に指定しないと without sharing 扱い
+//     public List<Account> getData() { return [SELECT Id FROM Account]; }
+// }`,
+
+'s10-security': `public with sharing class SecureRecordService {
+
+    // ====== WITH SECURITY_ENFORCED: SOQLレベルでFLS・CRUDを強制 ======
+    public static List<Account> getAccountsSecure() {
+        try {
+            // ユーザーがアクセスできないフィールドがあれば QueryException
+            return [
+                SELECT Id, Name, AnnualRevenue, Phone
+                FROM Account
+                WITH SECURITY_ENFORCED
+                LIMIT 100
+            ];
+        } catch (System.QueryException e) {
+            throw new AuraHandledException('アクセス権限がありません: ' + e.getMessage());
+        }
+    }
+
+    // ====== Schema.sObjectType: オブジェクト・フィールドのCRUD/FLSを手動チェック ======
+    public static void createAccountWithCheck(String name, Decimal revenue) {
+        // オブジェクトレベル: 作成権限チェック
+        if (!Schema.sObjectType.Account.isCreateable()) {
+            throw new AuraHandledException('Account の作成権限がありません');
+        }
+        // フィールドレベル: 各フィールドの書き込み権限チェック
+        Map<String, Schema.SObjectField> fieldMap =
+            Schema.sObjectType.Account.fields.getMap();
+
+        if (!fieldMap.get('Name').getDescribe().isCreateable()) {
+            throw new AuraHandledException('Name フィールドへの書き込み権限がありません');
+        }
+        if (!fieldMap.get('AnnualRevenue').getDescribe().isCreateable()) {
+            throw new AuraHandledException('AnnualRevenue フィールドへの書き込み権限がありません');
+        }
+
+        Account acc = new Account(Name = name, AnnualRevenue = revenue);
+        insert acc;
+    }
+
+    // ====== Security.stripInaccessible: アクセス不可フィールドを自動除去 ======
+    public static List<Account> getStrippedAccounts() {
+        // まず全フィールドを取得
+        List<Account> rawAccounts = [
+            SELECT Id, Name, AnnualRevenue, Rating, Phone
+            FROM Account
+            LIMIT 50
+        ];
+
+        // ユーザーが読み取り不可のフィールドを自動で除去
+        SObjectAccessDecision decision = Security.stripInaccessible(
+            AccessType.READABLE,  // READABLE / CREATABLE / UPDATABLE / UPSERTABLE
+            rawAccounts
+        );
+
+        // 除去されたフィールドを確認（デバッグ用）
+        for (String field : decision.getRemovedFields().get('Account')) {
+            System.debug('アクセス不可フィールドを除去: ' + field);
+        }
+
+        return (List<Account>)decision.getRecords();
+    }
+
+    // ====== isAccessible / isUpdateable / isCreateable の確認 ======
+    public static Map<String, Boolean> getFieldPermissions(String fieldName) {
+        Schema.DescribeFieldResult dfr =
+            Schema.sObjectType.Account.fields.getMap()
+                  .get(fieldName).getDescribe();
+
+        return new Map<String, Boolean>{
+            'isAccessible'  => dfr.isAccessible(),
+            'isCreateable'  => dfr.isCreateable(),
+            'isUpdateable'  => dfr.isUpdateable()
+        };
+    }
+}`,
+
+};
+
+// ====== シンタックスハイライター ======
+function highlight(text) {
+  const rules = [
+    [/^(\/\/[^\n]*)/, 'cmt'],
+    [/^(\/\*[\s\S]*?\*\/)/, 'cmt'],
+    [/^('(?:[^'\\]|\\.)*')/, 'str'],
+    [/^(@(?:isTest|testSetup|TestVisible|future|AuraEnabled|RemoteAction|ReadOnly|deprecated|SuppressWarnings|JsonAccess)\b)/, 'ann'],
+    [/^(@\w+)/, 'ann'],
+    [/^(without\s+sharing)\b/, 'kw'],
+    [/^(with\s+sharing)\b/, 'kw'],
+    [/^(inherited\s+sharing)\b/, 'kw'],
+    [/^(SELECT|FROM|WHERE|AND|OR|NOT\b|IN\b|LIKE|LIMIT|OFFSET|HAVING|RETURNING|FIND|ORDER\s+BY|GROUP\s+BY|WITH\s+SECURITY_ENFORCED|LAST_N_DAYS|THIS_QUARTER|THIS_MONTH|THIS_YEAR|LAST_YEAR|LAST_MONTH|LAST_WEEK|THIS_WEEK)\b/, 'soql'],
+    [/^(if|else|for|while|do|switch|when|return|break|continue|try|catch|finally|throw)\b/, 'ctrl'],
+    [/^(insert|update|delete|upsert|undelete|merge)(?=\s|;)/, 'dml'],
+    [/^(public|private|protected|global|static|final|abstract|virtual|override|transient)(?=[\s(])/, 'kw'],
+    [/^(class|interface|enum|extends|implements|trigger|on)(?=[\s(])/, 'kw'],
+    [/^(new|this|super|null|true|false|void)\b/, 'kv'],
+    [/^(String|Integer|Long|Double|Decimal|Boolean|Date|DateTime|Time|Id|Blob|Object|sObject)(?=[\s<,\[\)(;])/, 'typ'],
+    [/^(List|Set|Map)(?=[\s<(])/, 'typ'],
+    [/^(Account|Contact|Opportunity|Lead|Case|Task|Event|User|Profile|RecordType|AggregateResult|SObjectAccessDecision|SObject)(?=[\s\W])/, 'obj'],
+    [/^(Database|System|Schema|Limits|Math|JSON|URL|Test|ApexPages|Trigger|UserInfo|Messaging|HttpRequest|HttpResponse|Http|Security|AccessType|QueueableContext|SchedulableContext|BatchableContext|AuraHandledException|Exception|DmlException|QueryException|NullPointerException|NullPointerException|Savepoint|Blob|EncodingUtil)(?=[\s.(,<;\[])/, 'sys'],
+    [/^(\d+(?:\.\d+)?L?)(?=[\s\W])/, 'num'],
+  ];
+
+  let result = '';
+  let i = 0;
+
+  while (i < text.length) {
+    const slice = text.slice(i);
+    let matched = false;
+
+    for (const [re, cls] of rules) {
+      const m = slice.match(re);
+      if (m) {
+        const escaped = m[1]
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        result += '<span class="' + cls + '">' + escaped + '</span>';
+        i += m[1].length;
+        matched = true;
+        break;
+      }
+    }
+
+    if (!matched) {
+      const ch = text[i];
+      result += ch === '<' ? '&lt;' : ch === '>' ? '&gt;' : ch === '&' ? '&amp;' : ch;
+      i++;
+    }
+  }
+
+  return result;
+}
+
+// コードブロックにコンテンツを注入してハイライト
+document.querySelectorAll('code[data-key]').forEach(el => {
+  const key = el.dataset.key;
+  const code = EXAMPLES[key];
+  if (code) {
+    el.innerHTML = highlight(code.trim());
+  }
+});
+
+// ====== アクティブナビゲーション ======
+const navLinks = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.section');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const activeLink = document.querySelector('.nav-item[href="#' + entry.target.id + '"]');
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+}, {
+  root: document.getElementById('main'),
+  rootMargin: '-10% 0px -80% 0px',
+  threshold: 0
+});
+
+sections.forEach(s => observer.observe(s));
+</script>
