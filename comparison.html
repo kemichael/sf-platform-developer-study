@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>各種比較表 | Platform デベロッパー</title>
+<style>
+/* ===== カラートークン ===== */
+:root{
+  --blue:#0176D3; --blue-d:#014486; --navy:#032D60;
+  --app-bg:#F3F3F3; --surface:#FFFFFF; --side-bg:#FBFBFD;
+  --text:#181818; --text-2:#5C5C5C; --text-3:#747474;
+  --border:#E5E5E5; --border-2:#EDEDED;
+  --ok:#2E844A; --ok-bg:#EAF5EC;
+  --code-bg:#F6F8FA; --code-border:#E7EBEF; --inline-code:#B5306E; --inline-code-bg:#FBEAF1;
+  --accent:var(--blue); --accent-soft:#E8F2FC;
+  --shadow:0 1px 2px rgba(0,0,0,.06),0 2px 8px rgba(0,0,0,.04);
+  --header-h:58px; --side-w:240px; --read-w:900px;
+  --mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic",Meiryo,system-ui,sans-serif;
+  --c-warn:#B25800; --c-warn-bg:#FBF0E2; --c-warn-bd:#F1D9BA;
+  --c-tip:#1A6DB5; --c-tip-bg:#E8F2FC; --c-tip-bd:#C5DEF6;
+  --c-ok:#2E844A; --c-ok-bg:#EAF5EC; --c-ok-bd:#C5E5CD;
+  /* comparison column colors */
+  --oa:#0176D3; --oa-bg:#E8F2FC; --oa-bd:#C5DEF6;
+  --ob:#0B7A6E; --ob-bg:#E6F6F3; --ob-bd:#BFE7E0;
+  --oc:#8250DF; --oc-bg:#F1EDFB; --oc-bd:#D9CDF2;
+  --od:#B25800; --od-bg:#FBF0E2; --od-bd:#F1D9BA;
+}
+[data-theme="dark"]{
+  --blue:#1B96FF; --blue-d:#57ABFF; --navy:#C9E2FF;
+  --app-bg:#16191F; --surface:#1E222B; --side-bg:#13161B;
+  --text:#E6E8EB; --text-2:#9BA1AC; --text-3:#79808B;
+  --border:#2A2F3A; --border-2:#242935;
+  --ok:#4BCA7E; --ok-bg:#193326;
+  --code-bg:#13161B; --code-border:#2A2F3A; --inline-code:#FF9CC7; --inline-code-bg:#2A1B23;
+  --accent:var(--blue); --accent-soft:#13283D;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 16px rgba(0,0,0,.3);
+  --c-warn:#F0B36A; --c-warn-bg:#2C2113; --c-warn-bd:#4A3820;
+  --c-tip:#7CC0FF; --c-tip-bg:#132433; --c-tip-bd:#22405C;
+  --c-ok:#5FD18E; --c-ok-bg:#15291E; --c-ok-bd:#264A33;
+  --oa:#57ABFF; --oa-bg:#132433; --oa-bd:#22405C;
+  --ob:#6FD8C8; --ob-bg:#132A27; --ob-bd:#244641;
+  --oc:#D2A8FF; --oc-bg:#221C33; --oc-bd:#3A2F55;
+  --od:#F0B36A; --od-bg:#2C2113; --od-bd:#4A3820;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--sans); color:var(--text); background:var(--app-bg);
+  font-size:16px; line-height:1.85; -webkit-font-smoothing:antialiased;
+}
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ===== トップバー ===== */
+.topbar{
+  position:sticky;top:0;z-index:40;height:var(--header-h);
+  display:flex;align-items:center;gap:12px;padding:0 18px;
+  background:color-mix(in srgb,var(--surface) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
+.brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff}
+.brand-mark .ico{width:20px;height:20px}
+.brand-text{display:flex;flex-direction:column;line-height:1.2}
+.brand-text b{font-size:15px;color:var(--navy);font-weight:700}
+.brand-text small{font-size:11px;color:var(--text-3);letter-spacing:.04em}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--text-2);font-size:13px;text-decoration:none;
+  padding:6px 10px;border-radius:8px;transition:.15s;
+  border:1px solid var(--border-2);background:var(--side-bg);
+}
+.back-link:hover{color:var(--text);border-color:var(--border);background:var(--surface)}
+.back-link .ico{width:15px;height:15px}
+.icon-btn{
+  display:grid;place-items:center;width:36px;height:36px;border-radius:8px;
+  border:1px solid var(--border-2);background:transparent;cursor:pointer;
+  color:var(--text-2);transition:.15s;
+}
+.icon-btn:hover{color:var(--text);background:var(--border-2)}
+[data-theme="light"] .ico-moon{display:none}
+[data-theme="dark"] .ico-sun{display:none}
+
+/* ===== レイアウト ===== */
+.comp-layout{display:flex;min-height:calc(100vh - var(--header-h))}
+.comp-sidebar{
+  width:var(--side-w);flex-shrink:0;
+  position:sticky;top:var(--header-h);height:calc(100vh - var(--header-h));
+  overflow-y:auto;padding:18px 14px;
+  background:var(--side-bg);border-right:1px solid var(--border);
+  scrollbar-width:thin;
+}
+.comp-main{
+  flex:1;min-width:0;padding:32px 28px 80px;
+}
+@media(max-width:768px){
+  .comp-layout{flex-direction:column}
+  .comp-sidebar{
+    width:100%;position:static;height:auto;
+    padding:10px 14px;overflow-x:auto;overflow-y:hidden;
+    border-right:none;border-bottom:1px solid var(--border);
+  }
+  .nav-items{display:flex;flex-direction:row;gap:6px;flex-wrap:nowrap;width:max-content}
+  .comp-main{padding:20px 16px 60px}
+  .brand-text small{display:none}
+}
+
+/* ===== サイドバーナビ ===== */
+.sidebar-title{font-size:11px;font-weight:600;color:var(--text-3);letter-spacing:.08em;
+  text-transform:uppercase;margin:0 0 10px;padding:0 4px}
+.nav-items{display:flex;flex-direction:column;gap:3px}
+.nav-item{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:8px;cursor:pointer;
+  border:none;background:transparent;font-family:inherit;font-size:13px;
+  color:var(--text-2);transition:.12s;text-align:left;width:100%;text-decoration:none;
+}
+.nav-item:hover{background:var(--border-2);color:var(--text)}
+.nav-item.active{background:color-mix(in srgb,#F59E0B 15%,transparent);color:#92400E;font-weight:600}
+[data-theme="dark"] .nav-item.active{color:#F59E0B;background:color-mix(in srgb,#F59E0B 12%,transparent)}
+.nav-num{
+  display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  font-size:11px;font-weight:700;flex-shrink:0;
+  background:var(--border);color:var(--text-3);
+}
+.nav-item.active .nav-num{background:#F59E0B;color:#fff}
+
+/* ===== 比較セクション ===== */
+.comp-section{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:26px 28px;margin-bottom:24px;
+  scroll-margin-top:calc(var(--header-h) + 16px);
+}
+.comp-header{margin-bottom:18px}
+.comp-num{font-size:12px;font-weight:700;color:var(--text-3);letter-spacing:.06em;margin-bottom:4px}
+.comp-title{font-size:20px;font-weight:800;color:var(--text);margin:0 0 8px;line-height:1.3}
+.comp-desc{font-size:14px;color:var(--text-2);margin:0;line-height:1.7}
+
+/* ===== 比較テーブル ===== */
+.comp-table-wrap{
+  overflow-x:auto;border-radius:10px;border:1px solid var(--border);
+  margin:0 0 16px;-webkit-overflow-scrolling:touch;
+}
+.comp-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:500px}
+.comp-table thead tr th{
+  padding:10px 14px;font-size:12px;font-weight:700;letter-spacing:.04em;
+  border-right:1px solid rgba(0,0,0,.06);
+}
+.comp-table thead tr th:last-child{border-right:none}
+.comp-table td{
+  padding:10px 14px;border-top:1px solid var(--border-2);
+  vertical-align:top;line-height:1.65;border-right:1px solid var(--border-2);
+}
+.comp-table td:last-child{border-right:none}
+.comp-table tbody tr:hover td{background:var(--side-bg)}
+.comp-table .row-label{
+  font-weight:600;font-size:12.5px;color:var(--text-2);
+  white-space:nowrap;background:var(--side-bg);min-width:120px;
+}
+/* option column headers */
+.th-oa{background:var(--oa-bg);color:var(--oa)}
+.th-ob{background:var(--ob-bg);color:var(--ob)}
+.th-oc{background:var(--oc-bg);color:var(--oc)}
+.th-od{background:var(--od-bg);color:var(--od)}
+/* option cells highlight */
+.td-oa{background:color-mix(in srgb,var(--oa-bg) 30%,transparent)}
+.td-ob{background:color-mix(in srgb,var(--ob-bg) 30%,transparent)}
+.td-oc{background:color-mix(in srgb,var(--oc-bg) 30%,transparent)}
+.td-od{background:color-mix(in srgb,var(--od-bg) 30%,transparent)}
+/* good/bad/neutral marks */
+.ok{color:var(--c-ok);font-weight:700}
+.ng{color:var(--c-warn);font-weight:700}
+code{
+  font-family:var(--mono);font-size:12px;
+  background:var(--code-bg);border:1px solid var(--code-border);
+  color:var(--inline-code);padding:1px 5px;border-radius:4px;white-space:nowrap;
+}
+
+/* ===== 使い分けセクション ===== */
+.usage-section{margin:14px 0 0}
+.usage-section h3{font-size:13px;font-weight:700;color:var(--text-2);margin:0 0 8px;
+  display:flex;align-items:center;gap:6px}
+.usage-section h3 .ico{width:14px;height:14px;color:var(--c-ok)}
+.usage-list{margin:0;padding:0 0 0 18px;font-size:13.5px;color:var(--text-2);line-height:1.75}
+.usage-list li{margin-bottom:4px}
+
+/* ===== 試験ポイントcallout ===== */
+.exam-callout{
+  background:var(--c-warn-bg);border:1px solid var(--c-warn-bd);
+  border-radius:10px;padding:13px 16px;margin-top:14px;
+}
+.exam-callout-head{
+  font-size:12px;font-weight:700;color:var(--c-warn);letter-spacing:.04em;
+  text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px;
+}
+.exam-callout-head .ico{width:14px;height:14px}
+.exam-callout ul{margin:0;padding:0 0 0 16px;font-size:13px;color:var(--text-2);line-height:1.75}
+.exam-callout li{margin-bottom:3px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.5" y1="4.5" x2="6.6" y2="6.6"/><line x1="17.4" y1="17.4" x2="19.5" y2="19.5"/><line x1="4.5" y1="19.5" x2="6.6" y2="17.4"/><line x1="17.4" y1="6.6" x2="19.5" y2="4.5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><line x1="4" y1="19" x2="4" y2="5"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 21V4h13l-2 4 2 4H4"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.5" y2="6"/><line x1="3" y1="12" x2="3.5" y2="12"/><line x1="3" y1="18" x2="3.5" y2="18"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17.5" x2="12" y2="17.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-mark"><svg class="ico"><use href="#i-list"/></svg></span>
+    <span class="brand-text"><b>各種比較表</b><small>Platform デベロッパー</small></span>
+  </a>
+  <div class="nav-actions">
+    <a class="back-link" href="index.html"><svg class="ico"><use href="#i-arrow-left"/></svg>学習ノートへ</a>
+    <a class="back-link" href="summary.html"><svg class="ico"><use href="#i-flag"/></svg>まとめ</a>
+    <a class="back-link" href="glossary.html"><svg class="ico"><use href="#i-book"/></svg>用語集</a>
+    <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
+      <svg class="ico ico-sun"><use href="#i-sun"/></svg>
+      <svg class="ico ico-moon"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="comp-layout">
+  <!-- サイドバー -->
+  <aside class="comp-sidebar">
+    <p class="sidebar-title">比較一覧</p>
+    <nav class="nav-items" id="compNav">
+      <a class="nav-item active" href="#c1"><span class="nav-num">1</span>SOQL vs SOSL vs DML</a>
+      <a class="nav-item" href="#c2"><span class="nav-num">2</span>DML文 vs Database クラス</a>
+      <a class="nav-item" href="#c3"><span class="nav-num">3</span>非同期処理 4方式</a>
+      <a class="nav-item" href="#c4"><span class="nav-num">4</span>共有モード 3方式</a>
+      <a class="nav-item" href="#c5"><span class="nav-num">5</span>List vs Set vs Map</a>
+      <a class="nav-item" href="#c6"><span class="nav-num">6</span>before vs after トリガー</a>
+      <a class="nav-item" href="#c7"><span class="nav-num">7</span>Custom Settings vs CMDT</a>
+      <a class="nav-item" href="#c8"><span class="nav-num">8</span>Profile vs Permission Set</a>
+      <a class="nav-item" href="#c9"><span class="nav-num">9</span>自動化ツール 3世代</a>
+      <a class="nav-item" href="#c10"><span class="nav-num">10</span>デプロイ方法 3方式</a>
+    </nav>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="comp-main">
+
+    <!-- 1: SOQL vs SOSL vs DML -->
+    <section class="comp-section" id="c1">
+      <div class="comp-header">
+        <div class="comp-num">比較 01</div>
+        <h2 class="comp-title">SOQL vs SOSL vs DML</h2>
+        <p class="comp-desc">Apexにおけるデータ操作の3つの基本手段。それぞれ用途・構文・ガバナー制限が異なる。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">SOQL</th>
+              <th class="th-ob">SOSL</th>
+              <th class="th-oc">DML</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">目的</td>
+              <td>特定オブジェクトのレコード取得</td>
+              <td>複数オブジェクトをまたぐ全文検索</td>
+              <td>レコードの作成・更新・削除</td>
+            </tr>
+            <tr>
+              <td class="row-label">基本構文</td>
+              <td><code>SELECT Id FROM Account WHERE...</code></td>
+              <td><code>FIND 'keyword' IN ALL FIELDS RETURNING Account</code></td>
+              <td><code>insert / update / delete / upsert</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">対象オブジェクト数</td>
+              <td>1クエリで1オブジェクト（子クエリは可）</td>
+              <td>複数オブジェクトを同時検索可</td>
+              <td>操作ごとに1オブジェクト</td>
+            </tr>
+            <tr>
+              <td class="row-label">ガバナー制限</td>
+              <td>100回 / トランザクション</td>
+              <td>20回 / トランザクション</td>
+              <td>150回 / トランザクション</td>
+            </tr>
+            <tr>
+              <td class="row-label">戻り値</td>
+              <td><code>List&lt;sObject&gt;</code></td>
+              <td><code>List&lt;List&lt;sObject&gt;&gt;</code></td>
+              <td>なし（Database クラスは SaveResult[]）</td>
+            </tr>
+            <tr>
+              <td class="row-label">空文字列検索</td>
+              <td class="ok">WHERE 句で空文字列 = 不可</td>
+              <td class="ng">空文字列の FIND は不可</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="row-label">使用場所</td>
+              <td>Apex, Visualforce, LWC（wire）</td>
+              <td>Apex のみ</td>
+              <td>Apex のみ（ループ外推奨）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="usage-section">
+        <h3><svg class="ico"><use href="#i-check"/></svg>使い分けポイント</h3>
+        <ul class="usage-list">
+          <li><strong>SOQL：</strong>条件（Id, 項目値）が明確なときに使用</li>
+          <li><strong>SOSL：</strong>「キーワード」で複数オブジェクトを横断検索したいとき</li>
+          <li><strong>DML：</strong>レコードを作成・変更・削除するとき（必ずリスト単位でまとめる）</li>
+        </ul>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>SOQL はループ内に書いてはいけない（Bulkification 違反 → Governor Limits 超過）</li>
+          <li>SOSL はテスト内で <code>Test.isRunningTest()</code> と組み合わせて固定値を返す実装が一般的</li>
+          <li>DML は 150回制限に注意。トリガーから再帰的に発火しないよう静的フラグを使う</li>
+          <li>SOSL の戻り値は <code>List&lt;List&lt;sObject&gt;&gt;</code>（二重リスト）であることに注意</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 2: DML文 vs Database クラス -->
+    <section class="comp-section" id="c2">
+      <div class="comp-header">
+        <div class="comp-num">比較 02</div>
+        <h2 class="comp-title">DML ステートメント vs Database クラスメソッド</h2>
+        <p class="comp-desc">同じDML操作を行う2つの記法。エラーハンドリングと部分コミットの対応が異なる。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">DML ステートメント</th>
+              <th class="th-ob">Database クラスメソッド</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">記法例</td>
+              <td><code>insert recordList;</code></td>
+              <td><code>Database.insert(recordList, false);</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">エラー時の挙動</td>
+              <td><code>DmlException</code> をスロー → 全件ロールバック</td>
+              <td><code>SaveResult[]</code> を返す → エラーを個別確認可</td>
+            </tr>
+            <tr>
+              <td class="row-label">部分コミット</td>
+              <td class="ng">不可（全成功 or 全失敗）</td>
+              <td class="ok">可（<code>allOrNone=false</code> を指定）</td>
+            </tr>
+            <tr>
+              <td class="row-label">try/catch の必要性</td>
+              <td>必要（DmlException を catch）</td>
+              <td>不要（SaveResult でエラー確認）</td>
+            </tr>
+            <tr>
+              <td class="row-label">upsert 外部ID指定</td>
+              <td><code>upsert list ExternalId__c;</code></td>
+              <td><code>Database.upsert(list, ExtId__c.sObjectField, false);</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">ガバナー制限</td>
+              <td>同じ（150回 / tx）</td>
+              <td>同じ（150回 / tx）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li><code>Database.insert(list, false)</code> の <code>false</code> が <code>allOrNone=false</code> → 部分コミット可能</li>
+          <li><code>SaveResult.isSuccess()</code> で成功/失敗を判定し、<code>getErrors()</code> でエラー内容を取得</li>
+          <li>DML ステートメントは失敗時に即座に <code>DmlException</code> がスローされる</li>
+          <li>どちらもガバナー制限（150回）は同じ。使い分けは「部分コミットが必要かどうか」</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3: 非同期処理4方式 -->
+    <section class="comp-section" id="c3">
+      <div class="comp-header">
+        <div class="comp-num">比較 03</div>
+        <h2 class="comp-title">非同期処理 4方式（@future / Queueable / Batch / Scheduled）</h2>
+        <p class="comp-desc">Apexで非同期処理を実現する4つの方法。ユースケースと制限が異なる。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">@future</th>
+              <th class="th-ob">Queueable Apex</th>
+              <th class="th-oc">Batch Apex</th>
+              <th class="th-od">Scheduled Apex</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">実装方法</td>
+              <td>アノテーション</td>
+              <td><code>System.Queueable</code></td>
+              <td><code>Database.Batchable</code></td>
+              <td><code>System.Schedulable</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">起動方法</td>
+              <td>メソッド呼び出し</td>
+              <td><code>System.enqueueJob()</code></td>
+              <td><code>Database.executeBatch()</code></td>
+              <td><code>System.schedule()</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">引数型</td>
+              <td class="ng">プリミティブ型のみ</td>
+              <td class="ok">オブジェクト型可</td>
+              <td>—（<code>QueryLocator</code> または <code>Iterable</code>）</td>
+              <td>—（引数なし）</td>
+            </tr>
+            <tr>
+              <td class="row-label">戻り値</td>
+              <td class="ng">void のみ</td>
+              <td class="ok">JobId（ID型）</td>
+              <td class="ok">JobId（ID型）</td>
+              <td class="ok">JobId（ID型）</td>
+            </tr>
+            <tr>
+              <td class="row-label">ジョブのチェーン</td>
+              <td class="ng">不可</td>
+              <td class="ok">可（execute内で再 enqueue）</td>
+              <td class="ng">不可（finish内から起動は可）</td>
+              <td class="ng">不可</td>
+            </tr>
+            <tr>
+              <td class="row-label">コールアウト</td>
+              <td><code>callout=true</code> で可</td>
+              <td class="ok">可</td>
+              <td class="ok">可（execute内）</td>
+              <td class="ng">不可（直接）</td>
+            </tr>
+            <tr>
+              <td class="row-label">大量データ処理</td>
+              <td class="ng">不向き</td>
+              <td class="ng">不向き</td>
+              <td class="ok">最適（チャンク分割）</td>
+              <td class="ng">不向き</td>
+            </tr>
+            <tr>
+              <td class="row-label">主要な制限</td>
+              <td>50回 / txn 呼び出し</td>
+              <td>同時50件キュー</td>
+              <td>同時5件アクティブ</td>
+              <td>100件スケジュール登録</td>
+            </tr>
+            <tr>
+              <td class="row-label">ヒープサイズ</td>
+              <td>12MB</td>
+              <td>12MB</td>
+              <td>12MB</td>
+              <td>12MB</td>
+            </tr>
+            <tr>
+              <td class="row-label">必須メソッド</td>
+              <td>—（アノテーションのみ）</td>
+              <td><code>execute(QueueableContext)</code></td>
+              <td><code>start / execute / finish</code></td>
+              <td><code>execute(SchedulableContext)</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="usage-section">
+        <h3><svg class="ico"><use href="#i-check"/></svg>使い分けポイント</h3>
+        <ul class="usage-list">
+          <li><strong>@future：</strong>シンプルな非同期・コールアウト。引数が少なくて済む場合</li>
+          <li><strong>Queueable：</strong>オブジェクト型引数が必要、チェーン実行が必要、JobIDで監視したい場合</li>
+          <li><strong>Batch Apex：</strong>数万〜数百万件の大量データを処理する場合</li>
+          <li><strong>Scheduled Apex：</strong>定期実行（夜間バッチ起動など）が必要な場合（内部でBatchを呼ぶことも多い）</li>
+        </ul>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>@future は <strong>引数にオブジェクト型不可</strong>（プリミティブ or プリミティブのコレクションのみ）</li>
+          <li>Batch Apex の <code>start()</code> は <code>Database.QueryLocator</code> または <code>Iterable&lt;sObject&gt;</code> を返す</li>
+          <li>Scheduled Apex の必須メソッドは <code>execute(SchedulableContext sc)</code> の1つだけ</li>
+          <li>Queueable から Queueable を enqueue するチェーン：同期テスト内では <code>Test.stopTest()</code> まで実行されない</li>
+          <li>Batch の最大チャンクサイズ：<code>executeBatch(job, 200)</code> で最大2000（Bulk API使用時）</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4: 共有モード -->
+    <section class="comp-section" id="c4">
+      <div class="comp-header">
+        <div class="comp-num">比較 04</div>
+        <h2 class="comp-title">共有モード（with sharing / without sharing / inherited sharing）</h2>
+        <p class="comp-desc">Apexクラスに宣言する共有モード。実行ユーザーの共有ルール・OWDを適用するか否かを決める。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">with sharing</th>
+              <th class="th-ob">without sharing</th>
+              <th class="th-oc">inherited sharing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">共有ルール適用</td>
+              <td class="ok">適用</td>
+              <td class="ng">無視</td>
+              <td>呼び出し元に依存</td>
+            </tr>
+            <tr>
+              <td class="row-label">OWD 考慮</td>
+              <td class="ok">考慮する</td>
+              <td class="ng">無視</td>
+              <td>呼び出し元に依存</td>
+            </tr>
+            <tr>
+              <td class="row-label">FLS（フィールドセキュリティ）</td>
+              <td class="ng">自動適用されない</td>
+              <td class="ng">自動適用されない</td>
+              <td class="ng">自動適用されない</td>
+            </tr>
+            <tr>
+              <td class="row-label">全レコードへのアクセス</td>
+              <td class="ng">不可（権限内のみ）</td>
+              <td class="ok">可</td>
+              <td>呼び出し元に依存</td>
+            </tr>
+            <tr>
+              <td class="row-label">キーワード省略時</td>
+              <td colspan="3" style="text-align:center;color:var(--text-3)">inherited sharing と同等（呼び出し元の共有モードを継承）</td>
+            </tr>
+            <tr>
+              <td class="row-label">推奨用途</td>
+              <td>一般ユーザー向けコード、UIコントローラ</td>
+              <td>管理操作、データ移行、システム処理</td>
+              <td>ユーティリティクラス、共通ライブラリ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li><strong>with sharing はFLSを自動適用しない</strong>。フィールドアクセス制限はコードで明示的にチェックが必要（<code>Schema.sObjectType.Account.fields.Name.isAccessible()</code>）</li>
+          <li>キーワードを省略すると <code>inherited sharing</code> 相当だが、<strong>明示的に書くことが推奨</strong></li>
+          <li><code>global</code> クラスは with / without sharing のどちらかを必須で宣言する</li>
+          <li>with sharing クラスが without sharing クラスを呼び出した場合、呼び出された側は without sharing で動作する</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5: List vs Set vs Map -->
+    <section class="comp-section" id="c5">
+      <div class="comp-header">
+        <div class="comp-num">比較 05</div>
+        <h2 class="comp-title">List vs Set vs Map（Apex コレクション型）</h2>
+        <p class="comp-desc">Apexの3つのコレクション型。それぞれ特性が異なるため適切に使い分ける。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">List</th>
+              <th class="th-ob">Set</th>
+              <th class="th-oc">Map</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">順序</td>
+              <td class="ok">保持（インデックスアクセス可）</td>
+              <td class="ng">保持しない</td>
+              <td class="ng">保持しない（挿入順は一部保持）</td>
+            </tr>
+            <tr>
+              <td class="row-label">重複</td>
+              <td class="ok">許可</td>
+              <td class="ng">不可（自動排除）</td>
+              <td>キーは一意、値は重複可</td>
+            </tr>
+            <tr>
+              <td class="row-label">アクセス方法</td>
+              <td><code>list[i]</code> or <code>list.get(i)</code></td>
+              <td><code>set.contains(val)</code></td>
+              <td><code>map.get(key)</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">初期化の例</td>
+              <td><code>new List&lt;Account&gt;()</code></td>
+              <td><code>new Set&lt;Id&gt;()</code></td>
+              <td><code>new Map&lt;Id, Account&gt;()</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">SOQLの結果格納</td>
+              <td class="ok">最適（直接代入可）</td>
+              <td>不可（直接代入不可）</td>
+              <td class="ok"><code>new Map&lt;Id,Account&gt;([SELECT...])</code> で一発</td>
+            </tr>
+            <tr>
+              <td class="row-label">null 要素</td>
+              <td class="ok">可</td>
+              <td>1つだけ可</td>
+              <td>値はnull可、キーのnullは非推奨</td>
+            </tr>
+            <tr>
+              <td class="row-label">典型的な用途</td>
+              <td>DML操作リスト、SOQL結果格納</td>
+              <td>重複排除、存在チェック（O(1)）</td>
+              <td>Id→レコードの高速ルックアップ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li><code>new Map&lt;Id, Account&gt;([SELECT Id, Name FROM Account])</code> はSOQL結果を直接Mapで受け取るショートカット</li>
+          <li>Set の <code>contains()</code> は O(1) でListの <code>contains()</code> はO(n)。存在チェックにはSetかMapが有利</li>
+          <li>List は <code>add()</code>, <code>remove(index)</code>, <code>size()</code>, Set/Map は <code>add()</code>/<code>put()</code>, <code>remove()</code>, <code>size()</code></li>
+          <li>Map の <code>values()</code> は <code>List</code> を返す、<code>keySet()</code> は <code>Set</code> を返す</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6: before vs after トリガー -->
+    <section class="comp-section" id="c6">
+      <div class="comp-header">
+        <div class="comp-num">比較 06</div>
+        <h2 class="comp-title">before トリガー vs after トリガー</h2>
+        <p class="comp-desc">Apex トリガーの2つの実行タイミング。何ができて何ができないかが重要。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">before トリガー</th>
+              <th class="th-ob">after トリガー</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">実行タイミング</td>
+              <td>DML 操作がDBに反映される前</td>
+              <td>DML 操作がDBに反映された後</td>
+            </tr>
+            <tr>
+              <td class="row-label">Trigger.new の変更</td>
+              <td class="ok">可（変更が自動的にDBに反映）</td>
+              <td class="ng">不可（ReadOnly）</td>
+            </tr>
+            <tr>
+              <td class="row-label">insert 時のId</td>
+              <td class="ng">null（まだ採番されていない）</td>
+              <td class="ok">確定済み（採番後）</td>
+            </tr>
+            <tr>
+              <td class="row-label">Trigger.old</td>
+              <td>update/delete で利用可（insertはnull）</td>
+              <td>update/delete で利用可（insertはnull）</td>
+            </tr>
+            <tr>
+              <td class="row-label">DML 操作</td>
+              <td>可（再帰トリガーに注意）</td>
+              <td class="ok">可（関連レコードの操作に多用）</td>
+            </tr>
+            <tr>
+              <td class="row-label">典型的な用途</td>
+              <td>値の自動設定・バリデーション・正規化</td>
+              <td>子レコード作成、関連オブジェクトの更新</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>before insert では <code>Trigger.new[i].Id</code> は null（ID未確定）</li>
+          <li>before trigger で <code>Trigger.new</code> に値をセットするとき、<strong>update DML は不要</strong>（自動でDBに書き込まれる）</li>
+          <li>after trigger で <code>Trigger.new</code> を変更しようとすると <code>System.FinalException</code> が発生</li>
+          <li>1オブジェクトに複数のトリガーを置くと実行順が不定になる → 1オブジェクト1トリガー推奨</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7: Custom Settings vs Custom Metadata Type -->
+    <section class="comp-section" id="c7">
+      <div class="comp-header">
+        <div class="comp-num">比較 07</div>
+        <h2 class="comp-title">Custom Settings vs Custom Metadata Type（CMDT）</h2>
+        <p class="comp-desc">アプリケーション設定値を保存する2つの仕組み。デプロイ可能かどうかが最大の違い。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">Custom Settings</th>
+              <th class="th-ob">Custom Metadata Type（CMDT）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">デプロイ可否</td>
+              <td class="ng">不可（データはデプロイできない）</td>
+              <td class="ok">可（設定値ごとデプロイ可能）</td>
+            </tr>
+            <tr>
+              <td class="row-label">パッケージング</td>
+              <td class="ng">不可</td>
+              <td class="ok">可</td>
+            </tr>
+            <tr>
+              <td class="row-label">種類</td>
+              <td>Hierarchy 型 / List 型</td>
+              <td>1種類（レコードで管理）</td>
+            </tr>
+            <tr>
+              <td class="row-label">SOQLカウント</td>
+              <td>Hierarchy型はインスタンスメソッドで取得するとカウントされない</td>
+              <td class="ng">SOQL 100回制限にカウントされる</td>
+            </tr>
+            <tr>
+              <td class="row-label">Apex でのアクセス</td>
+              <td><code>MySettings__c.getInstance()</code></td>
+              <td><code>[SELECT ... FROM MyMDT__mdt]</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">テスト内での見え方</td>
+              <td>テストデータを作成しないと見えない</td>
+              <td class="ok">テストコードからも自動的に見える（作成不要）</td>
+            </tr>
+            <tr>
+              <td class="row-label">UI での編集</td>
+              <td class="ok">設定 → カスタム設定から編集可</td>
+              <td class="ok">設定 → カスタムメタデータ型から編集可</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>デプロイや ISV パッケージに含めたい設定値は <strong>Custom Metadata Type を使う</strong></li>
+          <li>Custom Settings の Hierarchy 型は「Profile 設定 → ユーザー設定」の階層で上書きできる</li>
+          <li>テスト内で Custom Settings の値が必要なときは <code>insert new MySettings__c(...)</code> を実行する必要あり</li>
+          <li>CMDT のレコードは Apex テスト内でも見えるため、テスト用セットアップが不要（テストデータ汚染リスクが低い）</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 8: Profile vs Permission Set vs Permission Set Group -->
+    <section class="comp-section" id="c8">
+      <div class="comp-header">
+        <div class="comp-num">比較 08</div>
+        <h2 class="comp-title">Profile vs Permission Set vs Permission Set Group</h2>
+        <p class="comp-desc">Salesforceの権限設定の3階層。それぞれの役割と組み合わせ方を理解する。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">Profile</th>
+              <th class="th-ob">Permission Set</th>
+              <th class="th-oc">Permission Set Group</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">1ユーザーへの割り当て数</td>
+              <td>必ず 1つだけ</td>
+              <td class="ok">複数可（上限なし）</td>
+              <td class="ok">複数可</td>
+            </tr>
+            <tr>
+              <td class="row-label">役割</td>
+              <td>基本権限のベースライン</td>
+              <td>プロファイルへの追加権限</td>
+              <td>複数の Permission Set をまとめて管理</td>
+            </tr>
+            <tr>
+              <td class="row-label">ログイン時間・IP制限</td>
+              <td class="ok">設定可</td>
+              <td class="ng">設定不可</td>
+              <td class="ng">設定不可</td>
+            </tr>
+            <tr>
+              <td class="row-label">設定できる権限の幅</td>
+              <td>広い（タブ・アプリ・オブジェクト・FLSなど）</td>
+              <td>広い（プロファイルより狭い場合も）</td>
+              <td>複数 PS の束（権限そのものは持たない）</td>
+            </tr>
+            <tr>
+              <td class="row-label">Muting Permission Set</td>
+              <td>—</td>
+              <td>—</td>
+              <td class="ok">グループ内の一部権限を打ち消せる</td>
+            </tr>
+            <tr>
+              <td class="row-label">推奨用途</td>
+              <td>ユーザー種別（営業・管理者等）の基本権限</td>
+              <td>特定機能を使うユーザーへの追加権限</td>
+              <td>複数 PS をロールに応じてセット管理</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>Profile は必ず1つ割り当て必須。Permission Set は0個でも可</li>
+          <li>Permission Set は「プロファイルで持っていない権限を<strong>付与する</strong>」ことはできるが、「プロファイルの権限を<strong>剥奪</strong>」はできない</li>
+          <li>Permission Set Group（Spring '21〜）：複数のPermission Setを1つのグループとして一括割り当て可能</li>
+          <li>Muting Permission Set：PSG内の一部権限を打ち消す仕組み（PSGのみで利用可）</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 9: 自動化ツール3世代 -->
+    <section class="comp-section" id="c9">
+      <div class="comp-header">
+        <div class="comp-num">比較 09</div>
+        <h2 class="comp-title">自動化ツール 3世代（Workflow Rule / Process Builder / Flow）</h2>
+        <p class="comp-desc">Salesforceの宣言的自動化ツール3世代の比較。現在はFlowへの集約が進んでいる。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">Workflow Rule</th>
+              <th class="th-ob">Process Builder</th>
+              <th class="th-oc">Flow</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">提供時期・状態</td>
+              <td class="ng">廃止予定（移行推奨）</td>
+              <td class="ng">廃止予定（移行推奨）</td>
+              <td class="ok">現役・推奨</td>
+            </tr>
+            <tr>
+              <td class="row-label">トリガータイプ</td>
+              <td>レコード変更のみ</td>
+              <td>レコード変更・Platform Event</td>
+              <td>多様（レコード/スケジュール/画面/Platform Event/Apex）</td>
+            </tr>
+            <tr>
+              <td class="row-label">ループ処理</td>
+              <td class="ng">不可</td>
+              <td class="ng">不可</td>
+              <td class="ok">可</td>
+            </tr>
+            <tr>
+              <td class="row-label">Apex 連携</td>
+              <td class="ng">不可</td>
+              <td class="ok">可（@InvocableMethod）</td>
+              <td class="ok">可（@InvocableMethod）</td>
+            </tr>
+            <tr>
+              <td class="row-label">サブフロー呼び出し</td>
+              <td class="ng">不可</td>
+              <td class="ng">不可</td>
+              <td class="ok">可（Flow内からFlowを呼び出せる）</td>
+            </tr>
+            <tr>
+              <td class="row-label">利用可能なアクション</td>
+              <td>フィールド更新・メール・タスク・アウトバウンドメッセージの4種のみ</td>
+              <td>より多くのアクション（レコード作成・クイックアクション等）</td>
+              <td>ほぼ全操作（作成・更新・削除・メール・外部・Apex等）</td>
+            </tr>
+            <tr>
+              <td class="row-label">移行先</td>
+              <td>Flow</td>
+              <td>Flow</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>Workflow Rule が使えるアクションは<strong>4種類のみ</strong>：フィールド更新・メール送信・タスク作成・アウトバウンドメッセージ</li>
+          <li>Process Builder・Workflow Rule は廃止予定（既存のものは動き続けるが新規作成は非推奨）</li>
+          <li>FlowのトリガーはRecord-Triggered / Schedule-Triggered / Screen / Platform Event / Apex-Triggered の5種</li>
+          <li>@InvocableMethod（<code>@InvocableMethod(label='...')</code>）を使うとApexメソッドをFlowから呼び出せる</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 10: デプロイ3方法 -->
+    <section class="comp-section" id="c10">
+      <div class="comp-header">
+        <div class="comp-num">比較 10</div>
+        <h2 class="comp-title">デプロイ方法（Change Set / Salesforce CLI / Metadata API）</h2>
+        <p class="comp-desc">Salesforceのメタデータを組織間でデプロイする3つの方法。規模・自動化要件によって使い分ける。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">Change Set</th>
+              <th class="th-ob">Salesforce CLI（sf）</th>
+              <th class="th-oc">Metadata API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">操作方法</td>
+              <td>Salesforce UI（ブラウザ）</td>
+              <td>コマンドライン（sf / sfdx）</td>
+              <td>SOAP API（プログラム）</td>
+            </tr>
+            <tr>
+              <td class="row-label">バージョン管理連携</td>
+              <td class="ng">不可</td>
+              <td class="ok">可（Git との連携が容易）</td>
+              <td class="ok">可</td>
+            </tr>
+            <tr>
+              <td class="row-label">CI/CD 自動化</td>
+              <td class="ng">不可</td>
+              <td class="ok">可</td>
+              <td class="ok">可</td>
+            </tr>
+            <tr>
+              <td class="row-label">差分デプロイ</td>
+              <td class="ng">不可（手動選択）</td>
+              <td class="ok">Source Tracking で自動検出</td>
+              <td>可（カスタム実装が必要）</td>
+            </tr>
+            <tr>
+              <td class="row-label">パッケージ開発</td>
+              <td class="ng">不可</td>
+              <td class="ok">可（Unlocked Package 対応）</td>
+              <td class="ok">可</td>
+            </tr>
+            <tr>
+              <td class="row-label">接続要件</td>
+              <td>接続組織（Deployment Connection）が必要</td>
+              <td>認証のみ（sf org login）</td>
+              <td>認証のみ</td>
+            </tr>
+            <tr>
+              <td class="row-label">難易度</td>
+              <td>低（UIのみ）</td>
+              <td>中（CLI 操作）</td>
+              <td>高（API プログラミング）</td>
+            </tr>
+            <tr>
+              <td class="row-label">推奨用途</td>
+              <td>小規模・非技術者向けの簡易デプロイ</td>
+              <td>開発プロジェクト標準（現在の推奨）</td>
+              <td>ツール開発・高度な自動化</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="usage-section">
+        <h3><svg class="ico"><use href="#i-check"/></svg>使い分けポイント</h3>
+        <ul class="usage-list">
+          <li><strong>Change Set：</strong>小さな設定変更を素早くデプロイしたい非エンジニアや管理者向け</li>
+          <li><strong>Salesforce CLI：</strong>Git を使ったチーム開発・CI/CD パイプライン構築（現在の標準）</li>
+          <li><strong>Metadata API：</strong>独自のデプロイツールやアプリ内からプログラム的にデプロイしたい場合</li>
+        </ul>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>Change Set は<strong>一方向</strong>のデプロイ（Deployment Connection で接続先を事前設定が必要）</li>
+          <li>Change Set でデプロイする前に「検証（Validate）」を実行してテストを通過させる</li>
+          <li>Salesforce CLI の <code>sf project deploy start</code> でメタデータをデプロイ</li>
+          <li>Unlocked Package（アンロックパッケージ）はCLI/Metadata API でのみ作成可能。Change Set では不可</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  // テーマ切替
+  const html = document.documentElement;
+  const saved = localStorage.getItem('sf-study-theme');
+  if(saved) html.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    const t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', t);
+    localStorage.setItem('sf-study-theme', t);
+  });
+
+  // スクロール追従ナビ
+  const sections = Array.from(document.querySelectorAll('.comp-section'));
+  const navItems = Array.from(document.querySelectorAll('.nav-item'));
+  const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 58;
+
+  function updateActive(){
+    let current = sections[0].id;
+    sections.forEach(s => {
+      if(s.getBoundingClientRect().top <= headerH + 40) current = s.id;
+    });
+    navItems.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  document.addEventListener('scroll', updateActive, {passive:true});
+  updateActive();
+
+  // スムーズスクロール
+  navItems.forEach(a => {
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+})();
+</script>
+</body>
+</html>

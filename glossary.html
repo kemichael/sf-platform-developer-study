@@ -239,6 +239,7 @@ body{
     <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><line x1="4" y1="19" x2="4" y2="5"/></symbol>
     <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 21V4h13l-2 4 2 4H4"/></symbol>
     <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17.5" x2="12" y2="17.5"/></symbol>
+    <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></symbol>
   </defs>
 </svg>
 
@@ -254,6 +255,7 @@ body{
   <div class="nav-actions">
     <a class="back-link" href="index.html"><svg class="ico"><use href="#i-arrow-left"/></svg>学習ノートへ</a>
     <a class="back-link" href="summary.html"><svg class="ico"><use href="#i-flag"/></svg>まとめへ</a>
+    <a class="back-link" href="comparison.html"><svg class="ico"><use href="#i-table"/></svg>比較表へ</a>
     <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
       <svg class="ico ico-sun"><use href="#i-sun"/></svg>
       <svg class="ico ico-moon"><use href="#i-moon"/></svg>
@@ -340,6 +342,22 @@ body{
         </div>
         <p class="term-def">Salesforceのプロプライエタリなオブジェクト指向プログラミング言語。Javaに似た構文を持ち、サーバーサイドで実行される。強型付けで、ガバナー制限の下で動作する。</p>
       </article>
+
+      <article class="term-card" data-cats="apex" data-term="anonymous apex 匿名 即時実行 developer console">
+        <div class="term-head">
+          <span class="term-name">Anonymous Apex（匿名 Apex）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">クラスやトリガーとして保存せず、Developer Console の「Execute Anonymous」やVS Code拡張、CLIから即座に実行できるApexコード。動作確認・データ修正などに使用する。本番でも実行可能（ただし注意が必要）。</p>
+      </article>
+
+      <article class="term-card" data-cats="lwc" data-term="aura component アウラ コンポーネント lwc 前世代">
+        <div class="term-head">
+          <span class="term-name">Aura Component（オーラコンポーネント）</span>
+          <div class="badges"><span class="badge lwc">LWC</span></div>
+        </div>
+        <p class="term-def">LWC の前世代のSalesforce UIコンポーネントフレームワーク。<code>.cmp</code>ファイルと独自の JavaScript コントローラーで構成される。現在はLWCへの移行が推奨されているが、既存資産は引き続き動作する。</p>
+      </article>
     </section>
 
     <!-- B -->
@@ -408,6 +426,31 @@ body{
         </div>
         <p class="term-def">独自の権限単位を定義できる機能。プロファイルやパーミッションセットに付与し、Apexでは <code>FeatureManagement.checkPermission('PermName')</code>、Formulaでは <code>$Permission.PermName</code> で参照。</p>
       </article>
+
+      <article class="term-card" data-cats="deploy" data-term="change set チェンジセット デプロイ メタデータ 組織間">
+        <div class="term-head">
+          <span class="term-name">Change Set（チェンジセット）</span>
+          <div class="badges"><span class="badge deploy">デプロイ</span></div>
+        </div>
+        <p class="term-def">Salesforce組織間でメタデータをデプロイするUIベースの方法。「送信変更セット」で内容を定義し、「受信変更セット」でデプロイを実行する。事前に接続組織（Deployment Connection）の設定が必要。</p>
+        <p class="term-note"><strong>注意：</strong> バージョン管理と連携できないため、大規模開発には Salesforce CLI が推奨</p>
+      </article>
+
+      <article class="term-card" data-cats="limit" data-term="cpu time limit cpu時間 ガバナー制限 10秒 60秒">
+        <div class="term-head">
+          <span class="term-name">CPU Time Limit（CPU時間制限）</span>
+          <div class="badges"><span class="badge limit">ガバナー制限</span></div>
+        </div>
+        <p class="term-def">1トランザクションあたりのApexコード実行CPU時間の上限。同期処理では <strong>10秒</strong>、非同期処理（@future / Batch / Queueable 等）では <strong>60秒</strong>。複雑なロジックやネストされたループで超過しやすい。</p>
+      </article>
+
+      <article class="term-card" data-cats="security" data-term="crud create read update delete オブジェクト権限">
+        <div class="term-head">
+          <span class="term-name">CRUD（オブジェクトレベルセキュリティ）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">Create / Read / Update / Delete の頭文字。オブジェクトに対する基本操作権限の総称。Apexで実行ユーザーのCRUDを確認するには <code>Schema.sObjectType.Account.isCreateable()</code> などのメソッドを使用する。</p>
+      </article>
     </section>
 
     <!-- D -->
@@ -437,6 +480,14 @@ body{
         </div>
         <p class="term-def">クエリ文字列を実行時に組み立て、<code>Database.query(String)</code> で実行するSOQLの記述方法。柔軟性が高い一方、SOQLインジェクション対策として <code>String.escapeSingleQuotes()</code> によるサニタイズが必要。</p>
       </article>
+
+      <article class="term-card" data-cats="apex" data-term="developer console 開発者コンソール ide デバッグ 実行">
+        <div class="term-head">
+          <span class="term-name">Developer Console（開発者コンソール）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">Salesforceが提供するウェブベースの統合開発環境。Apexクラス・トリガー・テストの作成・実行、匿名Apexの実行、デバッグログの確認などができる。現在はVS Code + Salesforce Extension Pack が推奨。</p>
+      </article>
     </section>
 
     <!-- E -->
@@ -449,6 +500,14 @@ body{
           <div class="badges"><span class="badge async">非同期</span></div>
         </div>
         <p class="term-def">特定のSalesforceメールアドレス宛にメールを送信することで、<code>Messaging.InboundEmailHandler</code> インターフェースを実装したApexクラスを実行できる仕組み。メール受信をトリガーとしたデータ処理が可能。</p>
+      </article>
+
+      <article class="term-card" data-cats="apex" data-term="exception handling 例外処理 try catch finally dmlexception">
+        <div class="term-head">
+          <span class="term-name">Exception Handling（例外処理）</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">Apexの <code>try / catch / finally</code> 構文による例外処理。主な組み込み例外：<code>DmlException</code>（DML失敗）/ <code>QueryException</code>（クエリ結果が0件や複数件）/ <code>NullPointerException</code>（null参照）/ <code>LimitException</code>（ガバナー超過）。カスタム例外クラスは <code>Exception</code> を extend して作成する。</p>
       </article>
     </section>
 
@@ -471,6 +530,14 @@ body{
           <div class="badges"><span class="badge auto">自動化</span></div>
         </div>
         <p class="term-def">Salesforceのローコードプロセス自動化ツール。Screen Flow（UI有）、AutoLaunched Flow（Apex/Processから起動）、Scheduled Flow（定期実行）などの種類がある。Workflow Rule・Process Builderの後継として移行が推奨されている。</p>
+      </article>
+
+      <article class="term-card" data-cats="security" data-term="fls field level security フィールドレベルセキュリティ フィールド権限">
+        <div class="term-head">
+          <span class="term-name">FLS（Field Level Security / フィールドレベルセキュリティ）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">フィールド単位のアクセス制御。プロファイルやパーミッションセットで各フィールドの参照・編集権限を設定する。<code>with sharing</code> を宣言しても FLS は自動適用されない。Apexで明示的に確認するには <code>Schema.sObjectType.Account.fields.Name.isAccessible()</code> を使用する。</p>
       </article>
     </section>
 
@@ -535,6 +602,22 @@ body{
         </div>
         <p class="term-def">トリガー内で使用できる <code>Trigger</code> クラスの静的コンテキスト変数。例：<code>if (Trigger.isBefore &amp;&amp; Trigger.isInsert)</code> のように組み合わせてトリガーの実行条件を判定する。</p>
       </article>
+
+      <article class="term-card" data-cats="apex auto" data-term="@invocablemethod invocable method アノテーション flow フローから呼び出し">
+        <div class="term-head">
+          <span class="term-name">@InvocableMethod</span>
+          <div class="badges"><span class="badge apex">Apex</span><span class="badge auto">自動化</span></div>
+        </div>
+        <p class="term-def">FlowやProcess Builderから呼び出し可能にするApexメソッドへのアノテーション。<code>@InvocableMethod(label='Get Accounts' description='...')</code> のように label が必須。引数・戻り値は <code>List&lt;T&gt;</code> 型で定義する必要がある（コレクション対応のため）。</p>
+      </article>
+
+      <article class="term-card" data-cats="security apex" data-term="inherited sharing 継承 sharing mode 省略">
+        <div class="term-head">
+          <span class="term-name">inherited sharing（継承共有）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">呼び出し元クラスの共有モードを継承するApexのキーワード。<code>public inherited sharing class MyClass {...}</code> のように宣言する。キーワード省略時と同等だが、<strong>意図を明示するために宣言することが推奨</strong>される。グローバルクラスやトップレベルからの呼び出しでは without sharing として動作することがある。</p>
+      </article>
     </section>
 
     <!-- L -->
@@ -564,6 +647,14 @@ body{
         </div>
         <p class="term-def">順序付き可変長コレクション型。重複要素を許容する。<code>new List&lt;Account&gt;()</code> で生成。インデックスアクセス（<code>list[0]</code>）が可能。SOQLの結果は <code>List&lt;sObject&gt;</code> で受け取るのが基本。</p>
       </article>
+
+      <article class="term-card" data-cats="lwc" data-term="lightning data service lds wire adapter uiapi 最適化">
+        <div class="term-head">
+          <span class="term-name">Lightning Data Service（LDS）</span>
+          <div class="badges"><span class="badge lwc">LWC</span></div>
+        </div>
+        <p class="term-def">LWCコンポーネントがApexサーバーコールなしにSalesforceレコードを読み書きできるキャッシュ付きデータアクセス層。<code>@wire(getRecord, { recordId, fields })</code> などの wire adapter を使って実装する。共有キャッシュにより複数コンポーネント間でデータを効率的に共有する。</p>
+      </article>
     </section>
 
     <!-- M -->
@@ -592,6 +683,27 @@ body{
           <div class="badges"><span class="badge async">非同期</span><span class="badge apex">Apex</span></div>
         </div>
         <p class="term-def">テスト内でHTTPコールアウトをモック化するためのインターフェース。<code>HttpCalloutMock</code> を実装したクラスを作成し、<code>Test.setMock(HttpCalloutMock.class, new MockClass())</code> で登録して使用する。</p>
+      </article>
+    </section>
+
+    <!-- N -->
+    <section class="letter-group" id="gl-n">
+      <h2 class="letter-head">N</h2>
+
+      <article class="term-card" data-cats="async" data-term="named credential 名前付き資格情報 コールアウト 認証 エンドポイント">
+        <div class="term-head">
+          <span class="term-name">Named Credential（名前付き資格情報）</span>
+          <div class="badges"><span class="badge async">非同期</span></div>
+        </div>
+        <p class="term-def">外部サービスのエンドポイントURLと認証情報（ユーザー名・パスワード・OAuth等）をSalesforceに登録する仕組み。Apexコールアウト時に <code>callout:MyNamedCred/endpoint</code> と書くことで、認証情報をコードにハードコードせずに済む。</p>
+      </article>
+
+      <article class="term-card" data-cats="deploy" data-term="namespace 名前空間 パッケージ prefix 一意識別子">
+        <div class="term-head">
+          <span class="term-name">Namespace（名前空間）</span>
+          <div class="badges"><span class="badge deploy">デプロイ</span></div>
+        </div>
+        <p class="term-def">Salesforceパッケージに設定する一意識別子のプレフィックス。名前空間が設定された組織では、すべてのカスタムコンポーネントに <code>ns__ObjectName__c</code> のようにプレフィックスが付く。マネージドパッケージではパッケージ内要素を保護するために使用する。</p>
       </article>
     </section>
 
@@ -644,6 +756,22 @@ body{
         </div>
         <p class="term-def">ユーザーに割り当てる基本権限設定。オブジェクト権限（CRUD）、フィールドレベルセキュリティ（FLS）、タブ表示設定、アプリケーション設定などを管理する。1ユーザーに1つだけ割り当て可能。</p>
       </article>
+
+      <article class="term-card" data-cats="security" data-term="permission set group パーミッションセットグループ 権限グループ まとめ">
+        <div class="term-head">
+          <span class="term-name">Permission Set Group（パーミッションセットグループ）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">複数のパーミッションセットをひとつにまとめて管理するコンテナ。ユーザーにはパーミッションセットグループを割り当てるだけで、グループ内の全権限が一括付与される。メンテナンスコストを削減できる。</p>
+      </article>
+
+      <article class="term-card" data-cats="limit apex" data-term="platform cache プラットフォームキャッシュ org cache session cache パフォーマンス">
+        <div class="term-head">
+          <span class="term-name">Platform Cache（プラットフォームキャッシュ）</span>
+          <div class="badges"><span class="badge limit">制限</span><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">Apexで高コストな計算結果や頻繁に参照するデータをキャッシュする仕組み。<strong>Org Cache</strong>（組織全体で共有）と <strong>Session Cache</strong>（ユーザーセッション単位）の2種類がある。<code>Cache.Org.put()</code> / <code>Cache.Org.get()</code> で操作する。</p>
+      </article>
     </section>
 
     <!-- Q -->
@@ -669,6 +797,14 @@ body{
           <div class="badges"><span class="badge security">セキュリティ</span></div>
         </div>
         <p class="term-def">ロール階層に基づくデータアクセス管理。上位ロールのユーザーは下位ロールのユーザーが所有するレコードに自動的にアクセスできる。OWDが Private の場合でも、ロール階層を通じてアクセスが拡大される。</p>
+      </article>
+
+      <article class="term-card" data-cats="async" data-term="remote site settings リモートサイト設定 コールアウト 外部URL 許可リスト">
+        <div class="term-head">
+          <span class="term-name">Remote Site Settings（リモートサイト設定）</span>
+          <div class="badges"><span class="badge async">非同期</span></div>
+        </div>
+        <p class="term-def">Apexから外部URLへのHTTPコールアウトを許可するホワイトリスト設定。[設定] → [セキュリティ] → [リモートサイトの設定] で登録する。登録していないURLへのコールアウトは <code>CalloutException</code> が発生する。</p>
       </article>
     </section>
 
@@ -723,6 +859,30 @@ body{
         </div>
         <p class="term-def">複数のSalesforceオブジェクトをまたぐ全文検索クエリ言語。<code>FIND 'keyword' IN ALL FIELDS RETURNING Account(Id, Name), Contact(Id, Name)</code> のように複数オブジェクトの検索結果を一度に取得できる。</p>
       </article>
+
+      <article class="term-card" data-cats="security" data-term="sharing rules 共有ルール データ共有 OWD 拡張">
+        <div class="term-head">
+          <span class="term-name">Sharing Rules（共有ルール）</span>
+          <div class="badges"><span class="badge security">セキュリティ</span></div>
+        </div>
+        <p class="term-def">OWDで制限されたレコードアクセスを特定のグループ・ロールに拡張するルール。基準ベース（Criteria-based）と所有者ベース（Owner-based）の2種類がある。ロール階層ではカバーできない横断的な共有に使用する。</p>
+      </article>
+
+      <article class="term-card" data-cats="deploy" data-term="static resource 静的リソース js css 画像 zip ファイル管理">
+        <div class="term-head">
+          <span class="term-name">Static Resource（静的リソース）</span>
+          <div class="badges"><span class="badge deploy">デプロイ</span></div>
+        </div>
+        <p class="term-def">JavaScript・CSS・画像・ZIPファイルなどをSalesforce組織にアップロードして管理する仕組み。Visualforce/LWCから参照可能。<code>$Resource.ResourceName</code>（Visualforce）や <code>import myResource from '@salesforce/resourceUrl/ResourceName'</code>（LWC）で参照する。</p>
+      </article>
+
+      <article class="term-card" data-cats="apex" data-term="system.assert システムアサート テスト assertEquals assertNotEquals 検証">
+        <div class="term-head">
+          <span class="term-name">System.assert() / System.assertEquals()</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">Apexテストで期待値を検証するアサーションメソッド。<code>System.assert(condition)</code>：条件がtrueであることを確認。<code>System.assertEquals(expected, actual)</code>：2値が一致することを確認。<code>System.assertNotEquals()</code>：2値が異なることを確認。失敗すると <code>AssertException</code> が発生してテストが失敗する。</p>
+      </article>
     </section>
 
     <!-- T -->
@@ -760,6 +920,14 @@ body{
         </div>
         <p class="term-def">トリガーのロジックをHandlerクラスに委譲するベストプラクティス設計パターン。トリガーファイルは薄く保ち（呼び出しのみ）、ビジネスロジックはHandlerクラスに集約することでテスト・保守が容易になる。</p>
       </article>
+
+      <article class="term-card" data-cats="apex" data-term="test.setmock モック コールアウト テスト httpresponse webservice">
+        <div class="term-head">
+          <span class="term-name">Test.setMock()</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">テストクラス内でHTTPコールアウトやWebサービスコールをモックに差し替えるメソッド。<code>Test.setMock(HttpCalloutMock.class, new MyMock())</code> のように呼び出し、テスト対象コードがコールアウトを実行しても実際のネットワーク通信は行わずモックレスポンスを返す。</p>
+      </article>
     </section>
 
     <!-- U -->
@@ -794,6 +962,14 @@ body{
         </div>
         <p class="term-def"><code>virtual</code> キーワードで修飾されたクラス。サブクラスが <code>extends</code> してメソッドを <code>override</code> できる。<code>abstract</code> クラスと違い、直接インスタンス化可能でメソッドにデフォルト実装を持てる。</p>
       </article>
+
+      <article class="term-card" data-cats="apex" data-term="visualforce vf ページ apex controller 標準コントローラー ページレイアウト">
+        <div class="term-head">
+          <span class="term-name">Visualforce</span>
+          <div class="badges"><span class="badge apex">Apex</span></div>
+        </div>
+        <p class="term-def">HTMLライクなマークアップとApex Controllerを組み合わせてカスタムUIを構築する従来のUIフレームワーク。<code>&lt;apex:page controller="MyController"&gt;</code> の形式で記述。LWCが推奨される現在も、Salesforceクラシックや一部機能（PDF生成など）では引き続き使用される。</p>
+      </article>
     </section>
 
     <!-- W -->
@@ -814,6 +990,14 @@ body{
           <div class="badges"><span class="badge auto">自動化</span></div>
         </div>
         <p class="term-def">条件を満たしたレコード保存時にアクション（メール送信・項目更新など）を実行する旧来の自動化ツール。Salesforceによる廃止が発表されており、<strong>Flowへの移行が推奨</strong>されている。</p>
+      </article>
+
+      <article class="term-card" data-cats="lwc" data-term="@wire ワイヤー データサービス アダプター アポロ プロパティ 関数">
+        <div class="term-head">
+          <span class="term-name">@wire</span>
+          <div class="badges"><span class="badge lwc">LWC</span></div>
+        </div>
+        <p class="term-def">LWCでSalesforceのデータサービスや Apex メソッドをリアクティブに取得するデコレーター。<code>@wire(getRecord, { recordId: '$recordId', fields }) record;</code> のように書くと、依存プロパティが変わるたびに自動で再フェッチされる。プロパティか関数（data/error を受け取る）に適用可能。</p>
       </article>
     </section>
 
