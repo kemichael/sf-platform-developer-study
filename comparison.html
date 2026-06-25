@@ -253,6 +253,11 @@ code{
       <a class="nav-item" href="#c8"><span class="nav-num">8</span>Profile vs Permission Set</a>
       <a class="nav-item" href="#c9"><span class="nav-num">9</span>自動化ツール 3世代</a>
       <a class="nav-item" href="#c10"><span class="nav-num">10</span>デプロイ方法 3方式</a>
+      <a class="nav-item" href="#c11"><span class="nav-num">11</span>VF vs Aura vs LWC</a>
+      <a class="nav-item" href="#c12"><span class="nav-num">12</span>VF コントローラ 4種</a>
+      <a class="nav-item" href="#c13"><span class="nav-num">13</span>LWC コンポーネント間通信</a>
+      <a class="nav-item" href="#c14"><span class="nav-num">14</span>@wire vs 命令的呼び出し</a>
+      <a class="nav-item" href="#c15"><span class="nav-num">15</span>Lightning vs Classic</a>
     </nav>
   </aside>
 
@@ -1008,6 +1013,385 @@ code{
           <li>Change Set でデプロイする前に「検証（Validate）」を実行してテストを通過させる</li>
           <li>Salesforce CLI の <code>sf project deploy start</code> でメタデータをデプロイ</li>
           <li>Unlocked Package（アンロックパッケージ）はCLI/Metadata API でのみ作成可能。Change Set では不可</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 11: Visualforce vs Aura vs LWC -->
+    <section class="comp-section" id="c11">
+      <div class="comp-header">
+        <div class="comp-num">比較 11</div>
+        <h2 class="comp-title">Visualforce vs Aura vs LWC（UI 開発フレームワーク3世代）</h2>
+        <p class="comp-desc">Salesforce のカスタム UI を作る3つのフレームワーク。レンダリング方式・記法・推奨度が世代ごとに異なる。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">Visualforce</th>
+              <th class="th-ob">Aura コンポーネント</th>
+              <th class="th-oc">LWC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">レンダリング</td>
+              <td>サーバーサイド（ページ単位）</td>
+              <td>クライアントサイド</td>
+              <td>クライアントサイド</td>
+            </tr>
+            <tr>
+              <td class="row-label">ベース技術</td>
+              <td>独自タグ（MVCページ）</td>
+              <td>独自フレームワーク</td>
+              <td class="ok">Web 標準（Web Components / ES6）</td>
+            </tr>
+            <tr>
+              <td class="row-label">タグ／記法</td>
+              <td><code>&lt;apex:...&gt;</code> ＋ 式 <code>{! }</code></td>
+              <td><code>&lt;aura:...&gt;</code>／<code>&lt;lightning:...&gt;</code> ＋ <code>{!v.x}</code></td>
+              <td><code>&lt;template&gt;</code> ＋ <code>&lt;c-...&gt;</code>／<code>&lt;lightning-...&gt;</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">ファイル構成</td>
+              <td>.page ＋ Apex コントローラ</td>
+              <td>cmp / controller.js / helper.js / css ほか（バンドル）</td>
+              <td>html ＋ js ＋ js-meta.xml（3点セット）</td>
+            </tr>
+            <tr>
+              <td class="row-label">条件・繰り返し</td>
+              <td><code>rendered</code> 属性／<code>apex:repeat</code></td>
+              <td><code>aura:if</code>／<code>aura:iteration</code></td>
+              <td><code>lwc:if</code>／<code>for:each</code>（key必須）</td>
+            </tr>
+            <tr>
+              <td class="row-label">動作環境</td>
+              <td>Classic ＋ LEX（両対応）</td>
+              <td class="ng">LEX のみ</td>
+              <td class="ng">LEX のみ</td>
+            </tr>
+            <tr>
+              <td class="row-label">パフォーマンス</td>
+              <td>サーバー往復が多い</td>
+              <td>中</td>
+              <td class="ok">最速（軽量・標準準拠）</td>
+            </tr>
+            <tr>
+              <td class="row-label">推奨度</td>
+              <td>既存資産の保守</td>
+              <td>既存資産の保守</td>
+              <td class="ok">新規開発の第一候補</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="usage-section">
+        <h3><svg class="ico"><use href="#i-check"/></svg>使い分けポイント</h3>
+        <ul class="usage-list">
+          <li><strong>Visualforce：</strong>Classic も対象、PDF 出力（<code>renderAs="pdf"</code>）、既存ページの保守</li>
+          <li><strong>Aura：</strong>LWC が未対応の一部機能が必要なとき、既存 Aura 資産の保守（LWC を内包可能）</li>
+          <li><strong>LWC：</strong>原則すべての新規開発。軽量・高速で Web 標準に準拠</li>
+        </ul>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>Visualforce は<strong>サーバーサイドレンダリング</strong>、Aura/LWC は<strong>クライアントサイドレンダリング</strong></li>
+          <li>Aura は LWC を子として内包できるが、<strong>LWC は Aura を内包できない</strong>（一方向）</li>
+          <li>LWC は Web Components 標準ベースで、HTML・JS・メタデータXMLの3ファイル構成</li>
+          <li>Visualforce のみ Salesforce Classic で動作する（Aura/LWC は Lightning Experience 専用）</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 12: Visualforce コントローラ 4種 -->
+    <section class="comp-section" id="c12">
+      <div class="comp-header">
+        <div class="comp-num">比較 12</div>
+        <h2 class="comp-title">Visualforce コントローラ 4種</h2>
+        <p class="comp-desc">Visualforce ページにロジックを与える4つの方法。コードの要否と共有モードの扱いが異なる。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">標準コントローラ</th>
+              <th class="th-ob">標準リストコントローラ</th>
+              <th class="th-oc">カスタムコントローラ</th>
+              <th class="th-od">コントローラ拡張</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">指定方法</td>
+              <td><code>standardController="Account"</code></td>
+              <td><code>standardController</code> ＋ <code>recordSetVar</code></td>
+              <td><code>controller="MyCtrl"</code></td>
+              <td><code>extensions="MyExt"</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">Apex コード</td>
+              <td class="ok">不要</td>
+              <td class="ok">不要</td>
+              <td class="ng">必須（独自実装）</td>
+              <td class="ng">必須（標準に追加）</td>
+            </tr>
+            <tr>
+              <td class="row-label">標準アクション</td>
+              <td class="ok">save/edit/delete 等を自動提供</td>
+              <td class="ok">一覧・ページ送り（next/previous）</td>
+              <td>自前で実装</td>
+              <td>標準アクション＋独自</td>
+            </tr>
+            <tr>
+              <td class="row-label">対象レコード</td>
+              <td>単一レコード</td>
+              <td>複数レコード（一覧）</td>
+              <td>任意</td>
+              <td>標準コントローラに依存</td>
+            </tr>
+            <tr>
+              <td class="row-label">共有ルール（OWD）</td>
+              <td class="ok">適用される</td>
+              <td class="ok">適用される</td>
+              <td class="ng">既定でシステムモード（無視）</td>
+              <td>拡張先に依存</td>
+            </tr>
+            <tr>
+              <td class="row-label">コンストラクタ引数</td>
+              <td>—</td>
+              <td>—</td>
+              <td>なし（引数なし）</td>
+              <td><code>ApexPages.StandardController</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">典型用途</td>
+              <td>標準的なレコード編集画面</td>
+              <td>レコード一覧・一括表示</td>
+              <td>標準と無関係な独自画面</td>
+              <td>標準画面に独自ロジックを追加</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li><code>controller</code> と <code>standardController</code> は<strong>併用不可</strong>。標準に独自ロジックを足すときは <code>extensions</code></li>
+          <li>カスタムコントローラは既定で<strong>システムモード（共有ルールを無視）</strong>で動く。<code>with sharing</code> を明示すると共有ルールが適用される</li>
+          <li>標準コントローラ／標準リストコントローラは、実行ユーザーの<strong>共有ルール・FLS・CRUD を自動的に順守</strong>する</li>
+          <li>コントローラ拡張のコンストラクタは <code>public MyExt(ApexPages.StandardController stdCtrl)</code> の形が必須</li>
+          <li>標準リストコントローラは <code>recordSetVar</code> で変数名を指定し、最大10,000件まで扱える</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 13: LWC コンポーネント間通信 -->
+    <section class="comp-section" id="c13">
+      <div class="comp-header">
+        <div class="comp-num">比較 13</div>
+        <h2 class="comp-title">LWC コンポーネント間通信（親子・兄弟）</h2>
+        <p class="comp-desc">LWC で複数コンポーネントが連携する3つの基本パターン。「データは下へ、イベントは上へ」が原則。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">親 → 子</th>
+              <th class="th-ob">子 → 親</th>
+              <th class="th-oc">兄弟・無関係（横）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">仕組み</td>
+              <td>公開プロパティ／メソッド</td>
+              <td>カスタムイベント</td>
+              <td>Lightning Message Service（LMS）</td>
+            </tr>
+            <tr>
+              <td class="row-label">使うAPI</td>
+              <td><code>@api</code> プロパティ／メソッド</td>
+              <td><code>CustomEvent</code> ＋ <code>dispatchEvent()</code></td>
+              <td><code>@wire(MessageContext)</code> ＋ publish/subscribe</td>
+            </tr>
+            <tr>
+              <td class="row-label">データの向き</td>
+              <td>下方向（属性で渡す）</td>
+              <td>上方向（<code>event.detail</code>）</td>
+              <td>任意（メッセージチャネル経由）</td>
+            </tr>
+            <tr>
+              <td class="row-label">呼び出し例</td>
+              <td><code>&lt;c-child item-id={id}&gt;</code></td>
+              <td><code>new CustomEvent('select', {detail})</code></td>
+              <td><code>publish(ctx, CHANNEL, payload)</code></td>
+            </tr>
+            <tr>
+              <td class="row-label">親が子メソッド呼び出し</td>
+              <td class="ok"><code>querySelector('c-child').method()</code></td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="row-label">DOM 階層の制約</td>
+              <td>親子関係が必須</td>
+              <td>親子関係が必須</td>
+              <td class="ok">不要（DOM が離れていても可）</td>
+            </tr>
+            <tr>
+              <td class="row-label">必要な定義</td>
+              <td>子側に <code>@api</code></td>
+              <td>イベント名は小文字・スペース不可</td>
+              <td>Message Channel（メタデータ）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li>原則「<strong>データは下へ（プロパティ）、イベントは上へ（CustomEvent）</strong>」</li>
+          <li>子→親のイベント名は<strong>小文字のみ・スペース/キャメルケース不可</strong>（例 <code>productselected</code>）。データは <code>detail</code> プロパティに載せる</li>
+          <li>親から子の <code>@api</code> メソッドを呼ぶには <code>this.template.querySelector('c-child')</code> で参照を取得</li>
+          <li>親子関係にない（兄弟・別ページ領域の）コンポーネント間は <strong>Lightning Message Service（LMS）</strong>。Aura/Visualforce とも連携可能</li>
+          <li>イベントを DOM 階層の外まで届けるには <code>bubbles</code>／<code>composed</code> オプションを使う</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 14: @wire vs 命令的Apex呼び出し -->
+    <section class="comp-section" id="c14">
+      <div class="comp-header">
+        <div class="comp-num">比較 14</div>
+        <h2 class="comp-title">@wire vs 命令的 Apex 呼び出し（LWC のデータ取得）</h2>
+        <p class="comp-desc">LWC から Apex を呼ぶ2つの方法。リアクティブな読み取りか、任意タイミングの実行かで使い分ける。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">@wire（ワイヤ）</th>
+              <th class="th-ob">命令的呼び出し（imperative）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">呼び出しタイミング</td>
+              <td>リアクティブ（自動・パラメータ変化で再実行）</td>
+              <td class="ok">任意（ボタン押下など、コードで明示）</td>
+            </tr>
+            <tr>
+              <td class="row-label">Apex 側の要件</td>
+              <td class="ng"><code>cacheable=true</code> が必須</td>
+              <td><code>@AuraEnabled</code>（cacheable は任意）</td>
+            </tr>
+            <tr>
+              <td class="row-label">DML（更新系）</td>
+              <td class="ng">不可（読み取り専用）</td>
+              <td class="ok">可（作成・更新・削除）</td>
+            </tr>
+            <tr>
+              <td class="row-label">キャッシュ</td>
+              <td class="ok">クライアントキャッシュが効く</td>
+              <td>都度サーバーへ（キャッシュなし）</td>
+            </tr>
+            <tr>
+              <td class="row-label">受け取り方</td>
+              <td>プロパティ／関数（<code>{data, error}</code>）</td>
+              <td>Promise（<code>.then()</code>／<code>async-await</code>）</td>
+            </tr>
+            <tr>
+              <td class="row-label">リアクティブ変数</td>
+              <td><code>$recordId</code> のように <code>$</code> を付ける</td>
+              <td>引数をそのまま渡す（<code>$</code> 不要）</td>
+            </tr>
+            <tr>
+              <td class="row-label">典型用途</td>
+              <td>画面表示用データの取得</td>
+              <td>保存・検索ボタン・条件付き取得</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li><code>@wire</code> で呼ぶ Apex メソッドは <strong><code>@AuraEnabled(cacheable=true)</code>・static・DML 不可</strong></li>
+          <li>レコードの作成・更新・削除を行うときは<strong>必ず命令的呼び出し</strong>（@wire は読み取り専用）</li>
+          <li>@wire のパラメータに <code>'$recordId'</code> のように <code>$</code> を付けると、その値が変わるたびに自動で再取得（リアクティブ）</li>
+          <li>命令的呼び出しは Promise を返すので <code>.then()/.catch()</code> または <code>async/await</code> ＋ <code>try/catch</code> で処理</li>
+          <li>レコードの単純な参照・編集は Apex 不要の <strong>Lightning Data Service（@wire getRecord / createRecord 等）</strong>が推奨</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 15: Lightning Experience vs Salesforce Classic -->
+    <section class="comp-section" id="c15">
+      <div class="comp-header">
+        <div class="comp-num">比較 15</div>
+        <h2 class="comp-title">Lightning Experience vs Salesforce Classic</h2>
+        <p class="comp-desc">Salesforce の2つの UI。開発者視点では「どの UI 技術が動くか」が重要になる。</p>
+      </div>
+      <div class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="background:var(--side-bg)">項目</th>
+              <th class="th-oa">Lightning Experience（LEX）</th>
+              <th class="th-ob">Salesforce Classic</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">提供状態</td>
+              <td class="ok">現行・推奨 UI</td>
+              <td class="ng">レガシー（メンテナンスモード）</td>
+            </tr>
+            <tr>
+              <td class="row-label">Aura / LWC</td>
+              <td class="ok">動作する</td>
+              <td class="ng">動作しない</td>
+            </tr>
+            <tr>
+              <td class="row-label">Visualforce</td>
+              <td>動作する（Lightning スタイルで表示）</td>
+              <td class="ok">動作する（ネイティブ）</td>
+            </tr>
+            <tr>
+              <td class="row-label">Lightning App Builder</td>
+              <td class="ok">利用可（ページをドラッグ＆ドロップ構築）</td>
+              <td class="ng">利用不可</td>
+            </tr>
+            <tr>
+              <td class="row-label">VF での URL 遷移</td>
+              <td>環境差を吸収する <code>sforce.one</code> / <code>lightning:navigation</code> を使う</td>
+              <td><code>window.location</code> で直接遷移</td>
+            </tr>
+            <tr>
+              <td class="row-label">UI 表現</td>
+              <td>モダン（コンポーネントベース）</td>
+              <td>従来型（ページベース）</td>
+            </tr>
+            <tr>
+              <td class="row-label">主な開発技術</td>
+              <td>LWC / Aura / Visualforce</td>
+              <td>Visualforce</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exam-callout">
+        <div class="exam-callout-head"><svg class="ico"><use href="#i-alert"/></svg>試験ポイント</div>
+        <ul>
+          <li><strong>Aura / LWC は Lightning Experience（および Mobile）専用</strong>。Classic では動かない</li>
+          <li>Visualforce は<strong>両 UI で動作する</strong>が、LEX では Lightning スタイルでラップ表示される</li>
+          <li>VF を両 UI 対応にするときは、URL 遷移を <code>sforce.one</code> や <code>navigateToURL</code> で UI 差を吸収する</li>
+          <li>Lightning App Builder で LWC / Aura を配置できる（<code>isExposed=true</code> ＋ <code>targets</code> が必要）</li>
         </ul>
       </div>
     </section>
