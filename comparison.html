@@ -108,6 +108,19 @@ body{
   .nav-items{display:flex;flex-direction:row;gap:6px;flex-wrap:nowrap;width:max-content}
   .comp-main{padding:20px 16px 60px}
   .brand-text small{display:none}
+
+  /* モバイルではトップバーを2段組みに。
+     1段目: ブランド・テーマ切替 / 2段目: ナビリンクを横スクロール */
+  :root{--header-h:96px}
+  .topbar{flex-wrap:wrap;align-content:center;height:var(--header-h);
+    padding:8px 12px;gap:8px 10px;overflow:hidden}
+  .brand{order:1}
+  #themeToggle{order:2;margin-left:auto}
+  .nav-actions{order:3;flex:1 1 100%;margin-left:0;gap:8px;
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    margin:0 -12px;padding:0 12px}
+  .nav-actions::-webkit-scrollbar{display:none}
+  .back-link{flex:0 0 auto;white-space:nowrap}
 }
 
 /* ===== サイドバーナビ ===== */
@@ -231,11 +244,11 @@ code{
     <a class="back-link" href="glossary.html"><svg class="ico"><use href="#i-book"/></svg>用語集</a>
     <a class="back-link" href="numbers.html"><svg class="ico"><use href="#i-hash"/></svg>数字まとめ</a>
     <a class="back-link" href="reference.html"><svg class="ico"><use href="#i-code"/></svg>リファレンス</a>
-    <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
-      <svg class="ico ico-sun"><use href="#i-sun"/></svg>
-      <svg class="ico ico-moon"><use href="#i-moon"/></svg>
-    </button>
   </div>
+  <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
+    <svg class="ico ico-sun"><use href="#i-sun"/></svg>
+    <svg class="ico ico-moon"><use href="#i-moon"/></svg>
+  </button>
 </header>
 
 <div class="comp-layout">

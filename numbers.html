@@ -93,12 +93,14 @@ body{
   border:1px solid transparent;background:transparent;color:var(--text-2);cursor:pointer;transition:.15s;flex-shrink:0}
 .icon-btn:hover{background:var(--side-bg);color:var(--text);border-color:var(--border)}
 .menu-toggle{display:none}
+/* クイックリンク群のラッパー。デスクトップでは display:contents で透過し、
+   各リンクを topbar の直接の flex 子要素として従来どおり横並びさせる */
+.quicklinks{display:contents}
 .summary-link{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;text-decoration:none;
   font-size:13px;font-weight:700;color:#fff;border-radius:10px;padding:8px 14px;
   background:linear-gradient(95deg,#ff5fa2,#ff8a5b);box-shadow:0 1px 4px rgba(255,95,162,.35);transition:.15s}
 .summary-link:hover{filter:brightness(1.06);transform:translateY(-1px)}
 .summary-link .ico{width:15px;height:15px}
-@media(max-width:560px){.summary-link span{display:none}}
 #themeToggle .ico-moon{display:none}
 [data-theme="dark"] #themeToggle .ico-sun{display:none}
 [data-theme="dark"] #themeToggle .ico-moon{display:block}
@@ -337,7 +339,10 @@ body{
   .toc{display:none}
 }
 @media(max-width:860px){
-  :root{--side-w:300px}
+  /* モバイル/タブレットではトップバーを2段組みにする。
+     1段目: メニュー・ブランド・検索・テーマ切替 / 2段目: クイックリンクを横スクロール。
+     --header-h を2段分に拡張し、fixed なサイドバー・スクリムの位置揃えを保つ */
+  :root{--side-w:300px; --header-h:100px}
   .layout{grid-template-columns:minmax(0,1fr)}
   .menu-toggle{display:grid}
   .sidebar{position:fixed;top:var(--header-h);left:0;z-index:35;width:var(--side-w);
@@ -348,11 +353,27 @@ body{
   .content{padding:0 20px}
   .brand-text small{display:none}
   .topbar-progress{display:none}
+
+  .topbar{flex-wrap:wrap;align-content:center;height:var(--header-h);
+    padding:8px 12px;gap:8px 10px;overflow:hidden}
+  .menu-toggle{order:1}
+  .brand{order:2}
+  .search-wrap{order:3;flex:1 1 80px;margin-left:0;max-width:none}
+  #themeToggle{order:4}
+  /* 2段目: クイックリンクを必ず全幅で折り返し、横スクロールできる帯にする */
+  .quicklinks{order:5;display:flex;flex:1 1 100%;align-items:center;gap:8px;
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    margin:0 -12px;padding:0 12px}
+  .quicklinks::-webkit-scrollbar{display:none}
+  .summary-link{flex:0 0 auto;padding:7px 12px;font-size:12px}
+  .summary-link .ico{width:14px;height:14px}
 }
 @media(max-width:560px){
   .unit-title{font-size:24px}
   .pager{grid-template-columns:1fr}
   .search-wrap{max-width:none}
+  /* 横幅が厳しい端末ではブランド名テキストを省きアイコンのみに */
+  .brand-text{display:none}
 }
 .scrim{display:none}
 
@@ -455,21 +476,23 @@ body{
     <input type="search" id="searchInput" placeholder="カテゴリを絞り込み ( / )" autocomplete="off" spellcheck="false">
     <span class="search-count" id="searchCount"></span>
   </div>
-  <a class="summary-link" href="index.html" title="学習ノート本編へ">
-    <svg class="ico"><use href="#i-arrow-left"/></svg><span>本編</span>
-  </a>
-  <a class="summary-link" href="matome.html" title="単元まとめ・試験対策">
-    <svg class="ico"><use href="#i-list"/></svg><span>単元まとめ</span>
-  </a>
-  <a class="summary-link" href="summary.html" title="直前まとめチートシート">
-    <svg class="ico"><use href="#i-flag"/></svg><span>チートシート</span>
-  </a>
-  <a class="summary-link" href="comparison.html" title="比較表">
-    <svg class="ico"><use href="#i-table"/></svg><span>比較表</span>
-  </a>
-  <a class="summary-link" href="reference.html" title="構文・メソッドリファレンス">
-    <svg class="ico"><use href="#i-code"/></svg><span>リファレンス</span>
-  </a>
+  <div class="quicklinks">
+    <a class="summary-link" href="index.html" title="学習ノート本編へ">
+      <svg class="ico"><use href="#i-arrow-left"/></svg><span>本編</span>
+    </a>
+    <a class="summary-link" href="matome.html" title="単元まとめ・試験対策">
+      <svg class="ico"><use href="#i-list"/></svg><span>単元まとめ</span>
+    </a>
+    <a class="summary-link" href="summary.html" title="直前まとめチートシート">
+      <svg class="ico"><use href="#i-flag"/></svg><span>チートシート</span>
+    </a>
+    <a class="summary-link" href="comparison.html" title="比較表">
+      <svg class="ico"><use href="#i-table"/></svg><span>比較表</span>
+    </a>
+    <a class="summary-link" href="reference.html" title="構文・メソッドリファレンス">
+      <svg class="ico"><use href="#i-code"/></svg><span>リファレンス</span>
+    </a>
+  </div>
   <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
     <svg class="ico ico-sun"><use href="#i-sun"/></svg>
     <svg class="ico ico-moon"><use href="#i-moon"/></svg>
