@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模擬試験 | Platform デベロッパー</title>
+<style>/*__CSS__*/</style>
+<style>
+/* ===== 模擬試験ページ専用スタイル ===== */
+.exam-body{--bad:#C23934;--bad-bg:#FCECEC;--bad-bd:#F3C9C9}
+[data-theme="dark"] .exam-body{--bad:#FF6B61;--bad-bg:#2E1719;--bad-bd:#522A2C}
+.exam-body .topbar{position:sticky;top:0}
+.exam-main{max-width:880px;margin:0 auto;padding:28px 22px 140px}
+
+/* --- スタート画面 --- */
+.exam-hero h1{font-size:30px;line-height:1.25;margin:6px 0 8px;color:var(--navy)}
+.exam-hero p{color:var(--text-2);font-size:14px;line-height:1.8;margin:0 0 8px}
+.exam-hero .note{font-size:12.5px;color:var(--text-3)}
+.set-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:24px}
+.set-card{text-align:left;border:1px solid var(--border);background:var(--surface);border-radius:16px;
+  padding:18px 18px 16px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.set-card:hover{transform:translateY(-2px);border-color:var(--blue)}
+.set-card .sc-badge{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:11.5px;font-weight:700;
+  color:#fff;background:linear-gradient(95deg,#ff5fa2,#ff8a5b);border-radius:99px;padding:4px 11px}
+.set-card .sc-title{font-size:15.5px;font-weight:700;color:var(--text);line-height:1.45}
+.set-card .sc-meta{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--text-3);margin-top:auto}
+.set-card .sc-best{color:var(--ok);font-weight:700}
+.set-card .sc-go{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--blue)}
+.set-card .sc-go .ico{width:15px;height:15px}
+
+/* --- 問題 --- */
+.quiz-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.quiz-head h2{font-size:19px;color:var(--navy);margin:0;flex:1;min-width:200px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-2);border-radius:9px;padding:7px 13px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+.back-btn:hover{border-color:var(--blue);color:var(--blue)}
+.back-btn .ico{width:15px;height:15px}
+
+.q-card{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:18px 20px;margin:0 0 16px;box-shadow:var(--shadow)}
+.q-card.is-correct{border-color:var(--ok)}
+.q-card.is-wrong{border-color:var(--bad)}
+.q-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.q-num{flex-shrink:0;display:grid;place-items:center;min-width:30px;height:30px;padding:0 8px;border-radius:8px;
+  background:var(--accent-soft);color:var(--blue);font-weight:800;font-size:14px}
+.q-cat{font-size:11.5px;font-weight:700;color:var(--text-3);background:var(--border-2);border-radius:99px;padding:3px 10px}
+.q-multi{font-size:11.5px;font-weight:700;color:#fff;background:var(--c-triv);border-radius:99px;padding:3px 10px}
+.q-mark{margin-left:auto;display:none;align-items:center;gap:5px;font-size:13px;font-weight:800}
+.q-card.is-correct .q-mark.ok{display:inline-flex;color:var(--ok)}
+.q-card.is-wrong .q-mark.ng{display:inline-flex;color:var(--bad)}
+.q-mark .ico{width:17px;height:17px}
+.q-text{font-size:15px;line-height:1.85;color:var(--text);margin:0 0 14px}
+.q-text p{margin:0 0 8px}
+.q-text p:last-child{margin-bottom:0}
+
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{display:flex;align-items:flex-start;gap:11px;border:1.5px solid var(--border);border-radius:11px;
+  padding:11px 14px;cursor:pointer;transition:.12s;background:var(--surface)}
+.opt:hover{border-color:var(--blue);background:var(--accent-soft)}
+.opt.selected{border-color:var(--blue);background:var(--accent-soft)}
+.opt .mark{flex-shrink:0;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);
+  display:grid;place-items:center;font-size:12.5px;font-weight:800;color:var(--text-2);background:var(--side-bg);transition:.12s}
+.opt.multi .mark{border-radius:50%}
+.opt.selected .mark{background:var(--blue);border-color:var(--blue);color:#fff}
+.opt .otext{font-size:14px;line-height:1.7;color:var(--text);padding-top:1px}
+.opt .otext code{font-size:.92em}
+/* 採点後 */
+.opts.graded .opt{cursor:default}
+.opts.graded .opt:hover{background:var(--surface)}
+.opts.graded .opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+.opts.graded .opt.correct .mark{background:var(--ok);border-color:var(--ok);color:#fff}
+.opts.graded .opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opts.graded .opt.wrong .mark{background:var(--bad);border-color:var(--bad);color:#fff}
+.opts.graded .opt:hover.correct{background:var(--ok-bg)}
+.opts.graded .opt:hover.wrong{background:var(--bad-bg)}
+
+.explain{margin-top:14px;border-radius:11px;border:1px solid var(--c-sum-bd);background:var(--c-sum-bg);padding:13px 15px;display:none}
+.q-card.graded .explain{display:block}
+.explain-head{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--c-sum);margin-bottom:6px}
+.explain-head .ico{width:15px;height:15px}
+.explain-body{font-size:13.5px;line-height:1.85;color:var(--text)}
+.explain-body p{margin:0 0 7px}
+.explain-body p:last-child{margin-bottom:0}
+.explain-body code{font-size:.92em}
+
+/* --- 結果パネル --- */
+.result{border:1px solid var(--border);background:var(--surface);border-radius:18px;padding:24px;margin:0 0 22px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.score-ring{--p:0;flex-shrink:0;width:128px;height:128px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--ring-color) calc(var(--p)*1%), var(--border-2) 0)}
+.score-ring .inner{width:104px;height:104px;border-radius:50%;background:var(--surface);display:grid;place-items:center;flex-direction:column}
+.score-ring .pct{font-size:30px;font-weight:800;color:var(--text);line-height:1}
+.score-ring .pl{font-size:11px;color:var(--text-3);margin-top:3px}
+.result-info{flex:1;min-width:220px}
+.result-info .verdict{font-size:22px;font-weight:800;margin:0 0 6px}
+.result-info .verdict.pass{color:var(--ok)}
+.result-info .verdict.fail{color:var(--bad)}
+.result-info .detail{font-size:14px;color:var(--text-2);line-height:1.8}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:7px;border-radius:10px;padding:9px 16px;font-size:13.5px;font-weight:700;
+  cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);transition:.15s}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn .ico{width:15px;height:15px}
+.btn.primary{background:linear-gradient(95deg,#ff5fa2,#ff8a5b);border-color:transparent;color:#fff}
+.btn.primary:hover{filter:brightness(1.06);color:#fff}
+.filter-toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);cursor:pointer;user-select:none}
+.filter-toggle input{width:16px;height:16px;accent-color:var(--blue)}
+
+/* --- 下部固定バー（採点前） --- */
+.quiz-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--border);
+  box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+.quiz-bar-inner{max-width:880px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:16px}
+.quiz-bar .answered{font-size:13.5px;color:var(--text-2);font-variant-numeric:tabular-nums}
+.quiz-bar .answered b{color:var(--text);font-size:15px}
+.quiz-bar .qb-bar{flex:1;height:7px;border-radius:99px;background:var(--border);overflow:hidden;min-width:60px}
+.quiz-bar .qb-bar span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--ok),#43b96a);transition:width .3s}
+.quiz-bar .btn.primary{flex-shrink:0}
+
+/* コード（問題文・解説中） */
+.q-text code,.explain-body code,.opt .otext code{font-family:var(--mono);font-size:.9em;
+  background:var(--inline-code-bg);color:var(--inline-code);padding:.1em .4em;border-radius:5px}
+.q-text .code-block,.explain-body .code-block{margin:12px 0}
+.q-text .code-block code,.explain-body .code-block code{background:none;color:var(--text);padding:0;border:none}
+
+[hidden]{display:none !important}
+@media(max-width:640px){
+  .exam-main{padding:18px 14px 130px}
+  .result{gap:16px;padding:18px}
+  .score-ring{width:108px;height:108px}
+  .score-ring .inner{width:88px;height:88px}
+  .score-ring .pct{font-size:26px}
+  .quiz-bar-inner{padding:10px 14px;gap:10px}
+}
+</style>
+</head>
+<body class="exam-body">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.5" y1="4.5" x2="6.6" y2="6.6"/><line x1="17.4" y1="17.4" x2="19.5" y2="19.5"/><line x1="4.5" y1="19.5" x2="6.6" y2="17.4"/><line x1="17.4" y1="6.6" x2="19.5" y2="4.5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><line x1="4" y1="19" x2="4" y2="5"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.5" y2="6"/><line x1="3" y1="12" x2="3.5" y2="12"/><line x1="3" y1="18" x2="3.5" y2="18"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 21V4h13l-2 4 2 4H4"/></symbol>
+    <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></symbol>
+    <symbol id="i-hash" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></symbol>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" style="background:linear-gradient(135deg,#ff7eb3,#ff758c)"><svg class="ico"><use href="#i-edit"/></svg></span>
+    <span class="brand-text"><b>模擬試験</b><small>Platform デベロッパー</small></span>
+  </a>
+  <div style="flex:1"></div>
+  <div class="quicklinks">
+    <a class="summary-link" href="index.html" title="学習ノート本編へ">
+      <svg class="ico"><use href="#i-arrow-left"/></svg><span>本編</span>
+    </a>
+    <a class="summary-link" href="matome.html" title="単元まとめ・試験対策">
+      <svg class="ico"><use href="#i-list"/></svg><span>単元まとめ</span>
+    </a>
+    <a class="summary-link" href="summary.html" title="直前まとめチートシート">
+      <svg class="ico"><use href="#i-flag"/></svg><span>チートシート</span>
+    </a>
+    <a class="summary-link" href="reference.html" title="構文・メソッドリファレンス">
+      <svg class="ico"><use href="#i-code"/></svg><span>リファレンス</span>
+    </a>
+    <a class="summary-link" href="numbers.html" title="数字まとめ（数値・上限値）">
+      <svg class="ico"><use href="#i-hash"/></svg><span>数字まとめ</span>
+    </a>
+  </div>
+  <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
+    <svg class="ico ico-sun"><use href="#i-sun"/></svg>
+    <svg class="ico ico-moon"><use href="#i-moon"/></svg>
+  </button>
+</header>
+
+<main class="exam-main">
+  <!-- スタート画面：セット選択 -->
+  <section id="startScreen">
+    <div class="exam-hero">
+      <h1>模擬試験</h1>
+      <p>本番と同じ <b>60 問 1 セット</b> の四択形式。すべて回答して「採点する」を押すと、正解率・合否判定・各問の解説が表示されます。</p>
+      <p class="note">合格ライン目安は約 68%（PDI 本番準拠）。回答内容はブラウザに自動保存され、次回続きから再開できます。</p>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+  </section>
+
+  <!-- 試験画面 -->
+  <section id="quizScreen" hidden>
+    <div class="quiz-head">
+      <button class="back-btn" id="backBtn"><svg class="ico"><use href="#i-arrow-left"/></svg>セット選択へ</button>
+      <h2 id="quizTitle"></h2>
+    </div>
+    <div id="resultMount"></div>
+    <div id="questions"></div>
+  </section>
+</main>
+
+<!-- 採点バー（採点前のみ表示） -->
+<div class="quiz-bar" id="quizBar" hidden>
+  <div class="quiz-bar-inner">
+    <span class="answered">回答 <b id="answeredCount">0</b> / <span id="totalCount">0</span></span>
+    <div class="qb-bar"><span id="answeredBar"></span></div>
+    <button class="btn primary" id="gradeBtn"><svg class="ico"><use href="#i-check"/></svg>採点する</button>
+  </div>
+</div>
+
+<script>/*__VENDOR__*/</script>
+<script>window.__EXAM__ = /*__DATA__*/;</script>
+<script>/*__APP__*/</script>
+</body>
+</html>

@@ -1,0 +1,5074 @@
+{
+  "version": 1,
+  "sets": [
+    {
+      "id": "set1",
+      "title": "Set 1 — ファンダメンタルズ／Apex／自動化／UI／テスト",
+      "questions": [
+        {
+          "n": 1,
+          "category": "",
+          "text": "開発者が取引先（Account）とカスタムオブジェクト「プロジェクト（Project__c）」の間に主従（マスター/詳細）関係を作成しました。このとき、自動的に適用される仕様はどれですか？（2つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "プロジェクトレコードの所有者は、取引先レコードの所有者と常に同じになる。"
+            },
+            {
+              "key": "B",
+              "text": "取引先レコードを削除すると、関連するプロジェクトレコードも自動的に削除される。"
+            },
+            {
+              "key": "C",
+              "text": "プロジェクトレコードにカスタム共有ルールを作成して、アクセス権を細かく制御できる。"
+            },
+            {
+              "key": "D",
+              "text": "プロジェクトオブジェクトでロールアップサマリーフィールドを作成できるようになる。"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "主従関係を作成すると、詳細レコードは主レコードに従属するよ！だから主を消すと自動的に詳細も消える（カスケード削除）し、ロールアップサマリーも親で作れるようになるよ 所有者は親と同じになるから、詳細レコード単体での「所有者」フィールド自体が存在しなくなるんだ。共有ルールも詳細レコード単体には作れないから注意してね！"
+        },
+        {
+          "n": 2,
+          "category": "",
+          "text": "宣言的機能（ノーコード）ではなく、Apexコード（プログラミング）を使用する必要があるシナリオはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "レコードが作成されたときに、関連する子レコードの合計金額を親レコードに反映する。"
+            },
+            {
+              "key": "B",
+              "text": "ユーザーがレコードを保存する前に、電話番号のフォーマットが正しいかチェックする。"
+            },
+            {
+              "key": "C",
+              "text": "外部のWebサービスからリアルタイムでデータを取得し、Salesforceのレコードを更新する。"
+            },
+            {
+              "key": "D",
+              "text": "商談のフェーズが「成立」になったときに、Chatterグループに自動で投稿する。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "外部Webサービスとのリアルタイム連携（コールアウト）はフローやバリデーションルールではできないから、Apexコード（主にFutureメソッドやQueueable、またはLWCからの命令）が必要になるよ！他は全部ノーコード（フローやロールアップ、数式）でイケる！"
+        },
+        {
+          "n": 3,
+          "category": "",
+          "text": "リード（Lead）オブジェクトに「優先度（Priority__c）」というカスタム選択リストフィールドがあります。これを商談（Opportunity）オブジェクトの同名のフィールドにマッピングして、リード変換時にデータを引き継ぎたいです。開発者はどのように設定すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apexリード変換トリガーを作成して、データをプログラムでコピーする。"
+            },
+            {
+              "key": "B",
+              "text": "リードのオブジェクトマネージャーで「リードの項目のマッピング」を設定する。"
+            },
+            {
+              "key": "C",
+              "text": "フローを使用して、リードが変換されたときに商談を更新する。"
+            },
+            {
+              "key": "D",
+              "text": "商談側に数式フィールドを作成し、リードの値を参照する。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "リード変換時のカスタム項目のマッピングは、オブジェクトマネージャーの「リード」項目設定からノーコードでマッピングできるよ！わざわざApex書かなくていいから超アゲ！"
+        },
+        {
+          "n": 4,
+          "category": "",
+          "text": "数式フィールドについて正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "数式フィールドは読み取り専用であり、ユーザーが直接編集することはできない。"
+            },
+            {
+              "key": "B",
+              "text": "数式フィールドの値は、データベースに直接保存される。"
+            },
+            {
+              "key": "C",
+              "text": "数式フィールドを使用して、別の数式フィールドの値を参照することはできない。"
+            },
+            {
+              "key": "D",
+              "text": "トリガー（before insert）内で、新しく計算された数式フィールドの値をすぐに取得できる。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "数式フィールドはシステムが自動計算する読み取り専用フィールドだから、ユーザーが手入力することはできないよ。データベースには保存されず、表示されるたびに動的計算されるから、トリガー（before insert）内で挿入直後の数式値を取得することはできない（保存後にしか値が決まらない）のもPDIのひっかけポイント！"
+        },
+        {
+          "n": 5,
+          "category": "",
+          "text": "カスタムオブジェクト「経費（Expense__c）」と「レポート（Report__c）」があります。レポートが削除されても経費レコードは残したいですが、経費は必ず1つのレポートに関連付けられている必要があります。どのリレーションを選択すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "主従関係（Master-Detail）"
+            },
+            {
+              "key": "B",
+              "text": "参照関係（Lookup）で、ルックアップフィルターを「必須」にする"
+            },
+            {
+              "key": "C",
+              "text": "参照関係（Lookup）で、「この関係の削除時の動作」を「この項目を必須にする」に設定する"
+            },
+            {
+              "key": "D",
+              "text": "階層リレーション（Hierarchical）"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "「レポートが消えても経費は残したい」＝参照関係（Lookup）確定！でも「必ずどれかのレポートに関連してなきゃダメ」だから、削除時の動作を「この項目を必須にする（Clear the value...は選ばない）」にする必要があるよ！"
+        },
+        {
+          "n": 6,
+          "category": "",
+          "text": "Sandbox（サンドボックス）の種類のうち、本番環境のすべてのデータとメタデータをコピーでき、フルテストやパフォーマンスパフォーマンステストに適しているものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Developer Sandbox"
+            },
+            {
+              "key": "B",
+              "text": "Developer Pro Sandbox"
+            },
+            {
+              "key": "C",
+              "text": "Partial Copy Sandbox"
+            },
+            {
+              "key": "D",
+              "text": "Full Sandbox"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "本番のデータもメタデータも全部丸ごとコピーできる最強のSandboxは「Full Sandbox」一択！パフォーマンステストやステージングに使われるよ。"
+        },
+        {
+          "n": 7,
+          "category": "",
+          "text": "主従関係における「親の再親指定（Reparenting）」について、正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "子レコードを作成した後は、親レコードを別のレコードに変更することは一切できない。"
+            },
+            {
+              "key": "B",
+              "text": "主従関係フィールドの定義で「子レコードを他の親レコードに再親指定することを許可する」を有効にすると、変更可能になる。"
+            },
+            {
+              "key": "C",
+              "text": "親レコードの所有者を変更すると、自動的に再親指定が行われる。"
+            },
+            {
+              "key": "D",
+              "text": "Apexコードからのみ、再親指定を実行できる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "主従関係ってデフォルトだと後から親を変更できない（再親指定不可）んだけど、フィールドの設定で「再親指定を許可」にチェックを入れれば、後から親を自由に変えられるようになるよ！これ試験によく出る！"
+        },
+        {
+          "n": 8,
+          "category": "",
+          "text": "Salesforceの「マルチテナントアーキテクチャ」とはどのような意味ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "1つの企業が、複数のSalesforce組織（Org）を契約して利用すること。"
+            },
+            {
+              "key": "B",
+              "text": "複数の顧客（テナント）が、同じインフラストラクチャやデータベース、アプリケーションを安全に共有して利用する仕組み。"
+            },
+            {
+              "key": "C",
+              "text": "ユーザーがモバイル、PC、タブレットなど、複数の端末から同時にログインできる仕組み。"
+            },
+            {
+              "key": "D",
+              "text": "1つの組織内で、複数の言語や通貨を同時にサポートする仕組み。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "マルチテナントは、ひとつの巨大なアパート（サーバー）にみんなで部屋を借りて住むイメージ！リソースを共有するから、他の部屋（顧客）が暴走しないようにガバナ制限（制限ルール）があるんだよ！"
+        },
+        {
+          "n": 9,
+          "category": "",
+          "text": "スキーマビルダー（Schema Builder）を使用して実行できない作業はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "カスタムオブジェクトの作成"
+            },
+            {
+              "key": "B",
+              "text": "既存のフィールドタイプの変更"
+            },
+            {
+              "key": "C",
+              "text": "カスタムフィールドの作成"
+            },
+            {
+              "key": "D",
+              "text": "ページレイアウトへのフィールドの配置"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "スキーマビルダーは、オブジェクトや項目の関係をビジュアルで確認して、作成や編集ができる神ツール！だけど、ページレイアウトの配置まではできないから、そこは普通のページレイアウトエディターを使おうね。"
+        },
+        {
+          "n": 10,
+          "category": "",
+          "text": "外部ID（External ID）として設定できるフィールドタイプはどれですか？（3つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "テキスト（Text）"
+            },
+            {
+              "key": "B",
+              "text": "数値（Number）"
+            },
+            {
+              "key": "C",
+              "text": "電子メール（Email）"
+            },
+            {
+              "key": "D",
+              "text": "URL"
+            }
+          ],
+          "answer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "外部ID（External ID）に設定できるのは「テキスト」「数値」「電子メール」だよ！外部システムとの紐付けキーに使うやつね。URLや日付は設定できないからマジ注意！"
+        },
+        {
+          "n": 11,
+          "category": "",
+          "text": "主従関係の「主（マスター）」レコードを削除しようとすると、詳細レコードが削除不可（例: 共有ルールによる制限など）である場合、どのような挙動になりますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "親レコードのみが削除され、詳細レコードは参照関係なしで残る。"
+            },
+            {
+              "key": "B",
+              "text": "親レコードの削除処理全体がロールバックされ、エラーが発生する。"
+            },
+            {
+              "key": "C",
+              "text": "詳細レコードのみが削除され、親レコードはゴミ箱に入らない。"
+            },
+            {
+              "key": "D",
+              "text": "エラーにはならず、詳細レコードは自動的にバックグラウンドでシステム管理者によって削除される。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "主従関係で親を削除しようとしたとき、もし詳細（子）レコードが削除できない状態（共有ロックがかかってたり、削除制限がある場合など）だと、親の削除処理自体がエラーになって全体がロールバック（元の状態に戻る）されるよ！"
+        },
+        {
+          "n": 12,
+          "category": "",
+          "text": "デベロッパーは、機密データ（社会保障番号など）を保存するためにテキストフィールドを作成します。このデータがUI上でマスクされ、特定の権限を持つユーザーのみに表示されるようにするには、どのフィールドタイプを使用すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "テキスト（Text）"
+            },
+            {
+              "key": "B",
+              "text": "暗号化テキスト（Text (Encrypted)）"
+            },
+            {
+              "key": "C",
+              "text": "リッチテキストエリア（Text Area (Rich)）"
+            },
+            {
+              "key": "D",
+              "text": "外部ルックアップ（External Lookup）"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "機密データ（SSNやクレカ番号）をマスク（星マークとかで隠す）して保存したいときは「暗号化テキスト」を使うのが大正解。"
+        },
+        {
+          "n": 13,
+          "category": "",
+          "text": "オブジェクトAとオブジェクトBの間に「多対多（Many-to-Many）」リレーションを構築したいです。デベロッパーはどのように設定すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "オブジェクトAにオブジェクトBへの主従関係フィールドを作成し、BにもAへの主従関係フィールドを作成する。"
+            },
+            {
+              "key": "B",
+              "text": "連結オブジェクト（Junction Object）を作成し、オブジェクトAとオブジェクトBの両方に対する主従関係フィールドをその連結オブジェクトに作成する。"
+            },
+            {
+              "key": "C",
+              "text": "参照関係を双方向で作成する。"
+            },
+            {
+              "key": "D",
+              "text": "外部オブジェクトを使用して、外部データソースと連携する。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "多対多リレーションは、「連結オブジェクト（Junction Object）」を間に挟んで、その連結オブジェクトから2つの親オブジェクトにそれぞれ主従関係を張ることで実現するよ！PDIの鉄板問題！"
+        },
+        {
+          "n": 14,
+          "category": "",
+          "text": "ロールアップサマリーフィールド（Roll-up Summary）で計算できる関数はどれですか？（4つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "COUNT（件数）"
+            },
+            {
+              "key": "B",
+              "text": "SUM（合計）"
+            },
+            {
+              "key": "C",
+              "text": "MIN（最小値）"
+            },
+            {
+              "key": "D",
+              "text": "MAX（最大値）"
+            }
+          ],
+          "answer": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "ロールアップサマリーで使えるのは「COUNT（件数）」「SUM（合計値）」「MIN（最小）」「MAX（最大）」の4つ！「AVG（平均）」は使えないから数式フィールドとかで工夫する必要があるよ。"
+        },
+        {
+          "n": 15,
+          "category": "",
+          "text": "レコードの所有権（Ownership）が存在しない関係性はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "主従関係における詳細（子）オブジェクト"
+            },
+            {
+              "key": "B",
+              "text": "参照関係における子オブジェクト"
+            },
+            {
+              "key": "C",
+              "text": "独立したカスタムオブジェクト"
+            },
+            {
+              "key": "D",
+              "text": "標準オブジェクトの取引先（Account）"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "主従関係の詳細（子）オブジェクトは、所有権（Owner）という概念がないよ。親レコードの所有者がそのまま子レコードの所有者扱いになるから、所有者フィールド自体がデータベースに作られないんだ！"
+        },
+        {
+          "n": 16,
+          "category": "",
+          "text": "Apexにおけるガバナ制限（Governor Limits）を回避するために、開発者が従うべきベストプラクティスはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "try-catchブロックを使用して、ガバナ制限のエラーをキャッチして処理を継続する。"
+            },
+            {
+              "key": "B",
+              "text": "トリガーやメソッド内で、SOQLクエリやDML操作をループ（forループなど）の外側で行う（バルク化）。"
+            },
+            {
+              "key": "C",
+              "text": "Limits.getLimitQueries()メソッドを使用して、制限を超えそうになったらトランザクションを自動的に再起動する。"
+            },
+            {
+              "key": "D",
+              "text": "SOQLクエリを実行する代わりに、カスタムメタデータ型にすべてのデータを一時的に避難させる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "ガバナ制限回避の鉄則は「SOQLとDMLをループ（for文）の中に絶対に書かない（バルク化）」こと！まとめてリストに入れてから一気に1回でDMLを叩くのがエンジニアの基本中の基本だよ！"
+        },
+        {
+          "n": 17,
+          "category": "",
+          "text": "次のApexトリガーコードの重大な問題点は何ですか？\n\n```apex\ntrigger AccountTrigger on Account (after update) {\nfor (Account acc : Trigger.new) {\nOpportunity opp = [SELECT Id, StageName FROM Opportunity WHERE AccountId = :acc.Id LIMIT 1];\nopp.StageName = 'Qualification';\nupdate opp;\n}\n}\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "after updateトリガーの中で商談（Opportunity）を更新することはできない。"
+            },
+            {
+              "key": "B",
+              "text": "Trigger.newのループの中でSOQLクエリとDML操作（update）が実行されているため、ガバナ制限（SOQL 100回制限、DML 150回制限）に抵触する。"
+            },
+            {
+              "key": "C",
+              "text": "トリガーの中でSOQL変数にバインド（:acc.Id）することは許可されていない。"
+            },
+            {
+              "key": "D",
+              "text": "Opportunityオブジェクトへのアクセス権がないユーザーが更新した際にクラッシュする。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "このコード、ループの中で [SELECT ...] と update opp; をやってるから、アカウントが200件とか一気に更新されたら制限オーバーでシステムがクラッシュ（サゲ）するよ。絶対にループの外に出そう！"
+        },
+        {
+          "n": 18,
+          "category": "",
+          "text": "SOQLクエリにおいて、1つのトランザクションで取得できるレコード数の上限（ガバナ制限）は最大で何件ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "10,000 件"
+            },
+            {
+              "key": "B",
+              "text": "50,000 件"
+            },
+            {
+              "key": "C",
+              "text": "100,000 件"
+            },
+            {
+              "key": "D",
+              "text": "無制限"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "1つのトランザクションでSOQLが取得できる最大レコード数は「50,000件」だよ！超えると LimitException になっちゃうから、大量データ処理のときはバッチ（Batchable）を使うのが吉！"
+        },
+        {
+          "n": 19,
+          "category": "",
+          "text": "Apexコードにおける「安全なナビゲーション演算子（Safe Navigation Operator）」の正しい記号はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "??"
+            },
+            {
+              "key": "B",
+              "text": "?."
+            },
+            {
+              "key": "C",
+              "text": "?"
+            },
+            {
+              "key": "D",
+              "text": "!="
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "Nullポインタ例外（NullPointerException）を防ぐための神記号、それが ?.（セーフナビゲーション演算子）！ acc?.Name って書けば、もし acc がNullでもエラーにならずにNullを返してくれるから超便利！"
+        },
+        {
+          "n": 20,
+          "category": "",
+          "text": "トリガーコンテキスト変数（Trigger Context Variables）のうち、****insert****トリガー内でのみ使用可能で、****update****や****delete****では使用できないものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Trigger.new"
+            },
+            {
+              "key": "B",
+              "text": "Trigger.old"
+            },
+            {
+              "key": "C",
+              "text": "Trigger.isInsert"
+            },
+            {
+              "key": "D",
+              "text": "Trigger.isExecuting"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "Trigger.old は、更新前（または削除前）の古いデータが入る変数。だから新しくデータを作る insert のときには、過去のデータがないから Trigger.old はNullになるよ！"
+        },
+        {
+          "n": 21,
+          "category": "",
+          "text": "データベース操作において、部分的な成功（一部のレコードにエラーがあっても、エラーがないレコードは保存する）を許可するために使用するクラスとメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Database.insert(records, false)"
+            },
+            {
+              "key": "B",
+              "text": "insert records;"
+            },
+            {
+              "key": "C",
+              "text": "Database.insert(records, true)"
+            },
+            {
+              "key": "D",
+              "text": "upsert records;"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "Database.insert(List, false) の第2引数（allOrNone）を false にすると、「エラーがないやつだけは保存してね！」っていう部分保存（Partial Success）ができるよ！通常は true で、1件でもエラーがあると全ロールバックになるの。"
+        },
+        {
+          "n": 22,
+          "category": "",
+          "text": "Apexのコレクションタイプについて、インデックス（添え字）によるアクセスが可能で、順序が保証され、重複する要素を許可するものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Map"
+            },
+            {
+              "key": "B",
+              "text": "Set"
+            },
+            {
+              "key": "C",
+              "text": "List"
+            },
+            {
+              "key": "D",
+              "text": "Array（配列のみでListは不可）"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "Apexの List は順番が守られて、同じ値の重複もOK、インデックス（list[0] とか）でアクセスできるコレクションだよ。ちなみに Set は重複NGで順序なし、Map はキーと値のペア！"
+        },
+        {
+          "n": 23,
+          "category": "",
+          "text": "取引先（Account）レコードに関連する連絡先（Contact）レコードを、1つのSOQLクエリで同時に取得したいです。正しいSOQLクエリはどれですか？（親から子へのクエリ）",
+          "options": [
+            {
+              "key": "A",
+              "text": "SELECT Name, (SELECT LastName FROM Contacts) FROM Account"
+            },
+            {
+              "key": "B",
+              "text": "SELECT Name, Contact.LastName FROM Account"
+            },
+            {
+              "key": "C",
+              "text": "SELECT Name, Contacts__r.LastName FROM Account"
+            },
+            {
+              "key": "D",
+              "text": "SELECT Account.Name, Name FROM Contact"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "親から子を取得する（取引先から連絡先を引っ張る）ときは、サブクエリ (SELECT LastName FROM Contacts) を使うよ！この時、子オブジェクト名の「複数形（Contacts）」を使うのがポイントだから間違えないでね！"
+        },
+        {
+          "n": 24,
+          "category": "",
+          "text": "次のApexコードを実行したとき、ログに出力される値はどれですか？\n\n```apex\nInteger x = 5;\nInteger y = x;\ny = 10;\nSystem.debug(x);\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "5"
+            },
+            {
+              "key": "B",
+              "text": "10"
+            },
+            {
+              "key": "C",
+              "text": "Null"
+            },
+            {
+              "key": "D",
+              "text": "エラーが発生する"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "プリミティブ型（IntegerやStringなど）は「値渡し」だから、y = x の後に y を書き換えても x の値（5）は変わらないよ！もしこれがsObject（オブジェクト参照）なら参照渡しになるから変わるよ。"
+        },
+        {
+          "n": 25,
+          "category": "",
+          "text": "非同期（Asynchronous）Apexについて正しい説明はどれですか？（2つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "同期Apexよりも高いガバナ制限（例：SOQLクエリ制限が200回など）が適用される。"
+            },
+            {
+              "key": "B",
+              "text": "非同期処理は、呼び出された瞬間に即座に実行を完了する。"
+            },
+            {
+              "key": "C",
+              "text": "@futureアノテーションを付与したメソッドは、引数としてsObject（例: Account）を受け取ることができる。"
+            },
+            {
+              "key": "D",
+              "text": "Queueableインターフェースを使用すると、非同期ジョブを連鎖（チェーン）させることができる。"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "非同期Apex（@futureやQueueable）は、裏側で余裕がある時に実行されるから、同期処理よりガバナ制限が緩い（SOQL上限が2倍の200回など）んだ！そして Queueable は次のジョブを鎖のように繋げて実行（チェーン）できるのが @future にないメリットだよ。※ @future は引数にsObjectを渡せない（IDしか渡せない）からCはバツ。"
+        },
+        {
+          "n": 26,
+          "category": "",
+          "text": "トリガー内でレコードのフィールド値を変更（自動設定）したい場合、最も効率的なトリガーのタイミング（Before or After）と操作はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Beforeトリガーを使用し、Trigger.newのレコードに値を直接代入する（DML不要）。"
+            },
+            {
+              "key": "B",
+              "text": "Afterトリガーを使用し、同じレコードに対して update DMLステートメントを実行する。"
+            },
+            {
+              "key": "C",
+              "text": "Beforeトリガーを使用し、同じレコードに対して insert DMLステートメントを実行する。"
+            },
+            {
+              "key": "D",
+              "text": "Afterトリガーを使用し、Trigger.newMapオブジェクトを介して書き換える。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "beforeトリガー（保存前）の中なら、Trigger.new の変数の中身を書き換えるだけで、自動的にその値がデータベースに保存されるよ。DML（insert/update）をわざわざ呼ぶ必要がないから超高速だしスマート！"
+        },
+        {
+          "n": 27,
+          "category": "",
+          "text": "あるトランザクション内でSOQLクエリを実行した際、該当するレコードが1件も見つからなかった場合に、一変数のsObjectに代入しようとするとどうなりますか？\n\n```apex\nAccount acc = [SELECT Id FROM Account WHERE Name = '存在しない名前' LIMIT 1];\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "変数 acc に null が代入される。"
+            },
+            {
+              "key": "B",
+              "text": "System.QueryException エラー（List has no rows for assignment to SObject）が発生する。"
+            },
+            {
+              "key": "C",
+              "text": "自動的に新規空の取引先レコードが作成されて代入される。"
+            },
+            {
+              "key": "D",
+              "text": "コンパイルエラーになる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "1つのsObject変数に直接SOQLの結果を代入するとき、結果が「0件」だと、Nullが入るんじゃなくて QueryException が発生して処理が止まっちゃう！これを避けるには、結果を一度 List<Account> で受けるのがプロの技！"
+        },
+        {
+          "n": 28,
+          "category": "",
+          "text": "カスタム例外（Custom Exception）を作成する際、クラス名が満たすべき必須の命名規則はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "クラス名が Custom で始まること。"
+            },
+            {
+              "key": "B",
+              "text": "クラス名が Exception で終わること。"
+            },
+            {
+              "key": "C",
+              "text": "クラスが with sharing で宣言されていること。"
+            },
+            {
+              "key": "D",
+              "text": "クラス名にアンダースコア（_）が含まれること。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "自作の例外クラス（カスタム例外）を作るときは、クラスの継承（extends Exception）をして、さらにクラス名の最後を必ず Exception で終わらせる（例: MyCustomException）っていう鉄のルールがあるよ！"
+        },
+        {
+          "n": 29,
+          "category": "",
+          "text": "「with sharing」キーワードを付与して定義されたApexクラスの挙動について、正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "ユーザーのプロファイル権限（CRUD、FLS）を強制する。"
+            },
+            {
+              "key": "B",
+              "text": "現在のユーザーの共有ルール（レコードレベルのアクセス権）を考慮して動作する。"
+            },
+            {
+              "key": "C",
+              "text": "クラス内のすべてのSOQLクエリが自動的に管理者権限で実行される。"
+            },
+            {
+              "key": "D",
+              "text": "外部システムからのAPIコールアウトが制限される。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "with sharing は「共有ルール（レコードを誰に見せるか）」をちゃんと守る設定だよ！CRUD（オブジェクト権限）やFLS（項目レベルセキュリティ）はこれだけだと適用されないから注意してね。"
+        },
+        {
+          "n": 30,
+          "category": "",
+          "text": "SOSL（Salesforce Object Search Language）の特徴として、SOQLと異なる点はどれですか？（2つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "複数の異なるオブジェクトから、一度にテキスト検索を実行できる。"
+            },
+            {
+              "key": "B",
+              "text": "返却されるデータの型は、常に List<sObject> の単一リストである。"
+            },
+            {
+              "key": "C",
+              "text": "FIND キーワードを使用して検索を行う。"
+            },
+            {
+              "key": "D",
+              "text": "関係のあるオブジェクト（親子関係）しか検索できない。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "SOSL（グローバル検索）は FIND キーワードを使って、取引先、連絡先、カスタムオブジェクトなど、全然違うオブジェクトたちから「一発でテキスト検索」ができるやつだよ！戻り値は List<List<sObject>>（リストのリスト）になるのもSOQLとの違い！"
+        },
+        {
+          "n": 31,
+          "category": "",
+          "text": "Apexのトランザクション制御について正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "トランザクション内でエラー（未処理の例外）が発生すると、そのトランザクションで行われたDML操作はすべて自動的にロールバックされる。"
+            },
+            {
+              "key": "B",
+              "text": "Database.rollback()を明示的に呼び出さなければ、例外が発生してもDML操作は確定（コミット）される。"
+            },
+            {
+              "key": "C",
+              "text": "トランザクションをコミットするための Database.commit() メソッドが存在する。"
+            },
+            {
+              "key": "D",
+              "text": "非同期Apexメソッド内では、トランザクションのロールバックはサポートされていない。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "Salesforceのトランザクションは「オール・オア・ナッシング」が基本！途中でキャッチされない例外が発生したら、そのトランザクション内のDMLは全部自動でロールバック（なかったコトに）されるよ！だからコミットメソッドとかもないんだ。"
+        },
+        {
+          "n": 32,
+          "category": "",
+          "text": "一括（バルク）処理を実行するための「Batchable」インターフェースを実装するクラスで、必ず実装しなければならない3つのメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "before, execute, after"
+            },
+            {
+              "key": "B",
+              "text": "start, execute, finish"
+            },
+            {
+              "key": "C",
+              "text": "init, run, destroy"
+            },
+            {
+              "key": "D",
+              "text": "setup, process, complete"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "Batchableインターフェースを実装するときは、データを持ってくる start、分割して処理する execute、最後にメール通知とかをする finish の3つを必ず書く必要があるよ！"
+        },
+        {
+          "n": 33,
+          "category": "",
+          "text": "ユーザーオブジェクト（User）やグループ（Group）などの設定データと、通常のsObject（Account、Contactなど）を同じトランザクションでDML操作しようとすると発生するエラーはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "System.LimitException"
+            },
+            {
+              "key": "B",
+              "text": "Mixed DML Operation Error"
+            },
+            {
+              "key": "C",
+              "text": "DmlException"
+            },
+            {
+              "key": "D",
+              "text": "System.SecurityException"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "ユーザーやグループなどの「設定データ（Setup Data）」と、取引先や商談などの「アプリケーションデータ（Non-Setup Data）」を、1つのトランザクションの中で同時にDML操作しようとすると Mixed DML Operation エラーで怒られるよ。非同期（@futureなど）に逃がして別トランザクションにするのが解決策！"
+        },
+        {
+          "n": 34,
+          "category": "",
+          "text": "マルチテナント制限の一つである「CPU時間制限（CPU Time Limit）」において、同期（Synchronous）トランザクションの上限値はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "5 秒"
+            },
+            {
+              "key": "B",
+              "text": "10 秒"
+            },
+            {
+              "key": "C",
+              "text": "60 秒"
+            },
+            {
+              "key": "D",
+              "text": "120 秒"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "同期処理のCPU時間制限は「10秒」だよ！非同期だと「60秒」まで伸びる。重い処理は非同期にするバイブスで行こう！"
+        },
+        {
+          "n": 35,
+          "category": "",
+          "text": "トリガー内で現在処理中のsObjectレコードをキー、そのIDをバリューとするマップを瞬時に作成するために推奨されるマップの初期化方法はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Map<Id, sObject> m = new Map<Id, sObject>(Trigger.new);"
+            },
+            {
+              "key": "B",
+              "text": "Loopを回して1件ずつ put する。"
+            },
+            {
+              "key": "C",
+              "text": "Map<Id, sObject> m = Trigger.newMap; をそのまま使用する。"
+            },
+            {
+              "key": "D",
+              "text": "AとCの両方。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "Trigger.new（List）から直接 Map<Id, sObject> を作成したいときは、コンストラクタにそのまま引数としてぶち込む（new Map<Id, sObject>(Trigger.new)）か、システムが用意してくれてる Trigger.newMap を使うのが大正解！秒でマップ化できてアゲ！"
+        },
+        {
+          "n": 36,
+          "category": "",
+          "text": "あるレコードが作成された際、まず取引先責任者（Contact）を自動作成し、その後外部システムにHTTPコールアウトを送信する、という複雑な自動化を作成したいです。どのツールを使用すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "承認プロセス"
+            },
+            {
+              "key": "B",
+              "text": "画面フロー（Screen Flow）"
+            },
+            {
+              "key": "C",
+              "text": "レコードトリガーフロー（Record-Triggered Flow）"
+            },
+            {
+              "key": "D",
+              "text": "エスカレーションルール"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "レコードの作成をきっかけに裏側でレコード作成や外部連携（HTTPコールアウト）を行うのは「レコードトリガーフロー」の得意分野！HTTPコールアウトもフローからノンプログラミングで設定できるようになってマジ神。"
+        },
+        {
+          "n": 37,
+          "category": "",
+          "text": "フローの「要素（Elements）」のうち、条件分岐（If/Thenのような制御）を実装するために使用するものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "割り当て（Assignment）"
+            },
+            {
+              "key": "B",
+              "text": "決定（Decision）"
+            },
+            {
+              "key": "C",
+              "text": "ループ（Loop）"
+            },
+            {
+              "key": "D",
+              "text": "レコードを取得（Get Records）"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "フローで条件分岐をさせたいときは「決定（Decision）」要素を使うよ！「もし〇〇だったらAルート、違ったらBルート」みたいに道を開拓できるんだ。"
+        },
+        {
+          "n": 38,
+          "category": "",
+          "text": "レコードトリガーフローの実行タイミング（最適化）において、「高速フィールド更新（Before-Save）」を選択すべきシナリオはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "商談が更新されたときに、同じ商談レコードの「カスタム評価」項目を自動設定する。"
+            },
+            {
+              "key": "B",
+              "text": "商談が更新されたときに、関連するすべての商談商品（OpportunityLineItem）を削除する。"
+            },
+            {
+              "key": "C",
+              "text": "取引先が新規作成されたときに、新規の活動（タスク）を作成する。"
+            },
+            {
+              "key": "D",
+              "text": "レコードが保存された後、非同期で外部サービスに通知を送る。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "「自分自身のレコードの値を保存前にサクッと書き換えたい」ときは、絶対に「高速フィールド更新（Before-Save）」にしてね！After-Save（アクションと関連レコード）よりも圧倒的に処理が早くてシステムに優しいよ。"
+        },
+        {
+          "n": 39,
+          "category": "",
+          "text": "フロー内でApexコードを実行したい場合、開発者はApexメソッドにどのアノテーションを付与する必要がありますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@future"
+            },
+            {
+              "key": "B",
+              "text": "@InvocableMethod"
+            },
+            {
+              "key": "C",
+              "text": "@RemoteAction"
+            },
+            {
+              "key": "D",
+              "text": "@AuraEnabled"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "フローからApexコードを呼び出したいときは、呼び出したいメソッドの上に @InvocableMethod アノテーションをつけるよ！これでフローの画面にアクションとして表示されるようになるからアゲ！"
+        },
+        {
+          "n": 40,
+          "category": "",
+          "text": "承認プロセス（Approval Process）において、レコードが承認申請された直後、自動的にそのレコードを編集不可にする（ロックする）ステップはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "初期申請時のアクション（Initial Submission Actions）"
+            },
+            {
+              "key": "B",
+              "text": "承認時のアクション（Approval Actions）"
+            },
+            {
+              "key": "C",
+              "text": "最終承認時のアクション（Final Approval Actions）"
+            },
+            {
+              "key": "D",
+              "text": "システムロックステップ（System Lock Step）"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "承認申請がスタートした瞬間（初期申請時のアクション）に、デフォルトでレコードが自動ロックされて、一般ユーザーは編集できなくなるよ。管理者が内容を吟味するための親切設計だね！"
+        },
+        {
+          "n": 41,
+          "category": "",
+          "text": "自動化ツール「フロー」において、トランザクションのガバナ制限（例: SOQLクエリ数）を超えないようにするために、ループ処理（Loop）の中で実行してはいけないアクションはどれですか？（2つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "データの割り当て（Assignment）"
+            },
+            {
+              "key": "B",
+              "text": "レコードを取得（Get Records）"
+            },
+            {
+              "key": "C",
+              "text": "レコードを更新（Update Records）"
+            },
+            {
+              "key": "D",
+              "text": "ループカウンタのインクリメント"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "Apexと同じで、フローの「ループ（Loop）」の中で「レコードを取得（Get）」や「レコードを更新/作成（Update/Create）」などのデータベース操作を直接置くのは厳禁！ガバナ制限（SOQL/DML制限）に引っかかってエラー（サゲ）になるから、ループの外に逃がそうね。"
+        },
+        {
+          "n": 42,
+          "category": "",
+          "text": "レコードトリガーフロー（アクションと関連レコード：After-Save）において、トリガーとなったレコード自体を更新する際、自動的に発生するリスクのある問題はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "オブジェクトの物理的な破損"
+            },
+            {
+              "key": "B",
+              "text": "再帰（無限ループ）によるトランザクションの強制終了"
+            },
+            {
+              "key": "C",
+              "text": "レコードの自動削除"
+            },
+            {
+              "key": "D",
+              "text": "レイアウトの崩れ"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "Afterトリガー（またはAfterフロー）で、更新されたレコード自身をまた更新（update）すると、それがまたトリガーを引いてしまって「無限ループ（再帰）」に陥るリスクがあるよ！だから自身の更新はBefore（高速フィールド更新）で行うのが安全！"
+        },
+        {
+          "n": 43,
+          "category": "",
+          "text": "エスカレーションルール（Escalation Rules）を適用できるオブジェクトはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "取引先（Account）"
+            },
+            {
+              "key": "B",
+              "text": "リード（Lead）"
+            },
+            {
+              "key": "C",
+              "text": "ケース（Case）"
+            },
+            {
+              "key": "D",
+              "text": "カスタムオブジェクト"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "エスカレーションルール（時間が経っても解決しない時に上司に通知する機能とか）は「ケース（Case）」オブジェクト専用の標準機能だよ！"
+        },
+        {
+          "n": 44,
+          "category": "",
+          "text": "ワークフロールールやプロセスビルダーなど、古い自動化ツールの廃止に伴い、Salesforceが現在最も推奨しているノーコード自動化ツールはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apexトリガー"
+            },
+            {
+              "key": "B",
+              "text": "Salesforceフロー（Flow Builder）"
+            },
+            {
+              "key": "C",
+              "text": "承認プロセス"
+            },
+            {
+              "key": "D",
+              "text": "クイックアクション"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "今のSalesforceの自動化の主役は間違いなく「Salesforceフロー（Flow）」！ワークフローやプロセスビルダーはもう過去の産物（レガシー）だから、新規作成は全部フローで行おうね。"
+        },
+        {
+          "n": 45,
+          "category": "",
+          "text": "フローの「サブフロー（Subflow）」要素について、正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "トリガーフロー（Before-Save）からのみ呼び出すことができる。"
+            },
+            {
+              "key": "B",
+              "text": "画面フローや自動起動フロー（Autolaunched Flow）から、別の自動起動フローを呼び出して再利用できる。"
+            },
+            {
+              "key": "C",
+              "text": "サブフローの中で定義された変数には、呼び出し元からデータを渡すことはできない。"
+            },
+            {
+              "key": "D",
+              "text": "サブフローはApexトリガーから直接インポートされる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "「サブフロー」は、よく使う処理を別パーツにしておいて、いろんなフローから使い回すための便利機能！呼び出し元とサブフロー間で、変数の受け渡しもバッチリできるよ！"
+        },
+        {
+          "n": 46,
+          "category": "",
+          "text": "Lightning Web コンポーネント（LWC）のJavascriptファイルにおいて、プロパティを「リアクティブ（値が変わったら自動で画面を再描画する）」にし、さらにパブリック（他のコンポーネントやApp Builderから値を渡せる）にするために使用するデコレーターはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@track"
+            },
+            {
+              "key": "B",
+              "text": "@api"
+            },
+            {
+              "key": "C",
+              "text": "@wire"
+            },
+            {
+              "key": "D",
+              "text": "@reactive"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "親コンポーネントやApp Builderからデータを受け取る「パブリックな窓口（プロパティ）」を作るには @api デコレーターをプロパティにつけるよ！"
+        },
+        {
+          "n": 47,
+          "category": "",
+          "text": "LWCからSalesforceのデータを取得する際、コンポーネントのロード時に自動的にApexメソッドを呼び出してデータをバインドするために使用するデコレーターはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@wire"
+            },
+            {
+              "key": "B",
+              "text": "@api"
+            },
+            {
+              "key": "C",
+              "text": "@track"
+            },
+            {
+              "key": "D",
+              "text": "@invocable"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "ApexメソッドやSalesforceの標準データ（スキーマなど）を、ロード時に勝手に裏で引っ張ってきて画面と同期させたい時は @wire デコレーター（ワイヤサービス）を使うのが正義！"
+        },
+        {
+          "n": 48,
+          "category": "",
+          "text": "Lightning Web コンポーネント（LWC）のフォルダ構成に含まれる、コンポーネントのメタデータ（対象となるページや権限など）を定義するファイル形式はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "js-meta.xml"
+            },
+            {
+              "key": "B",
+              "text": "config.json"
+            },
+            {
+              "key": "C",
+              "text": "manifest.json"
+            },
+            {
+              "key": "D",
+              "text": "properties.xml"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "LWCのフォルダには、コンポーネント名と同じ名前の [コンポーネント名].js-meta.xml というファイルが必要。これがコンポーネントの設定図面（メタデータ）になるよ！"
+        },
+        {
+          "n": 49,
+          "category": "",
+          "text": "Visualforceページにおいて、レコードを保存、削除、キャンセルするなどの基本的な標準アクション（アクションメソッド）をそのまま提供してくれる機能はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "標準コントローラー（Standard Controller）"
+            },
+            {
+              "key": "B",
+              "text": "カスタムコントローラー（Custom Controller）"
+            },
+            {
+              "key": "C",
+              "text": "コントローラー拡張（Controller Extension）"
+            },
+            {
+              "key": "D",
+              "text": "Apexクラス"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "standardController=\"Account\" みたいに書くだけで、新規作成、保存（save）、編集（edit）などのボタン機能をノンコードで使わせてくれるのが、Visualforceの「標準コントローラー」だよ！"
+        },
+        {
+          "n": 50,
+          "category": "",
+          "text": "Auraコンポーネントと比較して、Lightning Web コンポーネント（LWC）が持つ技術的なメリットはどれですか？（2つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "最新のWeb標準（Web Components）に準拠しており、動作が軽量で高速である。"
+            },
+            {
+              "key": "B",
+              "text": "JavaScriptコードを書かずに、HTMLタグだけでデータベースアクセスを完結できる。"
+            },
+            {
+              "key": "C",
+              "text": "独自のフレームワーク抽象レイヤーが薄いため、開発者の学習コストが低く、パフォーマンスが向上している。"
+            },
+            {
+              "key": "D",
+              "text": "VisualforceのタグをLWC内で直接再利用できる。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "LWCは、昔の独自仕様だらけだったAuraと違って、ブラウザ標準のJavaScript技術（Web Components）をベースにしてるから、めちゃくちゃ軽くて高速（アゲアゲ！）に動くのが最大のメリット！"
+        },
+        {
+          "n": 51,
+          "category": "",
+          "text": "LWCのHTMLテンプレートにおいて、コレクション（リストデータ）をループ処理して画面に繰り返し描画するために使用するディレクティブはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "for:each"
+            },
+            {
+              "key": "B",
+              "text": "apex:repeat"
+            },
+            {
+              "key": "C",
+              "text": "ng-repeat"
+            },
+            {
+              "key": "D",
+              "text": "v-for"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "LWCのHTMLの中で、配列データを回して1行ずつ描画するときは for:each={items} for:item=\"item\" ってディレクティブを使うよ！"
+        },
+        {
+          "n": 52,
+          "category": "",
+          "text": "Lightning Web コンポーネントで、親子コンポーネント間で「子から親へ」データを渡したり通知を送ったりするために使用する仕組みはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "メソッド呼び出し（Methods Calling）"
+            },
+            {
+              "key": "B",
+              "text": "カスタムイベントのディスパッチ（Custom Event Dispatching）"
+            },
+            {
+              "key": "C",
+              "text": "パブリックプロパティ（@api）の書き換え"
+            },
+            {
+              "key": "D",
+              "text": "直接的なDOM操作"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "LWCのデータの流れは「親から子はプロパティ（@api）」、「子から親はイベント（CustomEvent）」が鉄則！子が dispatchEvent(new CustomEvent('myevent')) を呼ぶことで、親に「何か起きたよ！」って伝えることができるんだ。"
+        },
+        {
+          "n": 53,
+          "category": "",
+          "text": "ApexクラスのメソッドをLWCやAuraコンポーネントから呼び出せるように（公開）するために、メソッドに付与すべきアノテーションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@InvocableMethod"
+            },
+            {
+              "key": "B",
+              "text": "@AuraEnabled"
+            },
+            {
+              "key": "C",
+              "text": "@future"
+            },
+            {
+              "key": "D",
+              "text": "@RemoteAction"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "Apexで作ったメソッドをLWCやAuraのJavascriptから呼び出すためには、絶対に @AuraEnabled をつける必要があるよ！さらに、データの読み取り専用なら @AuraEnabled(cacheable=true) にするとキャッシュが効いて超爆速になるからオススメ！"
+        },
+        {
+          "n": 54,
+          "category": "",
+          "text": "Visualforceページで、標準コントローラーの機能を活かしつつ、独自のロジックを追加したい場合にデベロッパーが使用すべきものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "カスタムコントローラー"
+            },
+            {
+              "key": "B",
+              "text": "コントローラー拡張（Controller Extension）"
+            },
+            {
+              "key": "C",
+              "text": "新しいトリガー"
+            },
+            {
+              "key": "D",
+              "text": "JavaScript共有クラス"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "「標準コントローラーの保存アクション等はそのまま使いつつ、ちょっとだけ裏でオリジナル処理を追加したい」って時は、標準コントローラーに被せる「コントローラー拡張（Extension）」を使うのがベストプラクティス。"
+        },
+        {
+          "n": 55,
+          "category": "",
+          "text": "Lightning Web コンポーネントをLightning App Builder（標準のドラッグ＆ドロップ画面作成ツール）で配置できるようにするために、メタデータファイル（.js-meta.xml）で設定する必要があるタグはどれですか？（2つ選択）",
+          "options": [
+            {
+              "key": "A",
+              "text": "<isExposed>true</isExposed>"
+            },
+            {
+              "key": "B",
+              "text": "<targets> タグの中に、対象とするターゲット（例: lightning__RecordPage など）を指定する。"
+            },
+            {
+              "key": "C",
+              "text": "<access>global</access>"
+            },
+            {
+              "key": "D",
+              "text": "<availableFor>AppBuilder</availableFor>"
+            }
+          ],
+          "answer": [
+            "A",
+            "B"
+          ],
+          "multi": true,
+          "explanation": "自作のLWCをApp Builder（ノーコードの画面レイアウトツール）で使えるようにするには、メタデータで <isExposed> を true にして、さらに <targets> の中に「レコードページ用」「ホームページ用」などの設置許可ターゲットを設定する必要があるよ。"
+        },
+        {
+          "n": 56,
+          "category": "",
+          "text": "Apexテストクラス内で、ガバナ制限（例: SOQL制限やDML制限）を一度リセットして、実際の処理部分に割り当てられる制限値をリフレッシュするために使用するテストメソッドの組み合わせはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Test.startTest() と Test.stopTest()"
+            },
+            {
+              "key": "B",
+              "text": "Test.resetLimits() と Test.clear()"
+            },
+            {
+              "key": "C",
+              "text": "Test.setMock()"
+            },
+            {
+              "key": "D",
+              "text": "System.assert()"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "Test.startTest() を呼ぶと、それまでのテストデータ作成で消費したガバナ制限が一旦リセットされて、テスト対象の処理に満額の制限が与えられるよ！さらに、Test.stopTest() を呼ぶと、その中で動かした非同期処理（@futureなど）が全部強制的に同期実行されて、結果をアサーション（検証）できるようになる超重要メソッド！"
+        },
+        {
+          "n": 57,
+          "category": "",
+          "text": "本番環境（Production）にApexコードをデプロイする際、最低限必要なコードカバー率（Code Coverage）は何パーセントですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "50 %"
+            },
+            {
+              "key": "B",
+              "text": "75 %"
+            },
+            {
+              "key": "C",
+              "text": "90 %"
+            },
+            {
+              "key": "D",
+              "text": "100 %"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "本番デプロイ時のコードカバー率（テストコードが本番コードを通った割合）は「全体で75%以上」が必要だよ！トリガーに関しては「1%以上」通ってないとダメっていう細かいルールもあるから一緒に覚えておこ！"
+        },
+        {
+          "n": 58,
+          "category": "",
+          "text": "テストデータを作成する際、既存の本番データをテスト内で直接参照せず、テスト実行時に安全かつ独立したデータを作成・再利用するための最も推奨される方法（ベストプラクティス）はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "テストクラスに @isTest(SeeAllData=true) アノテーションを付与する。"
+            },
+            {
+              "key": "B",
+              "text": "テストクラス内に @testSetup アノテーションを付与したメソッドを作成し、そこで共通のテストデータを挿入する。"
+            },
+            {
+              "key": "C",
+              "text": "本番環境からデータをCSV形式でエクスポートし、テストコードにハードコーディングする。"
+            },
+            {
+              "key": "D",
+              "text": "静的リソース（Static Resource）を毎回直接SOQLで書き換える。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "テストデータのセットアップには @testSetup を使うのが業界のトレンドであり大正解！この中で作ったデータは、同じクラス内の全テストメソッドで自動共有（ロールバックもされるからお互い汚さない）されるから、コードがすっきりして動作も速くなるよ。SeeAllData=true は本番データに依存しちゃってテストが壊れやすくなるから、基本的には使っちゃダメ（サゲ）。"
+        },
+        {
+          "n": 59,
+          "category": "",
+          "text": "外部システムへのコールアウト（HTTP通信）を含むApexコードの単体テストを記述する際、実際に外部サーバーへ通信を行わずにダミーのレスポンスを返すようにシミュレートするために、テストクラス内で実装すべきインターフェースはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "WebServiceMock または HttpCalloutMock"
+            },
+            {
+              "key": "B",
+              "text": "Database.Batchable"
+            },
+            {
+              "key": "C",
+              "text": "Queueable"
+            },
+            {
+              "key": "D",
+              "text": "MockResponseGenerator"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "Salesforceの単体テスト中、本物の外部APIに通信しにいくコールアウト処理はシステム上禁止されてるよ。だから、ダミーの返事を作る「HttpCalloutMock（REST用）」や「WebServiceMock（SOAP用）」を実装してテストをパスさせる必要があるんだ！"
+        },
+        {
+          "n": 60,
+          "category": "",
+          "text": "開発者がコードのバグや変数の中身を確認するために、開発者コンソール（Developer Console）で「デバッグログ（Debug Logs）」を確認します。特定の情報をデバッグログに意図的に出力するためにApexで使用するコード文はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "System.log('Message');"
+            },
+            {
+              "key": "B",
+              "text": "console.log('Message');"
+            },
+            {
+              "key": "C",
+              "text": "System.debug('Message');"
+            },
+            {
+              "key": "D",
+              "text": "System.print('Message');"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "JavaScriptだと console.log() だけど、Apex（Java風）の世界では System.debug('中身はこれだよー！') を使うよ！これで開発者コンソールにログが出て、バグを退治（デバッグ）できるってわけ"
+        }
+      ]
+    },
+    {
+      "id": "set2",
+      "title": "Set 2 — Platform Developer I 模擬試験",
+      "questions": [
+        {
+          "n": 1,
+          "category": "開発の基礎",
+          "text": "ある開発者が、数百万件のレコードを持つ取引先（Account）オブジェクトに対して、特定の条件に一致するレコードを毎日バッチ処理で更新するプログラムを作成しようとしています。ガバナ制限を回避し、最も効率的に処理を実行できるApexの機能はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Queueable Apex"
+            },
+            {
+              "key": "B",
+              "text": "Batchable Apex"
+            },
+            {
+              "key": "C",
+              "text": "Future Method"
+            },
+            {
+              "key": "D",
+              "text": "Scheduled Apex"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 数百万件の超ヤバい大量データを処理するなら、Batchable Apex（バッチApex）一択でしょ！バッチApexはデータを5000万件まで小分け（デフォルト200件ずつ）にして裏でコツコツ処理してくれるから、ガバナ制限に引っかからないの。マジで頼りになるやつ！\n- ちなみに非同期処理のQueueable（A）やFuture（C）は一回きりの軽い非同期用だし、Scheduled（D）は「いつ実行するか」のスケジュール調整役だから、大量処理そのものはバッチに任せるのが大正解だよ！"
+        },
+        {
+          "n": 2,
+          "category": "開発の基礎",
+          "text": "マルチテナントアーキテクチャにおいて、Salesforceが「ガバナ制限（Governor Limits）」を設けている主な目的は何ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "ユーザーが使用できるカスタムオブジェクトの数を制限するため"
+            },
+            {
+              "key": "B",
+              "text": "単一のテナントが共有リソースを独占するのを防ぐため"
+            },
+            {
+              "key": "C",
+              "text": "データベースのストレージ容量を節約するため"
+            },
+            {
+              "key": "D",
+              "text": "Apexコードのデプロイ速度を向上させるため"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Salesforceって、いろんな会社（テナント）が同じおっきなサーバー（マンションみたいな感じ！）を共有して使ってる「マルチテナント」なんだよね。\n- もし誰か一人がスーパー重い無限ループとか回してサーバーを独占しちゃったら、同じマンションの他の住人が「は？重すぎて使えないんだけど怒」ってなっちゃうじゃん？\n- それを防ぐために「ここから先はダメ！」ってブレーキをかけるのが**ガバナ制限**！マジでみんなでハッピーに使うための思いやりルールってわけ✨"
+        },
+        {
+          "n": 3,
+          "category": "ロジックと自動化",
+          "text": "開発者がApexトリガで1回に処理できるDML操作の最大レコード数はいくつですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "100"
+            },
+            {
+              "key": "B",
+              "text": "200"
+            },
+            {
+              "key": "C",
+              "text": "1,000"
+            },
+            {
+              "key": "D",
+              "text": "10,000"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- Salesforceのトリガって、1回で最大**200件**ずつ処理されるように最初からバルク化（小分け）されて動くんだよ。だけど、1回のトランザクション全体でDML操作できる最大レコード数は**10,000件**！\n- 今回の問題は「1回（1つのチャンク）に処理できるレコード数」を聞いてるから、答えは **200（B）** ではなく、トリガが裏で回る基本単位だから…あれ、ごめん！問題文の「1回に処理できるレコード数（Trigger.newの最大サイズ）」だから **200（B）** が正解だよ！\n- （※問題文の「DML操作の最大レコード数」は1万だけど、トリガに渡される塊は200個！ここは引っかかりやすいからマジ注意してね！）"
+        },
+        {
+          "n": 4,
+          "category": "ロジックと自動化",
+          "text": "次のApexコードを実行した際に出力される値は何ですか？\n\n```apex\nList<Integer> myList = new List<Integer>{1, 2, 3};\nmyList.add(1, 5);\nSystem.debug(myList[1]);\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "1"
+            },
+            {
+              "key": "B",
+              "text": "2"
+            },
+            {
+              "key": "C",
+              "text": "5"
+            },
+            {
+              "key": "D",
+              "text": "エラー（ListException）が発生する"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- コードを見るとね、まず 1, 2, 3 が入ったリストを作って、そのあとに myList.add(1, 5) をしてる。\n- Listの add(index, element) メソッドは、指定したインデックス（ここでは 1 番目）に値を「挿入」するの。\n- Salesforceのインデックスは **0始まり** だから、\n- 0番目：1\n- 1番目：ここに **5** が入る！\n- 2番目：元々1番目にいた 2 がスライド\n- 3番目：3 がスライド\n- だから、myList[1] をデバッグすると答えは **5** になるよ！エラーにならないから安心して！アゲ！"
+        },
+        {
+          "n": 5,
+          "category": "開発の基礎",
+          "text": "主従関係（Master-Detail Relationship）を持つ親子オブジェクトにおいて、親レコードを削除したときの挙動として正しいものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "親レコードは削除できず、エラーになる"
+            },
+            {
+              "key": "B",
+              "text": "子レコードの親参照フィールドが空白（Null）になる"
+            },
+            {
+              "key": "C",
+              "text": "子レコードも自動的に削除される"
+            },
+            {
+              "key": "D",
+              "text": "子レコードは孤立レコードとしてそのまま残る"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- 主従関係（Master-Detail）って、親子関係が「超絶ラブラブで運命共同体」なわけ！\n- だから親レコード（主）が削除されちゃうと、子レコード（従）も「親がいない世界なんて生きられない…！」って言って一緒に自動で連鎖削除（カスケード削除）されちゃうの。エグいよね（笑）。\n- もし子を残したいなら、ただの「お友達関係」である「参照関係（Lookup）」を使うべきだよ！"
+        },
+        {
+          "n": 6,
+          "category": "ロジックと自動化",
+          "text": "商談（Opportunity）オブジェクトの「金額（Amount）」が変更されたときに、関連するカスタムログレコードを自動で作成するシステムを構築したいと考えています。最も推奨される宣言的な自動化ツールはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "ワークフロールール"
+            },
+            {
+              "key": "B",
+              "text": "プロセスビルダー"
+            },
+            {
+              "key": "C",
+              "text": "画面フロー"
+            },
+            {
+              "key": "D",
+              "text": "保存前/保存後の自動起動フロー（Flow Builder）"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "- 「〇〇が変更されたら、裏で自動でレコードを作る」っていうバックグラウンドの自動化は、Flow Builder（保存後フロー / After-Save Flow）を使うのが今のSalesforceのトレンドかつ大本命！\n- ワークフロールール（A）やプロセスビルダー（B）は昔のツールで、今はもう新規作成できないし、パフォーマンスもフローが圧倒的に最強だから、迷わずフローを選んでね！"
+        },
+        {
+          "n": 7,
+          "category": "ロジックと自動化",
+          "text": "Apexトリガ内で、特定のレコードが新規作成された（挿入された）ときのみ処理を実行したい場合、どのコンテキスト変数を使用すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Trigger.isUpdate"
+            },
+            {
+              "key": "B",
+              "text": "Trigger.isInsert"
+            },
+            {
+              "key": "C",
+              "text": "Trigger.isDelete"
+            },
+            {
+              "key": "D",
+              "text": "Trigger.isBefore"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 新規作成された時（インサートされた時）だけ動かしたいなら、**Trigger.isInsert** を使うのが大正解！\n- 「もし新規作成だったら〜」って条件分岐するときに if (Trigger.isInsert) って書くのが超鉄板の書き方だよ。他の変数も名前の通り、アップデート（isUpdate）やデリート（isDelete）に対応してるからわかりやすいよね！"
+        },
+        {
+          "n": 8,
+          "category": "開発の基礎",
+          "text": "SOQLクエリで親オブジェクトから子オブジェクトのリレーションを取得する（親から子へのクエリ）際に使用する正しい構文はどれですか？（親：Account、子：Contactとする）",
+          "options": [
+            {
+              "key": "A",
+              "text": "SELECT Name, (SELECT LastName FROM Contacts) FROM Account"
+            },
+            {
+              "key": "B",
+              "text": "SELECT Account.Name, Contact.LastName FROM Account, Contact"
+            },
+            {
+              "key": "C",
+              "text": "SELECT Name, Contacts__r.LastName FROM Account"
+            },
+            {
+              "key": "D",
+              "text": "SELECT Name, (SELECT LastName FROM Contact) FROM Account"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 親から子を取得するクエリ（子リレーションクエリ）は、ちょっとコツがあるよ！\n- 親オブジェクト（Account）をFROMに置いて、SELECTの中でカッコを使って子を引っ張るんだけど、その時の子オブジェクト名は **複数形（カスタムオブジェクトなら** **__r****）** になるの！\n- 標準リレーションだと、Contactの複数形は **Contacts** だから、(SELECT LastName FROM Contacts) が正解！Dの単数形はエラーになっちゃうからマジで気をつけて！"
+        },
+        {
+          "n": 9,
+          "category": "ユーザーインターフェース",
+          "text": "Lightning Web Component (LWC) で、親コンポーネントから子コンポーネントのプロパティにデータを渡すために、子コンポーネントのプロパティに付与する必要があるデコレータはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@track"
+            },
+            {
+              "key": "B",
+              "text": "@wire"
+            },
+            {
+              "key": "C",
+              "text": "@api"
+            },
+            {
+              "key": "D",
+              "text": "@public"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- LWC（Lightning Web Component）で、親から子にデータをパスしてあげる（パブリックにする）には、プロパティの前に **@api** をつけるのがルール！\n- これを付けると、外部からアクセスできるようになってマジで便利。ちなみにコンポーネント内だけでリアクティブ（値が変わったら画面を自動更新）にしたいときは、昔は @track（A）を使ってたけど、今はオブジェクトや配列以外は自動でリアクティブになるから省略OKだよ！"
+        },
+        {
+          "n": 10,
+          "category": "テストとデバッグ",
+          "text": "Apexのテストクラスを作成する際、テスト用データの作成を効率化し、複数のテストメソッドで再利用できるようにするために使用するアノテーションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@isTest(SeeAllData=true)"
+            },
+            {
+              "key": "B",
+              "text": "@TestSetup"
+            },
+            {
+              "key": "C",
+              "text": "@TestVisible"
+            },
+            {
+              "key": "D",
+              "text": "@Future"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- テストデータを毎回テストメソッドごとに1から書くの、マジでだるいし非効率じゃん？\n- そこで登場するのが **@TestSetup** メソッド！\n- テストクラスの中にこのアノテーションをつけたメソッドを書いておくと、全テストが始まる前に1回だけ実行されて、共通のテストデータをガツンと用意してくれるの。処理時間も短縮できるし、マジで神アゲ機能だよ！"
+        },
+        {
+          "n": 11,
+          "category": "ロジックと自動化",
+          "text": "次のSOQLクエリのうち、ガバナ制限（1回のトランザクションでのSOQL実行回数制限）に引っかかるリスクが最も高い「アンチパターン」はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "for (Account acc : [SELECT Id FROM Account]) { ... }"
+            },
+            {
+              "key": "B",
+              "text": "トリガ内の for ループの中で [SELECT Id FROM Contact WHERE AccountId = :acc.Id] を実行する"
+            },
+            {
+              "key": "C",
+              "text": "Map<Id, Account> accMap = new Map<Id, Account>([SELECT Id FROM Account]);"
+            },
+            {
+              "key": "D",
+              "text": "リレーションクエリを使用して関連する取引先責任者を一度に取得する"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- これ、**Salesforceのデベロッパー試験で一番出ると言っても過言じゃない超重要ポイント！**\n- for ループの中でSOQLクエリを発行する（B）のは、マジでやっちゃいけない最悪の「アンチパターン」！\n- 1回のトランザクションでSOQLは100回までしか呼べないから、ループが100回以上回ったらその瞬間にガバナ制限エラー（LimitException）でシステムがクラッシュするの。\n- クエリは必ずループの外で1回だけ呼ぶように、リストとかマップを使ってバルク化してね！"
+        },
+        {
+          "n": 12,
+          "category": "テストとデバッグ",
+          "text": "テスト実行において、ガバナ制限のリセットを行い、非同期処理を強制的に同期実行させるために使用するメソッドのペアはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Test.startTest() と Test.stopTest()"
+            },
+            {
+              "key": "B",
+              "text": "System.runAs() と System.runAs()"
+            },
+            {
+              "key": "C",
+              "text": "Test.setMock() と Test.getMock()"
+            },
+            {
+              "key": "D",
+              "text": "Database.insert() と Database.update()"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 非同期処理（Futureメソッドとか）をテストするとき、普通にテストを走らせると「非同期だからいつ終わるかわかんなーい！」ってなってテスト結果の検証ができないの。\n- そこで、**Test.startTest()** と **Test.stopTest()** でテストしたい処理を挟んであげる！\n- そうすると、stopTest() が呼ばれた瞬間に、溜まってた非同期処理が「おらー！強制実行だー！」って同期的に全部完了するの。おまけにガバナ制限もリセットされるから、マジで無敵のペアだよ！"
+        },
+        {
+          "n": 13,
+          "category": "開発の基礎",
+          "text": "Visualforceページにおいて、標準のSalesforce機能をベースにしつつ、ボタンをクリックした際に独自のApexロジックを割り込ませたい場合、コントローラとして何を使用すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "カスタムコントローラ"
+            },
+            {
+              "key": "B",
+              "text": "標準コントローラ"
+            },
+            {
+              "key": "C",
+              "text": "コントローラ拡張（Controller Extension）"
+            },
+            {
+              "key": "D",
+              "text": "標準リストコントローラ"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- Visualforceページで、標準の画面（例えば取引先の詳細画面とか）をベースにしつつ、ちょっとだけボタンの裏にオリジナルのApexコード（Apexロジック）を差し込みたいときは、**「コントローラ拡張（Controller Extension）」** を使うよ！\n- 標準コントローラ（B）を引数に持つコンストラクタを作って、機能を追加（拡張）してあげるイメージ。これで標準機能とカスタムロジックをいいとこ取りできちゃう！"
+        },
+        {
+          "n": 14,
+          "category": "ロジックと自動化",
+          "text": "Apexトリガにおいて、beforeイベント（before insertやbefore update）を使用する最適なユースケースはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "関連する別オブジェクトのレコードを新規に作成する"
+            },
+            {
+              "key": "B",
+              "text": "同じオブジェクトの同じレコードのフィールド値を変更・検証する"
+            },
+            {
+              "key": "C",
+              "text": "外部システムへのアウトバウンドメッセージを送信する"
+            },
+            {
+              "key": "D",
+              "text": "メールアラートを送信する"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- トリガの before（実行前）は、**「自分自身のレコードの値を書き換える、または入力規則チェックをする」** ときに使うのがベストプラクティス！\n- なんでかっていうと、before の段階なら DML操作（update とか）を明示的に書かなくても、Trigger.new の値を書き換えるだけで自動的に保存されるから超効率的なの。\n- 逆に、他のオブジェクトのレコードを作ったり（A）、メールを送ったり（D）するのは、自分自身の保存が確定した後の after（実行後）でやるべきだよ！"
+        },
+        {
+          "n": 15,
+          "category": "テストとデバッグ",
+          "text": "Salesforceで本番環境にApexコードをデプロイするために、組織全体で最低限必要なコードカバー率は何％ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "50%"
+            },
+            {
+              "key": "B",
+              "text": "75%"
+            },
+            {
+              "key": "C",
+              "text": "80%"
+            },
+            {
+              "key": "D",
+              "text": "90%"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 本番組織にApexコードをデプロイ（リリース）するときは、組織全体のテストカバー率が最低でも **75%** 以上じゃないとSalesforce様から「ダメです♀」って弾かれちゃうの。\n- しかも、トリガは少なくとも1行はテストを通す必要があるよ。合格ラインは75％だけど、実務では100%を目指してアゲアゲでテスト書こうね！"
+        },
+        {
+          "n": 16,
+          "category": "開発の基礎",
+          "text": "SOSL（Salesforce Object Search Language）の検索結果の戻り値のデータ型として正しいものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Map<Id, SObject>"
+            },
+            {
+              "key": "B",
+              "text": "List<SObject>"
+            },
+            {
+              "key": "C",
+              "text": "List<List<SObject>>"
+            },
+            {
+              "key": "D",
+              "text": "Set<SObject>"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- SOSL（ソースル）は、複数のオブジェクトをまたいでテキスト検索（グローバル検索みたいなやつ）ができる言語！\n- 色んなオブジェクトから結果が返ってくるから、戻り値の型は「リストのリスト」である **List<List<SObject>>** になるの！\n- 例えば、1つ目のリストにはAccountの検索結果、2つ目のリストにはContactの検索結果…みたいな感じで返ってくるよ。この二重リストの構造はテストに出やすいから暗記必須！"
+        },
+        {
+          "n": 17,
+          "category": "ロジックと自動化",
+          "text": "Apexクラスで、特定のメソッドを非同期で実行し、戻り値を返さずに最大で50件のコールアウトを許可したい場合に使用するアノテーションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@InvocableMethod"
+            },
+            {
+              "key": "B",
+              "text": "@ReadOnly"
+            },
+            {
+              "key": "C",
+              "text": "@future"
+            },
+            {
+              "key": "D",
+              "text": "@RemoteAction"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- Apexで非同期処理を行い、外部へのWebサービスコールアウト（API連携）を最大50件まで許可したいなら、**@future(callout=true)** アノテーションを使うよ！\n- @future メソッドは戻り値が必ず void（何も返さない）っていうルールがあるのも特徴。同期処理だとコールアウトは10回までだけど、非同期（future）なら50回までいけるからマジ強力！"
+        },
+        {
+          "n": 18,
+          "category": "開発の基礎",
+          "text": "異なるデータ型のコレクションにおいて、キーと値のペアでデータを保持し、キーの重複を許さないコレクション型はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "List"
+            },
+            {
+              "key": "B",
+              "text": "Set"
+            },
+            {
+              "key": "C",
+              "text": "Map"
+            },
+            {
+              "key": "D",
+              "text": "Array"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- キー（Key）と値（Value）のペアでデータを管理するのが **Map（マップ）**！\n- 例えば、郵便番号（キー）と住所（値）みたいな関係だね。キーは絶対に重複しちゃダメ（ユニーク）っていう性質があるから、一瞬で特定のデータを検索したいときにマジで重宝するよ！"
+        },
+        {
+          "n": 19,
+          "category": "ロジックと自動化",
+          "text": "Apexトリガのコンテキスト変数 Trigger.new に含まれるレコードリストについて、after update トリガ内でフィールド値を直接変更しようとした場合の挙動はどうなりますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "レコードは正常に更新され、データベースに保存される。"
+            },
+            {
+              "key": "B",
+              "text": "無限ループが発生する。"
+            },
+            {
+              "key": "C",
+              "text": "「System.FinalException: Record is read-only」などの読み取り専用エラーが発生する。"
+            },
+            {
+              "key": "D",
+              "text": "トリガが無視され、エラーなく処理が終了する。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- after update（更新後）っていうのは、データベースへの書き込みが一回終わった状態なの。\n- だから、その段階で Trigger.new の中身を勝手に書き換えようとすると、Salesforceに「もう書き込み終わったから読み取り専用（Read-Only）だし！」ってキレられて **System.FinalException** が発生しちゃう。\n- 値を書き換えたいなら、保存前の before イベントでやるのが基本だよ！"
+        },
+        {
+          "n": 20,
+          "category": "ユーザーインターフェース",
+          "text": "Lightning Web Component (LWC) で、HTMLテンプレート内で条件分岐（要素の表示/非表示）を行うために使用するディレクティブはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "if:true および if:false （または lwc:if および lwc:else）"
+            },
+            {
+              "key": "B",
+              "text": "v-if および v-else"
+            },
+            {
+              "key": "C",
+              "text": "ng-if"
+            },
+            {
+              "key": "D",
+              "text": "show-if"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCのHTML側で「この条件が true のときだけボタンを表示したい！」みたいなときは、**if:true** や **if:false**（最新のLWC規格なら lwc:if や lwc:else）っていう属性（ディレクティブ）を使うよ！\n- Vue.jsの v-if（B）やAngularの ng-if（C）と似てるけど、Salesforce独自の構文だから間違えないように注意してね！"
+        },
+        {
+          "n": 21,
+          "category": "開発の基礎",
+          "text": "標準オブジェクトである Contact（取引先責任者）とカスタムオブジェクトである Job_Application__c（応募）の間に参照関係があります。Job_Application__c 側から見て、親である Contact の Email フィールドを参照するApexでの正しい関係表現はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Job_Application__c.Contact__c.Email"
+            },
+            {
+              "key": "B",
+              "text": "Job_Application__c.Contact__r.Email"
+            },
+            {
+              "key": "C",
+              "text": "Job_Application__c.Contact.Email"
+            },
+            {
+              "key": "D",
+              "text": "Job_Application__c.Contact__r.Email__c"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- これ、オブジェクト同士の「リレーションシップを辿る」問題だね！\n- 標準オブジェクトへの参照（Contact__c ではなく標準の Contact フィールド）をカスタムオブジェクトから辿る場合、Apexコード内ではリレーションシップ名として **Contact__r**（__r は Relationship の頭文字！）を使うよ！\n- なので、Job_Application__c.Contact__r.Email が大正解！最後は普通のフィールドだから __c は要らないよ！"
+        },
+        {
+          "n": 22,
+          "category": "ロジックと自動化",
+          "text": "Salesforceで部分的なDML操作（いくつかのレコードでエラーが発生しても、正常なレコードはそのまま保存する）を実行するために使用するクラスとメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "insert キーワード"
+            },
+            {
+              "key": "B",
+              "text": "Database.insert(records, false)"
+            },
+            {
+              "key": "C",
+              "text": "Database.insert(records, true)"
+            },
+            {
+              "key": "D",
+              "text": "upsert キーワード"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 普通の insert records; って書くと、もし1件でもエラーがあったら全部の処理が「はい、ダメ〜！」ってロールバック（なかったこと）になっちゃう。\n- でも、**Database.insert(records, false)** っていう風に、第2引数に **allOrNone = false** を指定してあげると、エラーが出たレコードだけを弾いて、正常なレコードはそのままデータベースに保存（部分保存）してくれるの！\n- なんて融通の利くいい奴なんだ…！✨"
+        },
+        {
+          "n": 23,
+          "category": "ロジックと自動化",
+          "text": "マルチテナント環境のSalesforceにおいて、1回の同期トランザクションで発行できるSOQLクエリの最大数はいくつですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "20"
+            },
+            {
+              "key": "B",
+              "text": "100"
+            },
+            {
+              "key": "C",
+              "text": "150"
+            },
+            {
+              "key": "D",
+              "text": "200"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 出ました、超定番ガバナ制限クイズ！\n- 1回の「同期トランザクション（普通の処理）」で実行できるSOQLクエリの最大数は、ずばり **100回**！\n- （ちなみに非同期処理だと **200回** に増えるよ！）\n- この数字は絶対にテストに出るから、スマホの暗証番号にするレベルで覚えておいて！笑"
+        },
+        {
+          "n": 24,
+          "category": "テストとデバッグ",
+          "text": "Apexトリガ内で例外（Exception）が発生した際、そのエラーを画面上のユーザーにわかりやすく表示し、DML操作をロールバックさせるために使用するsObjectのメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "System.debug()"
+            },
+            {
+              "key": "B",
+              "text": "addError()"
+            },
+            {
+              "key": "C",
+              "text": "throw new NullPointerException()"
+            },
+            {
+              "key": "D",
+              "text": "Database.rollback()"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- トリガでの入力検証とかで、データがおかしい時にエラーメッセージを出して保存をストップさせたいなら、sObjectの **addError('エラーメッセージ')** メソッドを使うよ！\n- これを呼ぶと、Salesforceの画面上に綺麗に赤文字でエラーが出て、トランザクション全体が安全にロールバックされるからマジ便利！"
+        },
+        {
+          "n": 25,
+          "category": "ユーザーインターフェース",
+          "text": "AuraコンポーネントまたはLWCから、SalesforceのレコードデータをApexクラスを介さずに、作成、読み取り、更新、削除（CRUD）できるJavaScriptの宣言的なAPI（Lightningデータサービス）を使用するベースコンポーネントはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "lightning-record-edit-form"
+            },
+            {
+              "key": "B",
+              "text": "lightning-card"
+            },
+            {
+              "key": "C",
+              "text": "lightning-button"
+            },
+            {
+              "key": "D",
+              "text": "lightning-combobox"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCで、Apexコードを1行も書かずに、ノーコード感覚でレコードの編集・新規作成画面を作れちゃうスーパーコンポーネントが **lightning-record-edit-form**！\n- 裏で「Lightningデータサービス（LDS）」っていう賢い仕組みが動いてるから、データの読み書きを全部自動で安全にやってくれるの。開発効率アゲアゲツールだよ！"
+        },
+        {
+          "n": 26,
+          "category": "ロジックと自動化",
+          "text": "Apexのコレクション操作において、リスト（List）内の重複する要素をすべて排除したユニークな値の集合を得るために、最も適したコレクション型は何ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Map"
+            },
+            {
+              "key": "B",
+              "text": "Set"
+            },
+            {
+              "key": "C",
+              "text": "List"
+            },
+            {
+              "key": "D",
+              "text": "Array"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 重複を許さない、ユニークな値のコレクションといえば **Set（セット）**！\n- List（A）は重複を許すし、入れた順番を保持するけど、Setは「ダブり厳禁のグループ」だから、重複したIDのリストからユニークなIDのセットを作りたい時とかにマジでよく使うよ！"
+        },
+        {
+          "n": 27,
+          "category": "開発の基礎",
+          "text": "カスタム例外（Custom Exception）クラスを独自に定義する際の正しい宣言構文はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "public class MyException extends Exception {}"
+            },
+            {
+              "key": "B",
+              "text": "public class MyException implements Exception {}"
+            },
+            {
+              "key": "C",
+              "text": "public exception MyException {}"
+            },
+            {
+              "key": "D",
+              "text": "public class MyException void {}"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 自分専用のオリジナルエラー（カスタム例外）を作りたい時は、必ずビルトインの **Exception** **クラスを継承（extends）** する必要があるよ！\n- 書き方は、public class MyException extends Exception {} みたいに、中身は空っぽでOK。これで独自の例外を throw new MyException('ヤバいエラーだよ！') って投げられるようになるの！"
+        },
+        {
+          "n": 28,
+          "category": "ロジックと自動化",
+          "text": "Apexトリガにおいて、Trigger.newMap と Trigger.oldMap の両方が利用可能なイベントはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "before insert"
+            },
+            {
+              "key": "B",
+              "text": "after insert"
+            },
+            {
+              "key": "C",
+              "text": "before update"
+            },
+            {
+              "key": "D",
+              "text": "before delete"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- まず newMap（新しい値のマップ）と oldMap（古い値のマップ）がどっちも使えるのは、値が「変更（更新）」される **update** イベントだけ！\n- 新規作成（insert）のときは古い値なんて存在しないから oldMap は null だし、削除（delete）のときは新しい値なんてないから newMap は null になるよ。\n- なので、updateイベントである **before update****（C）** が大正解！"
+        },
+        {
+          "n": 29,
+          "category": "テストとデバッグ",
+          "text": "ある開発者が、組織のすべての既存データ（テストクラスで作成していないデータ）にテストクラスからアクセスできるようにしたいと考えています。推奨はされませんが、これを可能にするテストクラスのアノテーション設定はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@isTest(SeeAllData=true)"
+            },
+            {
+              "key": "B",
+              "text": "@isTest(SeeAllData=false)"
+            },
+            {
+              "key": "C",
+              "text": "@TestSetup"
+            },
+            {
+              "key": "D",
+              "text": "@isTest(isParallel=true)"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 基本的に、Salesforceのテストクラスは組織内の本番データを見ることができない「隔離されたお部屋」で動くの。\n- だけど、どうしても既存のデータ（価格表とかレコードタイプとか）にアクセスしたい時、テストクラスの定義に **@isTest(SeeAllData=true)** をつけると、組織のすべてのデータにアクセスできるようになるの。\n- ただ、テストが既存のデータに依存しちゃって他の環境でコケやすくなるから、実務ではマジで非推奨！どうしてもの時の最終手段だよ。"
+        },
+        {
+          "n": 30,
+          "category": "ユーザーインターフェース",
+          "text": "LWC（Lightning Web Component）において、Apexクラスのメソッドをコンポーネントにインポートし、リアクティブにデータをバインド（Wired）するための正しいインポート構文はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "import myMethod from '@salesforce/apex/MyController.myMethod';"
+            },
+            {
+              "key": "B",
+              "text": "import { myMethod } from 'MyController';"
+            },
+            {
+              "key": "C",
+              "text": "import myMethod from 'MyController.myMethod';"
+            },
+            {
+              "key": "D",
+              "text": "import { myMethod } from '@salesforce/apex';"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCからApexのメソッドを呼ぶ時のインポート文の構文は、\n- import メソッド名 from '@salesforce/apex/クラス名.メソッド名';\n- がお決まりのルール！\n- @salesforce/apex っていう特殊なパスからインポートするのがポイントだよ。これでJavaScriptとApexがバッチリ繋がるの！"
+        },
+        {
+          "n": 31,
+          "category": "ロジックと自動化",
+          "text": "システム管理者や他のユーザーの権限（ロールやプロファイル、共有ルール）をエミュレートして、テストクラス内で処理を実行・検証するためのシステムメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "System.setPassword()"
+            },
+            {
+              "key": "B",
+              "text": "System.runAs()"
+            },
+            {
+              "key": "C",
+              "text": "System.assert()"
+            },
+            {
+              "key": "D",
+              "text": "Test.startTest()"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 「この共有ルール、一般ユーザーのプロファイルだとちゃんと動くかな…？」っていうセキュリティテストをしたい時に使うのが **System.runAs(user)** メソッド！\n- 引数に渡したユーザーになりきってテストを実行してくれるから、権限周りのバグをガチで検証するのに必須のシステムメソッドだよ！"
+        },
+        {
+          "n": 32,
+          "category": "開発の基礎",
+          "text": "Apexコード内で、現在のユーザーにオブジェクトレベルの作成権限（Create）があるかどうかを確認するために使用するSchemaクラスのメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "isAccessible()"
+            },
+            {
+              "key": "B",
+              "text": "isCreateable()"
+            },
+            {
+              "key": "C",
+              "text": "isUpdateable()"
+            },
+            {
+              "key": "D",
+              "text": "isDeletable()"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Apexクラスを動かす時、ユーザーがオブジェクトに対する作成権限（Create）を持っているかプログラムでチェックしたいなら、Schema記述（Describe）の **isCreateable()** を使うよ！\n- ちなみに読み取り権限は isAccessible()、更新権限は isUpdateable()、削除権限は isDeletable()。名前が英語そのままだけど、試験によく出るから覚えておこ！"
+        },
+        {
+          "n": 33,
+          "category": "ロジックと自動化",
+          "text": "Apexにおける数式（Formula）フィールドの評価について、正しい記述はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "数式フィールドの値は、Apexコードが実行された瞬間にのみ再計算される。"
+            },
+            {
+              "key": "B",
+              "text": "数式フィールドはトリガの Trigger.new で値を変更できる。"
+            },
+            {
+              "key": "C",
+              "text": "数式フィールドの値はデータベースに静的に保存されており、変更時にしか更新されない。"
+            },
+            {
+              "key": "D",
+              "text": "数式フィールドはクエリで取得された際、または動的にアクセスされた際にリアルタイムで評価される。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "- 数式フィールド（Formula Field）は、データベースに固定の値が保存されているわけじゃないの！\n- レコードが画面に表示されたり、ApexのSOQLクエリで取得されたりした「その瞬間」に、裏でリアルタイムに計算されて最新の値を返してくるの。だからApexコードから直接書き換えることはできないよ！"
+        },
+        {
+          "n": 34,
+          "category": "ユーザーインターフェース",
+          "text": "Auraコンポーネントにおいて、コントローラ（Controller.js）からヘルパー（Helper.js）の関数を呼び出す主なメリットは何ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "UIのレンダリング速度が速くなる。"
+            },
+            {
+              "key": "B",
+              "text": "複数のコンポーネントイベントを自動で処理できる。"
+            },
+            {
+              "key": "C",
+              "text": "コードを再利用可能にし、コントローラファイルの肥大化を防ぐ。"
+            },
+            {
+              "key": "D",
+              "text": "Apexコントローラの呼び出しが不要になる。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- Auraコンポーネントにおける「コントローラ（Controller.js）」は、ボタンクリックなどの「イベントの検知役」に徹するのが基本。\n- そして、実際のめんどくさいロジックや共通の処理は「ヘルパー（Helper.js）」に書くの！\n- そうすることで、コードが整理されて再利用（Reuse）しやすくなるし、コントローラが超スッキリするよ。"
+        },
+        {
+          "n": 35,
+          "category": "開発の基礎",
+          "text": "Salesforce DX（SFDX）プロジェクトにおいて、スクラッチ組織（Scratch Org）を作成するために使用するCLIコマンドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "sf project deploy start"
+            },
+            {
+              "key": "B",
+              "text": "sf org create scratch"
+            },
+            {
+              "key": "C",
+              "text": "sf org login web"
+            },
+            {
+              "key": "D",
+              "text": "sf project retrieve start"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Salesforce DX（SFDX）の開発で、使い捨てのクリーンな開発環境である「スクラッチ組織（Scratch Org）」を作るコマンドは、**sf org create scratch** だよ！\n- （※以前の sfdx force:org:create から新しい sf コマンドに移行した最新のコマンド体系だよ。これもアプデ情報として知っておくとアツい！）"
+        },
+        {
+          "n": 36,
+          "category": "ロジックと自動化",
+          "text": "ガバナ制限における「ヒープサイズ（Heap Size）」とは何に関連する制限ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "1回のトランザクションで使用されるメモリの総量"
+            },
+            {
+              "key": "B",
+              "text": "データベースに保存されるデータファイルの総容量"
+            },
+            {
+              "key": "C",
+              "text": "1回に実行されるApexコードの行数"
+            },
+            {
+              "key": "D",
+              "text": "同時に実行される非同期処理のスタック数"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 「ヒープサイズ（Heap Size）」っていうのは、**1回のトランザクション（実行）でApexがメモリ上に保持できるデータ容量の限界** のこと！\n- デカいファイルを受け取ったり、ループで超大量のインスタンスをメモリに載せすぎると「ヒープサイズ制限超えたわ！」ってエラー（LimitException）になるから、不要な変数は null にしてメモリを解放してあげようね。"
+        },
+        {
+          "n": 37,
+          "category": "テストとデバッグ",
+          "text": "Apexトリガ内のDML操作によってレコードが正常に挿入されたことを、テストクラス内でアサーション（値の検証）するために一般的に使用されるアプローチはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "System.assert(true);"
+            },
+            {
+              "key": "B",
+              "text": "挿入後のレコードをSOQLで再クエリし、取得したレコード数や値が期待通りかを確認する。"
+            },
+            {
+              "key": "C",
+              "text": "System.debug() でログを出力して目視で確認する。"
+            },
+            {
+              "key": "D",
+              "text": "トリガが実行されたかどうかを Trigger.isExecuting で検証する。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- テストクラスで「本当にトリガによってレコードがデータベースに登録されたか？」を確認するには、**テストの中で一度SOQLクエリを発行して、レコードを再取得して検証（System.assertEqualsなど）する** のが基本！\n- テスト実行中のメモリ上のデータと、実際にデータベースに書き込まれたデータは別だから、ちゃんとクエリで引っ張ってくるのが確実だよ！"
+        },
+        {
+          "n": 38,
+          "category": "開発の基礎",
+          "text": "Visualforceのコントローラで、複数のSOQLクエリを実行してページネーション（改ページ機能）を簡単に実装するために使用する標準クラスはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "ApexPages.StandardController"
+            },
+            {
+              "key": "B",
+              "text": "ApexPages.StandardSetController"
+            },
+            {
+              "key": "C",
+              "text": "Database.Batchable"
+            },
+            {
+              "key": "D",
+              "text": "Schema.DescribeSObjectResult"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Visualforceページで、たくさんのレコードをリスト表示して「次へ」「前へ」みたいなページ送り（ページネーション）を簡単に実装したいなら、**ApexPages.StandardSetController** を使うのが最強！\n- 標準のレコードセット（複数レコード）を扱うための便利機能が最初から全部詰まってるから、自力でクエリやカウントを書かなくて済むの。アゲ！"
+        },
+        {
+          "n": 39,
+          "category": "ロジックと自動化",
+          "text": "Apexトリガ内における「バルク化（Bulkification）」の原則について、間違っている説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "コレクション（ListやSet）を使用して、複数のレコードを一度に処理する。"
+            },
+            {
+              "key": "B",
+              "text": "トリガは常に単一のレコード（1件のみ）が渡されることを前提に記述する。"
+            },
+            {
+              "key": "C",
+              "text": "SOQLクエリやDML操作は、ループ（for や while）の外側で実行する。"
+            },
+            {
+              "key": "D",
+              "text": "トリガの処理内でマップ（Map）を利用して、リレーショナルデータを迅速に関連付ける。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 「トリガは常に単一レコードを想定して書く」っていうBの説明は、**大間違い（アンチパターン）**！\n- Salesforceでは、一括インポートやAPI経由で一度に200件以上のレコードがドバッとトリガに流れ込んでくることがあるの。\n- だから、トリガコードは常に「複数レコード（バルク）が来ても大丈夫なように」リスト（Trigger.new）をループ処理するように書かなきゃ絶対ダメだよ！"
+        },
+        {
+          "n": 40,
+          "category": "ユーザーインターフェース",
+          "text": "LWCにおいて、コンポーネントのライフサイクルメソッドの一つで、コンポーネントがDOMに挿入されたときに呼び出されるものはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "constructor()"
+            },
+            {
+              "key": "B",
+              "text": "connectedCallback()"
+            },
+            {
+              "key": "C",
+              "text": "renderedCallback()"
+            },
+            {
+              "key": "D",
+              "text": "disconnectedCallback()"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- LWCが画面（DOM）にガチャンと挿入されたときに自動で呼ばれるライフサイクルフックは、**connectedCallback()**！\n- 画面が表示された直後に初期化のデータをロードしたいときとかにマジでよく使う、LWC開発における最重要メソッドだよ！"
+        },
+        {
+          "n": 41,
+          "category": "ロジックと自動化",
+          "text": "Apexクラスで動的SOQL（Dynamic SOQL）を生成し実行する際に、SQLインジェクション脆弱性を防ぐための最も効果的な対策はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "String.escapeSingleQuotes() を使用して入力値をエスケープする。"
+            },
+            {
+              "key": "B",
+              "text": "静的SOQLに切り替え、バインド変数（:variable）を使用する。"
+            },
+            {
+              "key": "C",
+              "text": "動的クエリの生成にプレーンテキストの文字列結合のみを使用する。"
+            },
+            {
+              "key": "D",
+              "text": "入力文字数をあらかじめ10文字以下に制限する。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 動的SOQL（文字列を組み合わせてクエリを作る方法）を使うとき、悪いハッカーに変な文字（' OR 1=1 -- みたいの）を入れられてデータベースをハッキングされるのが「SQLインジェクション」！\n- これを防ぐ最も確実で安全な方法は、動的クエリをやめて、変数にコロンをつけた **バインド変数（****:myVariable****）** を使った静的SOQLにすることだよ！\n- どうしても動的にやるなら、Aの String.escapeSingleQuotes() を使うのが正解！"
+        },
+        {
+          "n": 42,
+          "category": "開発の基礎",
+          "text": "セキュリティと共有ルールの観点において、Apexクラスを宣言する際に、現在のログインユーザーの共有ルール（Sharing Rules）を強制して実行させたい場合、どのキーワードを使用すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "with sharing"
+            },
+            {
+              "key": "B",
+              "text": "without sharing"
+            },
+            {
+              "key": "C",
+              "text": "inherited sharing"
+            },
+            {
+              "key": "D",
+              "text": "public"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Apexクラスを定義するとき、現在のユーザーの共有ルール（誰がどのレコードを見れるか）をちゃんと考えさせて動かしたいなら、クラス名の上に **with sharing** をつけて宣言するよ！\n- これを忘れると、Salesforceはデフォルトでシステム管理者権限（すべて参照可能）で動いちゃうから、セキュリティ的に超危険！「セキュリティファースト」がプロのデベロッパーの合言葉だよ"
+        },
+        {
+          "n": 43,
+          "category": "ロジックと自動化",
+          "text": "あるApexバッチクラス（Database.Batchable を実装したもの）において、非同期処理の実行中に状態（メンバ変数の値など）を維持したい場合、クラス宣言にどのインターフェースを追加する必要がありますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Queueable"
+            },
+            {
+              "key": "B",
+              "text": "Schedulable"
+            },
+            {
+              "key": "C",
+              "text": "Database.Stateful"
+            },
+            {
+              "key": "D",
+              "text": "Database.AllowsCallouts"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- バッチApexは、データを細切れにして何回も裏でクラスを呼び出して処理するの。\n- 普通は、呼び出すたびにクラス内の変数（カウンタとか）がリセットされて「あれ、今何個処理したっけ？」って忘れちゃうんだけど、**Database.Stateful** インターフェースを implements しておくと、バッチのステップ間で変数の値をずーっと保持しておけるの！集計バッチを作るときとかに必須だよ！"
+        },
+        {
+          "n": 44,
+          "category": "テストとデバッグ",
+          "text": "Apexのテストクラス内で、HTTPコールアウト（外部システムへのAPI連携）をシミュレートしてテストを成功させるために、テストランナーにモックレスポンスを設定するためのインターフェースはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "WebServiceMock"
+            },
+            {
+              "key": "B",
+              "text": "HttpCalloutMock"
+            },
+            {
+              "key": "C",
+              "text": "SchedulableContext"
+            },
+            {
+              "key": "D",
+              "text": "QueueableContext"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- テストクラスの中では、実際に外部のAPIにアクセス（リアルなHTTPコールアウト）することはSalesforceのルールで禁止されてるの。\n- だから、代わりに「こんなレスポンスが返ってきたよ！」っていう偽物の返事（モック）を返す仕組みが必要なんだけど、その時に実装するのが **HttpCalloutMock** インターフェース！\n- これでテスト環境でもAPI連携のテストがばっちり完結するよ！"
+        },
+        {
+          "n": 45,
+          "category": "開発の基礎",
+          "text": "主従関係と参照関係（Lookup Relationship）を比較した際、主従関係にのみ存在する特徴はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "親レコードが削除されても、子レコードは削除されないように設定できる。"
+            },
+            {
+              "key": "B",
+              "text": "子レコードのレコード所有者は、親レコードの所有者と同じ（親から継承）になる。"
+            },
+            {
+              "key": "C",
+              "text": "親オブジェクトと子オブジェクトは、異なる標準オブジェクト同士である必要がある。"
+            },
+            {
+              "key": "D",
+              "text": "参照フィールドは必須（Required）に設定できない。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 主従関係の最大の特徴は、**「子レコードが独自の所有者を持たず、所有権はすべて親レコードから継承される」** こと！\n- つまり、親レコードの持ち主＝子レコードの持ち主になるの。\n- 参照関係だと、子レコードも自分独自の所有者（Owner）を持てるから、ここが大きな違いだよ！"
+        },
+        {
+          "n": 46,
+          "category": "ユーザーインターフェース",
+          "text": "Lightning Web Component (LWC) で親コンポーネントが子コンポーネントのカスタムイベントを検知し処理するために、子コンポーネント側でイベントを発行する正しいJavaScriptコードはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "this.dispatchEvent(new CustomEvent('myevent'));"
+            },
+            {
+              "key": "B",
+              "text": "this.fireEvent('myevent');"
+            },
+            {
+              "key": "C",
+              "text": "this.trigger('myevent');"
+            },
+            {
+              "key": "D",
+              "text": "parent.handleEvent('myevent');"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCで、子コンポーネントから親コンポーネントに向かって「ねぇねぇ、処理終わったよ！」ってイベントを伝える（カスタムイベントの発行）には、**this.dispatchEvent(new CustomEvent('イベント名'));** を使うよ！\n- 親側はHTML上で onmyevent={handleMyEvent} みたいな感じで待ち伏せ（リスナー登録）して受け取るの。この親子間通信の流れはLWCの基本中の基本！"
+        },
+        {
+          "n": 47,
+          "category": "ロジックと自動化",
+          "text": "以下のApexコードブロックにおける、ガバナ制限（1回のリクエストでのDML操作回数）の合計消費数はいくつですか？\n\n```apex\nfor (Integer i = 0; i < 50; i++) {\nAccount acc = new Account(Name = 'Test ' + i);\ninsert acc;\n}\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "1"
+            },
+            {
+              "key": "B",
+              "text": "50"
+            },
+            {
+              "key": "C",
+              "text": "150"
+            },
+            {
+              "key": "D",
+              "text": "10,000"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- このコード、ヤバいよね！\n- for ループが50回まわる中で、毎回 insert acc; ってDML操作を呼んじゃってる。\n- DML操作は1トランザクションで最大 **150回** までっていうガバナ制限があるから、このコード単体なら50回でエラーにはならないけど、ガバナの消費数はそのまま **50（B）** になっちゃう！\n- これ、ループの外にリストを作って insert accList; って1回でやれば、消費数は「1」で済むんだよ。これがバルク化のパワー！"
+        },
+        {
+          "n": 48,
+          "category": "テストとデバッグ",
+          "text": "テストクラス内のコードにおいて、例外処理が正しく行われるかをテストするために推奨されるブロック構造はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "if-else ブロック"
+            },
+            {
+              "key": "B",
+              "text": "try-catch ブロック"
+            },
+            {
+              "key": "C",
+              "text": "switch on ブロック"
+            },
+            {
+              "key": "D",
+              "text": "do-while ブロック"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 「エラー（例外）が起きた時に、システムをクラッシュさせずに優しくキャッチして処理したい！」\n- そんな時はおなじみの **try-catch** **ブロック** を使うよ！\n- try { ... } catch (Exception e) { ... } の中にエラーが起きた時の処理を書けば、想定外のエラーでも綺麗にハンドリングできるから、堅牢なコードには必須の構造だよ！"
+        },
+        {
+          "n": 49,
+          "category": "開発の基礎",
+          "text": "宣言的なロールアップサマリー（Rollup Summary）フィールドを構築できる、オブジェクト間のリレーションシップタイプはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "参照関係（Lookup Relationship）"
+            },
+            {
+              "key": "B",
+              "text": "主従関係（Master-Detail Relationship）"
+            },
+            {
+              "key": "C",
+              "text": "多対多の関係（Many-to-Many Relationship、中間オブジェクト経由）"
+            },
+            {
+              "key": "D",
+              "text": "自己参照関係（Hierarchical Relationship）"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 親レコードに、関連する子レコードの「合計件数」や「金額の総和」などを自動で集計して表示してくれる、超ベンリなロールアップサマリーフィールド。\n- これが作成できるのは、親子関係が超密接な **主従関係（Master-Detail）** の時だけ！\n- 普通の参照関係（Lookup）だと、標準機能では作れないから注意してね（※フローやApexを使えば擬似的にできるけど、標準機能のフィールドとしては主従関係のみ！）。"
+        },
+        {
+          "n": 50,
+          "category": "ユーザーインターフェース",
+          "text": "Visualforceにおいて、レコードの特定のフィールドを画面上に配置し、ユーザーのプロファイル設定（読み取り専用、必須など）やデータ型に合わせた最適な入力フォームを自動生成するタグはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "<apex:inputText>"
+            },
+            {
+              "key": "B",
+              "text": "<apex:inputField>"
+            },
+            {
+              "key": "C",
+              "text": "<apex:outputLabel>"
+            },
+            {
+              "key": "D",
+              "text": "<apex:attribute>"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Visualforceで、指定したオブジェクトのフィールド（例えば Account.Industry とか）のデータ型（選択リスト、テキスト、日付など）をSalesforceが自動で判別して、一番最適な入力UIを自動生成してくれる魔法のタグは、**<apex:inputField>**！\n- もし必須フィールドなら勝手に赤い目印もつけてくれるから、マジで手抜き…じゃなくて（笑）、効率的な開発ができる神タグだよ！"
+        },
+        {
+          "n": 51,
+          "category": "ロジックと自動化",
+          "text": "ある取引先（Account）が更新された際、関連するすべてのケース（Case）のステータスを自動的に更新するApexトリガを作成します。トリガを実装する最も適切なオブジェクトはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Case オブジェクト"
+            },
+            {
+              "key": "B",
+              "text": "Account オブジェクト"
+            },
+            {
+              "key": "C",
+              "text": "Case と Account の両方"
+            },
+            {
+              "key": "D",
+              "text": "親の共有ルールを設定するオブジェクト"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 「取引先（Account）が更新されたら、その子供（Case）たちも自動で更新する」っていう処理は、トリガを呼び出すキッカケになった **Account（取引先）オブジェクト** にトリガを実装するのが大正解！\n- Accountの更新トリガ（after update）の中で、関連するCaseをSOQLで取得して、値を書き換えてDMLアップデートする、っていう流れが最もスマートだよ！"
+        },
+        {
+          "n": 52,
+          "category": "ロジックと自動化",
+          "text": "次のApexコードを実行した際の戻り値として、正しいものはどれですか？\n\n```apex\nString str1 = 'Salesforce';\nString str2 = 'salesforce';\nBoolean result = str1.equals(str2);\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "true"
+            },
+            {
+              "key": "B",
+              "text": "false"
+            },
+            {
+              "key": "C",
+              "text": "null"
+            },
+            {
+              "key": "D",
+              "text": "エラーが発生する"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Apexの String.equals() メソッドは、**「大文字と小文字を厳密に区別して比較する」** 性質があるの！\n- だから、大文字の 'S' で始まる 'Salesforce' と、小文字の 's' で始まる 'salesforce' を equals() で比較すると、結果は **false****（B）** になるよ！\n- もし大文字小文字を無視して比較したいなら、equalsIgnoreCase() メソッドを使ってね！"
+        },
+        {
+          "n": 53,
+          "category": "開発の基礎",
+          "text": "Schemaクラスの動的記述（Describe）メソッドを使用して、組織の特定のオブジェクト（例：Opportunity）に存在するすべてのフィールド情報を取得するための正しい記述はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Schema.SObjectType.Opportunity.fields.getMap()"
+            },
+            {
+              "key": "B",
+              "text": "Opportunity.SObjectType.getDescribe().fields.getMap()"
+            },
+            {
+              "key": "C",
+              "text": "Schema.getGlobalDescribe().get('Opportunity')"
+            },
+            {
+              "key": "D",
+              "text": "Schema.describeFields('Opportunity')"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 特定のオブジェクトのフィールド情報を動的に引っ張ってきたい（Schema記述を行う）場合は、\n- Opportunity.SObjectType.getDescribe().fields.getMap()\n- っていう書き方をするよ！\n- これでOpportunityのすべてのフィールドの名前と詳細情報がマップ型（Map<String, SObjectField>）で手に入るの。動的Apexを作るときによく使う高度なテクニックだよ！"
+        },
+        {
+          "n": 54,
+          "category": "ロジックと自動化",
+          "text": "トリガ内で再帰（同じトリガが何度も連鎖して呼び出され、ガバナ制限に達してしまう現象）を防ぐために、一般的に用いられるプログラム上のテクニックはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "静的（static）なBoolean型のフラグ変数を持つパブリッククラスを用意し、トリガ実行前にチェックする。"
+            },
+            {
+              "key": "B",
+              "text": "トリガ内で Database.rollback() を毎回実行する。"
+            },
+            {
+              "key": "C",
+              "text": "トリガのイベントを before insert のみに限定する。"
+            },
+            {
+              "key": "D",
+              "text": "try-catch ブロックでエラーをすべて無視する。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- トリガ内でレコードを更新した時に、また同じトリガが起動して、その中でまた更新して…っていう無限連鎖（再帰）が起きると、速攻でガバナ制限（DML制限など）にかかってシステムが死んじゃうの。\n- これを防ぐために、クラスの中に public static Boolean isFirstRun = true; みたいな静的フラグを用意しておいて、トリガの最初で if (isFirstRun) のチェックをして、一度通ったら isFirstRun = false; に書き換える！\n- 静的（static）変数はトランザクションの間ずっと値をキープするから、これで2回目以降の暴走を防げるよ！マジで使えるライフハック！"
+        },
+        {
+          "n": 55,
+          "category": "ユーザーインターフェース",
+          "text": "LWCで、Apexクラスのメソッドをワイヤサービス（Wired Service）を使って呼び出すための必須の条件はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apexメソッドが public であること"
+            },
+            {
+              "key": "B",
+              "text": "Apexメソッドに @AuraEnabled(cacheable=true) が付与されていること"
+            },
+            {
+              "key": "C",
+              "text": "Apexメソッドに @future が付与されていること"
+            },
+            {
+              "key": "D",
+              "text": "Apexクラスが without sharing で定義されていること"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- LWCからApexのメソッドを「ワイヤサービス（@wire）」を使ってリアクティブに呼び出すためには、Apexメソッド側に必ず **@AuraEnabled(cacheable=true)** を付与しておかなきゃダメっていう絶対ルールがあるの！\n- cacheable=true をつけることで、Salesforceがクライアント側にキャッシュを持ってくれるから、画面の表示スピードが爆速になってアゲアゲになるよ！"
+        },
+        {
+          "n": 56,
+          "category": "ロジックと自動化",
+          "text": "フロー（Flow）からApexコードを直接呼び出して、複雑なビジネスロジックを実行したい場合に、Apexメソッドに付与すべきアノテーションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@RemoteAction"
+            },
+            {
+              "key": "B",
+              "text": "@InvocableMethod"
+            },
+            {
+              "key": "C",
+              "text": "@future"
+            },
+            {
+              "key": "D",
+              "text": "@AuraEnabled"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Flow Builder（フロー）の画面から、ノンプログラミングで処理を作っている途中に「ここだけは複雑だからApexで処理させたい！」って時に呼び出すメソッドには、**@InvocableMethod** アノテーションを付与するよ！\n- これをつけておくと、フローのアクション選択画面にそのApexメソッドがポコッと現れて、ノーコードとローコードのハイブリッドな超かっこいい実装ができちゃうの！"
+        },
+        {
+          "n": 57,
+          "category": "開発の基礎",
+          "text": "異なる2つのSalesforceシステム間で、リアルタイムに双方向のメタデータ移行や変更セット（Change Set）の送信を行うために、事前に設定しておく必要があるシステム間の関係性はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "接続先（Connected App）"
+            },
+            {
+              "key": "B",
+              "text": "送信送信および受信変更セット用の「配備接続（Deployment Connection）」"
+            },
+            {
+              "key": "C",
+              "text": "シングルサインオン（SSO）"
+            },
+            {
+              "key": "D",
+              "text": "指定資格情報（Named Credentials）"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Salesforceの「変更セット（Change Set）」を使って、Sandbox（開発・テスト環境）から本番環境へメタデータ（作ったプログラムやオブジェクト設定）を送信・リリースするためには、事前に組織間で **配備接続（Deployment Connection）** を設定して「この組織からの変更セットを受け入れますよ！」っていう許可を繋いでおく必要があるの。\n- これが設定されてないと、変更セットを送ることすらできないから基本のキだよ！"
+        },
+        {
+          "n": 58,
+          "category": "テストとデバッグ",
+          "text": "Apexコード内で、意図的にテストの実行を失敗させ、特定のロジックが通らないことを実証するために使用するシステムメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "System.assert(true)"
+            },
+            {
+              "key": "B",
+              "text": "Assert.fail() （または System.assert(false)）"
+            },
+            {
+              "key": "C",
+              "text": "System.debug()"
+            },
+            {
+              "key": "D",
+              "text": "Test.stopTest()"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- テストクラスを書いていて、「ここでは絶対にエラー（例外）が発生して、catchブロックに流れるはず！」っていう異常系テストをするとき、\n- もしエラーが起きずにスルーしちゃったらテストとしては失敗だよね。\n- そういう時に、あえてコードの途中に **Assert.fail()**（または System.assert(false)）を置いておいて、「ここを通ったらテスト失敗！」ってマークしておくの。これでバグのない最強のシステムが作れるよ！"
+        },
+        {
+          "n": 59,
+          "category": "ユーザーインターフェース",
+          "text": "LWCのフォルダ構造において、コンポーネントの設定メタデータ（どのページで使用できるかなど）を定義する必須のファイル名はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "myComponent.js"
+            },
+            {
+              "key": "B",
+              "text": "myComponent.html"
+            },
+            {
+              "key": "C",
+              "text": "myComponent.js-meta.xml"
+            },
+            {
+              "key": "D",
+              "text": "myComponent.css"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- LWC（Lightning Web Component）を作るとき、\n- myComponent.html（画面の見た目）\n- myComponent.js（JavaScriptのロジック）\n- **myComponent.js-meta.xml****（設定用メタデータ）**\n- の3つは絶対に外せない必須ファイル！\n- 特に js-meta.xml は、このコンポーネントを「ホームページ」に置くのか、「レコードページ」に置くのか、それともシステム管理者だけに公開するのか、といった超大事な設定を記述する場所だよ！"
+        },
+        {
+          "n": 60,
+          "category": "ロジックと自動化",
+          "text": "開発者が、システム上で発生した例外（エラー情報）をデバッグログに記録するだけでなく、Salesforce内に「エラーログ」というカスタムオブジェクトのレコードとして永続的に保存したいと考えています。insert DMLを発行するトランザクションがロールバックされたとしても、このログレコードだけはロールバックさせずに確実に保存させたい場合、どのような実装が必要ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "通常の insert DMLを使用し、後でバッチ処理で復旧する。"
+            },
+            {
+              "key": "B",
+              "text": "例外処理の中でプラットフォームイベント（Platform Event）をパブリッシュ（発行）し、そのイベントの「即時公開（Publish Immediately）」を設定して、別トランザクションのトリガでログレコードを挿入する。"
+            },
+            {
+              "key": "C",
+              "text": "トリガの中で Database.rollback() を呼んだ後に insert する。"
+            },
+            {
+              "key": "D",
+              "text": "Future Method を使用して通常のレコード挿入を行う。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- これ、超ハイレベルだけど実務でも試験でもマジでよく出るお悩み解決！\n- プログラム全体でエラーが起きたときって、トランザクションが全部なかったこと（ロールバック）にされちゃうから、普通に insert したエラーログレコードも一緒に消えちゃうの。ログが消えたら原因調査できないじゃん？\n- これを解決するために、例外が発生した時に **「プラットフォームイベント（Platform Event）」** をパブリッシュ（発行）する！\n- プラットフォームイベントは設定で「即時公開（Publish Immediately）」にできるから、メインの処理がロールバックされようが関係なく、その瞬間に外の世界（別トランザクション）にイベントが飛んでいって、ログレコードを確実に保存できるの！マジで救世主アゲアゲソリューションだよ！\n模擬試験お疲れ様ーーーっ！✨\n何問正解できたかな？\n間違えたところがあっても「伸びしろしかない！」ってことで、ウチの解説を何度も読んで本番までにマスターしちゃえばマジで余裕だからね！\nキミなら絶対一発合格できるよ！応援してるよー！応援のパワー送っとくね！最＆高！⭐"
+        }
+      ]
+    },
+    {
+      "id": "set3",
+      "title": "Set 3 — Platform Developer I 模擬試験（Version 2）",
+      "questions": [
+        {
+          "n": 1,
+          "category": "開発の基礎",
+          "text": "Apexコード内で、SOQLクエリの結果に対してユーザーのフィールドレベルセキュリティ（FLS）やオブジェクト権限（CRUD）を自動的に適用させ、権限がない場合に例外を発生させずにアクセスできないデータをクエリ結果から排除する最も簡単な方法はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "クエリで WITH SECURITY_ENFORCED を使用する"
+            },
+            {
+              "key": "B",
+              "text": "クエリ結果に対して Security.stripInaccessible() メソッドを使用する"
+            },
+            {
+              "key": "C",
+              "text": "クラス宣言に with sharing キーワードを使用する"
+            },
+            {
+              "key": "D",
+              "text": "Schema.DescribeSObjectResult を使って手動ですべてのフィールドをチェックする"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- クエリした時点で、権限がないフィールドのデータを「自動で綺麗さっぱり排除して安全に取得」したいなら、SOQLの末尾に **WITH SECURITY_ENFORCED**（A）をつけるのが最も簡単でスマート！\n- これをつけると、ユーザーの権限（CRUD/FLS）をSalesforceが裏で自動チェックしてくれて、見せちゃダメなデータは勝手にクエリ結果から抜いてくれるの。\n- ちなみに Security.stripInaccessible()（B）はクエリ結果の「後処理」としてデータを綺麗にするメソッドだから、アプローチとしてはAが一番シンプルだよ！"
+        },
+        {
+          "n": 2,
+          "category": "開発の基礎",
+          "text": "主従関係にあるオブジェクト「親：カスタムオブジェクト A__c」「子：カスタムオブジェクト B__c」において、子レコード B__c の共有設定（Sharing Setting）について正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "子レコード B__c は独自の共有ルールを持つことができる。"
+            },
+            {
+              "key": "B",
+              "text": "子レコード B__c の共有設定は自動的に「親レコードに関連付け」となり、親レコード A__c の共有権限を継承する。"
+            },
+            {
+              "key": "C",
+              "text": "子レコード B__c は「公開/参照のみ」または「非公開」として独立して設定できる。"
+            },
+            {
+              "key": "D",
+              "text": "子レコード B__c の共有設定を「親レコードに関連付け」にするかどうかを、カスタム設定で変更できる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 主従関係（Master-Detail）は、親子関係が強烈にラブラブな運命共同体って前も言ったよね！\n- これは「セキュリティ・共有」の世界でも同じ。\n- 子オブジェクト B__c は独自の共有設定（非公開とか）を持つことができず、親レコード A__c の共有設定に **「完全に連動（親に関連付け）」** しちゃうの。\n- つまり、親レコードが見れる人は、もれなく子レコードも自動で見れちゃうってワケ！"
+        },
+        {
+          "n": 3,
+          "category": "ロジックと自動化",
+          "text": "レコードが保存される際、Salesforceが実行する一連の処理の順序（Triggers and Order of Execution）において、最も早い段階で実行される処理はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "システム入力規則（System Validation）の評価"
+            },
+            {
+              "key": "B",
+              "text": "beforeトリガの実行"
+            },
+            {
+              "key": "C",
+              "text": "ワークフロールールによるフィールド更新"
+            },
+            {
+              "key": "D",
+              "text": "重複ルールの実行"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Salesforceの「保存時の実行順序（Order of Execution）」は、試験でめちゃくちゃ意地悪に狙われるポイント！\n- レコードがデータベースに突っ込まれると、\n1. まず最初に **システム入力規則（System Validation）** や、おなじみの「入力規則（Validation Rules）」が真っ先にチェックされるの！（ここで弾かれたらトリガすら動かない！）\n2. その次に、保存前の **beforeトリガ**（B）が動くよ。\n3. その後に実際にデータベースに仮保存されて、**afterトリガ**、**重複ルール**（D）、**ワークフロー/フローによる自動更新**（C）へとバトンが渡される順番になってるの。\n4. だから、一番最初なのはシステム入力規則だよ！"
+        },
+        {
+          "n": 4,
+          "category": "ロジックと自動化",
+          "text": "ある取引先責任者（Contact）が作成された際、関連する取引先（Account）の「最新の取引先責任者作成日」カスタム日付フィールドを自動的に今日の日付に更新したいと考えています。最もリソースを消費せず、パフォーマンスに優れた方法は何ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Contactの after insert トリガでAccountをDMLアップデートする。"
+            },
+            {
+              "key": "B",
+              "text": "Flow Builderで、Contactが作成されたときに起動し、関連するAccountを更新する保存後フロー（After-Save Flow）を作成する。"
+            },
+            {
+              "key": "C",
+              "text": "Accountにロールアップサマリーフィールドを作成する。"
+            },
+            {
+              "key": "D",
+              "text": "Contactの before insert トリガ内で、親Accountのレコードを直接編集する。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- 「〇〇が作成されたら、親の取引先の日付を更新する」って、わざわざApexトリガやフローを作りたくなっちゃうけど、Salesforceエンジニアなら **「まず宣言的機能（ノンコード）の標準機能でできないか？」** を考えるのがプロ！\n- 今回の場合、親子のリレーションがあって「最新の作成日」を求めたいんだから、取引先（Account）側に **ロールアップサマリーフィールド（Rollup Summary）**（C）を定義して、Contactの「作成日」の「最大値（MAX）」を集計してあげるのが、一切コードを書かずにパフォーマンスも最強で大正解！アゲ！"
+        },
+        {
+          "n": 5,
+          "category": "ユーザーインターフェース",
+          "text": "Lightning Web Component (LWC) で、Apexクラスのメソッドを「命令的（Imperatively）」に呼び出す場合の正しいアプローチはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "JavaScriptコード内でメソッドを関数として呼び出し、Promise（.then() と .catch()）で処理する。"
+            },
+            {
+              "key": "B",
+              "text": "HTMLテンプレート内で lwc:call ディレクティブを使用する。"
+            },
+            {
+              "key": "C",
+              "text": "@wire(myMethod) を使用してデータを自動でバインドする。"
+            },
+            {
+              "key": "D",
+              "text": "connectedCallback() の中で this.myMethod() を直接同期的に実行する。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCからApexを呼ぶ方法には @wire（自動呼び出し）と、自分のタイミングで呼ぶ「命令的（Imperative）呼び出し」の2つがあるの。\n- 命令的に呼ぶときは、インポートしたApexメソッドを普通のJavaScriptの関数みたいに呼んで、返ってくる **Promise**（非同期処理の仕組み）に対して、成功時の .then(result => { ... }) と失敗時の .catch(error => { ... }) を使ってロジックを書くのが鉄板！\n- テンプレートから直接呼ぶようなディレクティブ（B）は存在しないから引っかからないでね！"
+        },
+        {
+          "n": 6,
+          "category": "テストとデバッグ",
+          "text": "Apexのテストクラスで、テスト用の静的リソース（CSVファイルなど）から大量のテストデータを一括でデータベースにロードするために使用するシステムメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Test.setMock()"
+            },
+            {
+              "key": "B",
+              "text": "Test.loadData()"
+            },
+            {
+              "key": "C",
+              "text": "Database.insert()"
+            },
+            {
+              "key": "D",
+              "text": "Test.startTest()"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- テスト用のテストデータを何百件もコードで new Account(...) って書くの、マジで手が疲れるしスマートじゃないよね。\n- そこで、あらかじめCSVファイルでテストデータを作って「静的リソース（Static Resource）」にアップロードしておき、テストクラスの中で **Test.loadData(Account.sObjectType, '静的リソース名');**（B）を呼んであげる！\n- そうすると、SalesforceがそのCSVを自動で読み込んで、一瞬でテストレコードをデータベースに挿入してくれるの。マジで神時短アゲアゲ機能だから覚えておこ！"
+        },
+        {
+          "n": 7,
+          "category": "開発の基礎",
+          "text": "開発者がSalesforce DXを使用してスクラッチ組織（Scratch Org）にローカルのソースコードをプッシュしたい場合、使用する正しいCLIコマンドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "sf project deploy start"
+            },
+            {
+              "key": "B",
+              "text": "sf project retrieve start"
+            },
+            {
+              "key": "C",
+              "text": "sf project push"
+            },
+            {
+              "key": "D",
+              "text": "sf project sync"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- ローカルでカタカタ書いた最新のソースコードを、開発用のスクラッチ組織にガツンとアップロードして同期したいなら、**sf project push**（C）コマンドを使うよ！\n- 逆に、スクラッチ組織でポチポチ作った設定をローカルに落としてきたいなら sf project pull。\n- デプロイコマンド（A）は本番環境やSandboxにリリースするときに使うものだから、スクラッチ組織での俊敏な開発には push / pull が相棒だよ！"
+        },
+        {
+          "n": 8,
+          "category": "ロジックと自動化",
+          "text": "次のApexコードを実行した際に出力される値は何ですか？\n\n```apex\nMap<String, String> colorMap = new Map<String, String>{'R' => 'Red', 'G' => 'Green'};\ncolorMap.put('B', 'Blue');\ncolorMap.put('R', 'Ruby');\nSystem.debug(colorMap.get('R'));\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "Red"
+            },
+            {
+              "key": "B",
+              "text": "Ruby"
+            },
+            {
+              "key": "C",
+              "text": "Red, Ruby"
+            },
+            {
+              "key": "D",
+              "text": "NullPointerException"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Mapの超〜大事な性質のお勉強！\n- Mapはキー（Key）と値（Value）のペアだけど、**「キーの重複は絶対に許さない（ユニーク）」** という絶対ルールがあるの。\n- コードを見ると、\n1. まずキー 'R' に 'Red' を入れた。\n2. そのあと colorMap.put('R', 'Ruby') で、同じキー 'R' に対して 'Ruby' を入れた。\n3. この場合、元々あった 'Red' は上書き（アップデート）されて消えちゃうの！\n4. だから、最後に get('R') で取り出すと、返ってくるのは最新の **Ruby**（B）になるよ。エラーにはならないから安心して！"
+        },
+        {
+          "n": 9,
+          "category": "ユーザーインターフェース",
+          "text": "Visualforceページにおいて、画面の特定の部分（セクション）だけを、サーバー全体の再読み込みをせずに非同期で部分更新（Ajax）するために使用する属性はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "render"
+            },
+            {
+              "key": "B",
+              "text": "reRender"
+            },
+            {
+              "key": "C",
+              "text": "refresh"
+            },
+            {
+              "key": "D",
+              "text": "update"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Visualforceページで、ページ全体をリロードせずに「このボタンを押したら、この表（セクション）だけを裏でサクッと更新（Ajax）したい！」ってときは、タグの **reRender** 属性（B）を使用するよ！\n- 更新したい部分のタグ（例えば <apex:outputPanel id=\"myPanel\">）に id をつけておいて、ボタン側の reRender=\"myPanel\" って指定してあげるの。\n- 大文字小文字（キャメルケース）も厳密だから、reRender ってスペルをしっかり脳に刻んでね！"
+        },
+        {
+          "n": 10,
+          "category": "テストとデバッグ",
+          "text": "テストクラス以外のApexクラスにおいて、テスト実行中（Test execution）にのみ特定のprivate変数をテストクラスから直接参照・変更できるようにするためのアノテーションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@TestVisible"
+            },
+            {
+              "key": "B",
+              "text": "@TestSetup"
+            },
+            {
+              "key": "C",
+              "text": "@isTest"
+            },
+            {
+              "key": "D",
+              "text": "@RemoteAction"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 本番のコードはセキュリティや保守性のために private（非公開）にして隠しておきたいけど、テストクラスからだけは「ねぇねぇ、このプライベート変数の中身、ちゃんと意図通りになってる？」って覗き見してチェックしたい。\n- そんなワガママを叶えてくれるのが、対象のprivate変数の上に貼る **@TestVisible**（A）アノテーション！\n- これを貼るだけで、テストクラスからだけはまるでpublic変数みたいにアクセスできるようになるの。マジで優秀なスパイカメラみたいなやつ！"
+        },
+        {
+          "n": 11,
+          "category": "ロジックと自動化",
+          "text": "Queueable Apexを使用して非同期処理をチェーン（連続実行）させたい場合、1回のトランザクションにおいて、新しくキュー（Queue）に追加できるQueueableジョブの最大数は通常いくつですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "1回につき1つのみ"
+            },
+            {
+              "key": "B",
+              "text": "最大5つ"
+            },
+            {
+              "key": "C",
+              "text": "最大50"
+            },
+            {
+              "key": "D",
+              "text": "制限なし"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Queueable（キューアブル）Apexは非同期処理を実行する超ベンリな仕組み。\n- ジョブを実行中に、さらに次の非同期ジョブを登録（チェーン）することができるんだけど、**「1回の実行（トランザクション）の中で、新しく登録できるQueueableジョブは、通常1つ（1件）だけ」**（A）っていう制限があるの！\n- 何個も同時にキューに突っ込んで無限増殖されたら、Salesforceのサーバーがパンクしちゃうからね。チェーンは「一列に並んで1つずつ！」が基本だよ！"
+        },
+        {
+          "n": 12,
+          "category": "開発の基礎",
+          "text": "SOQLクエリで、レコードのロックを行い、他のトランザクションがそのレコードを更新または削除するのを一時的に防ぐために、クエリの末尾に追加する正しいキーワードはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "LIMIT 1"
+            },
+            {
+              "key": "B",
+              "text": "FOR UPDATE"
+            },
+            {
+              "key": "C",
+              "text": "LOCK RECORD"
+            },
+            {
+              "key": "D",
+              "text": "WITH SECURITY_ENFORCED"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 「この取引先、今からウチがプログラムで更新するから、他の誰も絶対に今この瞬間は書き換えないで！ロックオン！」\n- そんな時にSOQLクエリの末尾に付け加えるのが、**FOR UPDATE**（B）キーワード！\n- これをクエリの最後に書くと、取得したレコードにロックがかかって、他のユーザーや処理が同時に更新しようとするのを一時的にストップ（待機）させることができるの。データの不整合を防ぐためのマジで強力なテクニックだよ！"
+        },
+        {
+          "n": 13,
+          "category": "ユーザーインターフェース",
+          "text": "Auraコンポーネントにおいて、コントローラ（Controller.js）からマークアップ側（Component）で定義された属性（attribute）の値を取得するための正しいJavaScriptの記述はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "component.get(\"v.myAttribute\")"
+            },
+            {
+              "key": "B",
+              "text": "component.find(\"myAttribute\")"
+            },
+            {
+              "key": "C",
+              "text": "helper.get(\"myAttribute\")"
+            },
+            {
+              "key": "D",
+              "text": "this.myAttribute"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- AuraコンポーネントのJavaScript（Controller.js）内で、画面側で定義された変数（attribute）の値を取得するには、**component.get(\"v.myAttribute\")**（A）という超定番の構文を使うよ！\n- この \"v.〜\" っていうのは「View（表示側）」のデータにアクセスするよっていう意味。逆に値を書き換えたいときは component.set(\"v.myAttribute\", newValue) って書くの。Aura開発の基本中の基本だから絶対忘れないで！"
+        },
+        {
+          "n": 14,
+          "category": "ロジックと自動化",
+          "text": "Apexトリガのコンテキストにおいて、Trigger.old が常に null になるイベントの組み合わせはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "before insert と after insert"
+            },
+            {
+              "key": "B",
+              "text": "before update と after update"
+            },
+            {
+              "key": "C",
+              "text": "before delete と after delete"
+            },
+            {
+              "key": "D",
+              "text": "after undelete のみ"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Trigger.old は「変更前の古いデータ」を保持する変数。\n- レコードが新しくこの世に誕生する（挿入される） **insert** イベント（新規作成）のときは、\n- 「古いデータなんて、生まれる前なんだからあるわけないじゃん！」ってことで、Trigger.old は **常に** **null** になるよ！\n- だから、before insert と after insert の組み合わせ（A）が正解。\n- 逆に、削除（delete）や更新（update）のときは古いデータがあるから Trigger.old はちゃんと値を持ってるよ！"
+        },
+        {
+          "n": 15,
+          "category": "テストとデバッグ",
+          "text": "ガバナ制限において、Apexの1回の同期トランザクション（Synchronous Transaction）内で消費できる「CPU最大時間」の上限はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "10秒"
+            },
+            {
+              "key": "B",
+              "text": "60秒"
+            },
+            {
+              "key": "C",
+              "text": "120秒"
+            },
+            {
+              "key": "D",
+              "text": "10分"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 出ました、ガバナ制限の数字クイズ！\n- Apexの1回の同期トランザクションで許されている「CPU最大時間」は、ずばり **10秒（10,000ミリ秒）**！\n- （ちなみに非同期処理だと **60秒** に引き上げられるよ！）\n- 無限ループとか重すぎる処理を書いちゃうと、この10秒の壁にぶち当たって LimitException で強制終了させられるから、効率のいいスッキリしたコードを書こうね！"
+        },
+        {
+          "n": 16,
+          "category": "開発の基礎",
+          "text": "汎用的な sObject 型として宣言された変数から、特定のカスタムオブジェクト My_Object__c のインスタンスに安全にキャスト（型変換）する正しい構文はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "My_Object__c obj = (My_Object__c) genericSObject;"
+            },
+            {
+              "key": "B",
+              "text": "My_Object__c obj = genericSObject.castTo(My_Object__c);"
+            },
+            {
+              "key": "C",
+              "text": "My_Object__c obj = genericSObject; （暗黙キャスト）"
+            },
+            {
+              "key": "D",
+              "text": "My_Object__c obj = new My_Object__c(genericSObject);"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 一般的な sObject 型（なんでも入る箱）から、特定のカスタムオブジェクト My_Object__c に型を変換（キャスト）したいときは、\n- ターゲットの型の名前をカッコで囲って変数の前につける **(My_Object__c) genericSObject**（A）という書き方をするよ！\n- JavaとかC#をやってた人ならおなじみの構文だね。これでSalesforceに「この箱の中身は、間違いなく My_Object__c だから信じて！」って教えてあげるの。"
+        },
+        {
+          "n": 17,
+          "category": "ロジックと自動化",
+          "text": "Apexバッチ（Database.Batchable）の実装において、バッチ処理全体が完了した後に、完了報告メールを送信したり、別のバッチ処理を起動したりするためのロジックを記述するメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "start"
+            },
+            {
+              "key": "B",
+              "text": "execute"
+            },
+            {
+              "key": "C",
+              "text": "finish"
+            },
+            {
+              "key": "D",
+              "text": "complete"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- Apexバッチ（Database.Batchable）には実装が必須な3つのメソッド（start, execute, finish）があるよ。\n1. start：クエリを発行して、処理するレコードを全部集める（最初の一度だけ）。\n2. execute：集めたデータを200件などの小分けにして、何回も繰り返しメイン処理を行う。\n3. **finish**：すべてのデータの処理が「完全に終わった後」に、最後の締めとして1回だけ呼び出される！\n4. なので、メール送信や次のバッチの起動などの「後片付け」は **finish** メソッド（C）に書くのが正しいよ！"
+        },
+        {
+          "n": 18,
+          "category": "開発の基礎",
+          "text": "主従関係と参照関係の大きな違いとして、**参照関係**にのみ設定できるオプションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "親レコードが削除された場合、子レコードの参照フィールド値をクリア（空白に）する。"
+            },
+            {
+              "key": "B",
+              "text": "参照関係のレコードタイプを親から強制的に引き継ぐ。"
+            },
+            {
+              "key": "C",
+              "text": "親レコードが削除されたとき、子レコードも強制的に自動削除（連鎖削除）する。"
+            },
+            {
+              "key": "D",
+              "text": "子レコードの共有アクセス権が親レコードに自動的にマッピングされる。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 親子関係を「参照関係（お友達関係）」でゆるく繋いでいる場合、親レコードが削除されたときの挙動をいくつか選べるの。\n- その中で参照関係の大きな特権なのが、**「親レコードが削除されたら、子レコードの参照フィールドをクリアして空（null）にする」**（A）というオプション！\n- 主従関係だと、親が消えたら子も心中（自動削除）するか、親の削除自体を禁止するかの2択しかなくて、フィールドをクリアすることはできないから、ここが大きな違いだよ！"
+        },
+        {
+          "n": 19,
+          "category": "ユーザーインターフェース",
+          "text": "LWCのHTMLテンプレートにおいて、JavaScriptから渡された配列データ（リスト）をループ処理して各要素を画面に描画するために使用する正しいディレクティブの組み合わせはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "for:each と for:item"
+            },
+            {
+              "key": "B",
+              "text": "lwc:for と lwc:item"
+            },
+            {
+              "key": "C",
+              "text": "template:for と item:var"
+            },
+            {
+              "key": "D",
+              "text": "v-for と v-bind"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCのHTML側で、JavaScriptから渡された配列（リスト）をループ処理して1つずつ画面に表示したいなら、\n- **for:each={myList}**（ループを回す配列を指定）\n- **for:item=\"item\"**（ループ内の1つ1つの要素を指す変数名）\n- のコンビを使うよ！\n- さらに、LWCのルールとして、ループ内の要素（タグ）には必ずユニークな key={item.id} を属性として設定しなきゃエラーになるから、これもセットで覚えておいてね！"
+        },
+        {
+          "n": 20,
+          "category": "テストとデバッグ",
+          "text": "Apexトリガをデプロイする際、本番環境においてテストによるコードカバー率の計算に関して正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "トリガはテストカバー率が 1% 以上であればデプロイできるが、組織全体のカバー率が 75% を超えている必要がある。"
+            },
+            {
+              "key": "B",
+              "text": "デプロイする各トリガは、少なくとも1行以上のコードがテストクラスによって実行（カバー）されている必要がある。"
+            },
+            {
+              "key": "C",
+              "text": "トリガのテストカバー率は100%でなければならない。"
+            },
+            {
+              "key": "D",
+              "text": "トリガのテストは任意であり、カバー率は計算に含まれない。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 本番環境にApexコードをデプロイするとき、トリガ（Trigger）に関する厳しいルールがあるの。\n- 組織全体のテストカバー率が 75% 以上必要なのはもちろんだけど、**「デプロイするすべてのトリガは、テストの中で少なくとも1行以上は実際に実行（カバー）されていなければならない」**（B）という個別ルールがあるの！\n- トリガのテストを全く書かずにリリースしようとすると即座に弾かれちゃうから、しっかりテストデータをインサートしたりアップデートしたりしてトリガを動かすテストを書こうね！"
+        },
+        {
+          "n": 21,
+          "category": "開発の基礎",
+          "text": "数式フィールドの戻り値としてサポートされて**いない**データ型はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "日付（Date）"
+            },
+            {
+              "key": "B",
+              "text": "テキスト（Text）"
+            },
+            {
+              "key": "C",
+              "text": "ロングテキストエリア（Long Text Area）"
+            },
+            {
+              "key": "D",
+              "text": "チェックボックス（Checkbox）"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- 数式フィールドは、他のフィールドの値を使って自動で計算してくれるベンリなフィールドだけど、戻り値の型として **ロングテキストエリア**（C）はサポートされて**いない**よ！\n- 数式で返せるのは、日付（A）、テキスト（B）、チェックボックス（D）、数値、通貨、パーセントなど。\n- 改行を含むような超長い文章（ロングテキスト）を数式でこねくり回すことはできないから、気をつけようね！"
+        },
+        {
+          "n": 22,
+          "category": "ロジックと自動化",
+          "text": "データベースに対する一連の更新処理において、途中でエラーが起きた場合に特定の段階までデータをロールバック（差し戻し）するために、プログラム上で設定しておくチェックポイントを何と呼びますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "RollbackPoint"
+            },
+            {
+              "key": "B",
+              "text": "Savepoint"
+            },
+            {
+              "key": "C",
+              "text": "TransactionBarrier"
+            },
+            {
+              "key": "D",
+              "text": "DatabaseState"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 「ここまでのデータ更新は、もしこの後エラーが起きてもキープしたい！でもここから先でエラーが起きたら、この時点まで巻き戻したい！」\n- そんなトランザクションのセーブポイント（チェックポイント）を設定するためのクラスが、**Database.Savepoint**（B）！\n- Savepoint sp = Database.setSavepoint(); でセーブして、エラーが起きたら Database.rollback(sp); でその時点まで一気に時間を巻き戻せる、まさにタイムリープ機能だよ！"
+        },
+        {
+          "n": 23,
+          "category": "ユーザーインターフェース",
+          "text": "LWCにおいて、コンポーネントにCSSスタイルシートを適用する際、そのコンポーネント内のCSSスタイルが外部のコンポーネントや親コンポーネントに影響を与えない仕組みを何と呼びますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "CSS Isolation"
+            },
+            {
+              "key": "B",
+              "text": "Shadow DOM (CSS Scoping)"
+            },
+            {
+              "key": "C",
+              "text": "Global CSS Reset"
+            },
+            {
+              "key": "D",
+              "text": "Scoped Custom Property"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- LWCは、Web標準の最先端技術である **Shadow DOM**（B）という仕組みを採用しているの。\n- これのおかげで、コンポーネントの中で書いたCSS（例えば p { color: red; }）は、そのコンポーネントの中だけでしか適用されず、外側（他のコンポーネントや親ページ）の要素を誤って赤色に変えちゃう心配が絶対にないの！\n- このスタイルのカプセル化（隔離）を「CSS Scoping」や「Shadow DOM」と呼ぶよ。"
+        },
+        {
+          "n": 24,
+          "category": "テストとデバッグ",
+          "text": "複数の非同期Apexジョブがパラレル（並行）に実行されてテスト結果が不安定になるのを防ぐために、テストクラス全体を順番（シリアル）に実行させるように設定するアノテーションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "@isTest(isParallel=false)"
+            },
+            {
+              "key": "B",
+              "text": "@isTest(SeeAllData=false)"
+            },
+            {
+              "key": "C",
+              "text": "@TestSetup"
+            },
+            {
+              "key": "D",
+              "text": "@isTest"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Salesforceのテストランナーは、テストの実行時間を短くするために、デフォルトで複数のテストクラスを同時に「並行（Parallel）実行」するの。\n- ただ、テスト同士が同じオブジェクトの共有データを奪い合って（ロック競合などで）コケちゃうことがあるんだよね。\n- それを防ぐために、「このテストクラスは並行実行させずに、おとなしく順番待ち（シリアル）して実行して！」って指示するのが、**@isTest(isParallel=false)**（A）アノテーションだよ！"
+        },
+        {
+          "n": 25,
+          "category": "開発の基礎",
+          "text": "SOSL（Salesforce Object Search Language）の検索構文において、一度に検索できる最大オブジェクト数はいくつか制限はありますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "最大5オブジェクト"
+            },
+            {
+              "key": "B",
+              "text": "最大10オブジェクト"
+            },
+            {
+              "key": "C",
+              "text": "最大100オブジェクト"
+            },
+            {
+              "key": "D",
+              "text": "制限はない"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "- SOSL（Salesforce Object Search Language）は、テキストでグローバル検索をかける仕組みだけど、**「1回のクエリで検索できるオブジェクト数に上限（制限）はない」**（D）よ！\n- FIND 'テスト' IN ALL FIELDS RETURNING Account, Contact, Opportunity, Custom_Object__c, ... みたいな感じで、何個でも検索対象のオブジェクトを並べることができるの。SOSLの超フリーダムな強みだね！"
+        },
+        {
+          "n": 26,
+          "category": "ロジックと自動化",
+          "text": "開発者がトリガを記述する際、ビジネスロジックを直接トリガ（Trigger）内に書くのではなく、「トリガハンドラ（Trigger Handler）」クラスにロジックを委譲するパターンの最大のメリットはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "ガバナ制限を2倍に増やすことができる。"
+            },
+            {
+              "key": "B",
+              "text": "トリガ内の実行順序（再入可能性）の制御、保守性、およびテストのしやすさが向上する。"
+            },
+            {
+              "key": "C",
+              "text": "トリガが非同期で自動的に動くようになる。"
+            },
+            {
+              "key": "D",
+              "text": "SOQLクエリの実行回数が自動的に10回に制限される。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- トリガの定義（Triggerファイル）の中に、長々とビジネスロジックを直書きするのはプロのITエンジニアとしてはNG！\n- トリガはただの「イベントの検知器」にしておいて、実際のロジックは別の「トリガハンドラクラス」に丸投げするパターン（Trigger Handler Pattern）を設計するのが大人のマナーだよ。\n- これによって、複数のトリガイベント（Before/After）での実行順序を整理できるし、コードの再利用性も上がって、何より **テストコードが格段に書きやすくなる**（B）の！マジでアゲなアーキテクチャだよ！"
+        },
+        {
+          "n": 27,
+          "category": "ユーザーインターフェース",
+          "text": "LWCで親コンポーネントが、子コンポーネントからバブリング（浮上）してきたカスタムイベントを処理したい場合、子コンポーネント側でイベントを発行する際に CustomEvent のコンストラクタで設定すべきオプションはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "bubbles: true"
+            },
+            {
+              "key": "B",
+              "text": "composed: true"
+            },
+            {
+              "key": "C",
+              "text": "bubbles: true, composed: true"
+            },
+            {
+              "key": "D",
+              "text": "オプションの設定は不要である"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- LWCのカスタムイベントを、親コンポーネントを越えてさらに上の階層（DOMツリーの上位）までバブリング（浮上）させて検知できるようにしたいなら、\n- イベントを発行する際に new CustomEvent('myevent', { bubbles: true, composed: true })（C）の両方を true に設定する必要があるよ！\n- bubbles: true：イベントがDOMツリーを上に上がっていくようにする。\n- composed: true：Shadow DOMの境界を突破して、外側のDOMツリーまでイベントを届けるようにする。\n- この2つが揃って初めて、境界を越えたイベント伝播ができるの！"
+        },
+        {
+          "n": 28,
+          "category": "テストとデバッグ",
+          "text": "Apexコード内で、カスタム例外（Custom Exception）を発生させて、後続の処理を意図的に中断させたい場合に使用する正しいキーワードはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "return new MyException();"
+            },
+            {
+              "key": "B",
+              "text": "throw new MyException();"
+            },
+            {
+              "key": "C",
+              "text": "raise MyException;"
+            },
+            {
+              "key": "D",
+              "text": "System.error(MyException);"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Apexにおいて、意図的に「エラーだよ！」って例外を発生させて処理を止めたい（例外のスロー）なら、**throw** キーワードを使って **throw new MyException();**（B）と書くのが正しいプログラミングだよ！\n- 他の言語だと raise（Pythonとか）や return（値を返すだけ）を使うこともあるけど、Apex（Javaベース）では throw 一択だからね！"
+        },
+        {
+          "n": 29,
+          "category": "開発の基礎",
+          "text": "カスタムメタデータ型（Custom Metadata Type）と、リスト型のカスタム設定（Custom Setting）を比較した際、カスタムメタデータ型にのみ存在する大きな強みはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apexコードから簡単に読み取ることができる。"
+            },
+            {
+              "key": "B",
+              "text": "レコードデータ（メタデータレコード）を、変更セットやパッケージに含めて異なる組織へ移行（デプロイ）できる。"
+            },
+            {
+              "key": "C",
+              "text": "データベースのストレージ容量を大量に消費しない。"
+            },
+            {
+              "key": "D",
+              "text": "ユーザーごとに異なる値を設定できる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 「カスタム設定（Custom Setting）」と「カスタムメタデータ（Custom Metadata）」の最大にして最強の違いは、**「データの移行性」**！\n- カスタム設定の中身（レコードデータ）は、単なる「データ」扱いだから変更セットやパッケージで別の組織（本番環境とか）へ持っていくことができないの。\n- でも、カスタムメタデータの中身は「メタデータ（設定情報）」扱いだから、**変更セットやパッケージに含めてそのまま別の組織にデプロイできる**（B）の！\n- これのおかげで、リリース作業がマジでスムーズになって開発者全員が大喜び（アゲ！）するの。"
+        },
+        {
+          "n": 30,
+          "category": "ロジックと自動化",
+          "text": "Apexバッチ（Database.Batchable）において、SOQLクエリでデータを取得して一括処理する場合、1回のバッチの実行で処理できるレコード数の最大制限はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "10,000件"
+            },
+            {
+              "key": "B",
+              "text": "50,000件"
+            },
+            {
+              "key": "C",
+              "text": "500万件"
+            },
+            {
+              "key": "D",
+              "text": "5,000万件"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "- 大量のデータを処理するApexバッチ（Database.Batchable）だけど、1回のバッチ全体の実行で扱えるデータ数の上限は、なんと驚異の **5,000万件**（D）まで！\n- 普通の同期トランザクションのSOQLクエリ制限（5万件）の1000倍も扱えるんだよ。\n- だから、数百万件〜数千万件のビックデータを安全に回すなら、バッチApex一択ってワケ！"
+        },
+        {
+          "n": 31,
+          "category": "ユーザーインターフェース",
+          "text": "LWCにおいて、コンポーネントのプロパティの値を画面上に表示する「データバインディング」を行う際、HTMLテンプレート（html）内で正しい記述形式はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "{!myProperty}"
+            },
+            {
+              "key": "B",
+              "text": "{{myProperty}}"
+            },
+            {
+              "key": "C",
+              "text": "{myProperty}"
+            },
+            {
+              "key": "D",
+              "text": "[myProperty]"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- LWCで、JavaScript側で定義したプロパティ（変数）の値をHTMLテンプレートにバインドして表示したいときは、ただの **シングル波カッコ** **{myProperty}**（C）で囲むだけ！\n- Visualforceの {!myProperty}（A）や、Aura/Vue.jsの {{myProperty}}（B）と混ざって超〜ごちゃごちゃになりがちだけど、LWCは一番シンプルな **{ }** だからね！間違えたらピエンだから注意して！"
+        },
+        {
+          "n": 32,
+          "category": "テストとデバッグ",
+          "text": "Apexコード内で、あるクエリが1件のレコードのみを返すことを期待して Account acc = [SELECT Id FROM Account WHERE Name = 'Unexist']; と記述したところ、該当するレコードが存在しなかった場合に発生するシステム例外クラスはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "NullPointerException"
+            },
+            {
+              "key": "B",
+              "text": "DmlException"
+            },
+            {
+              "key": "C",
+              "text": "QueryException"
+            },
+            {
+              "key": "D",
+              "text": "SObjectException"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- Apexコードで、1件のオブジェクト型変数に対して直接SOQLクエリを割り当てる際（Account acc = [SELECT Id FROM ...];）、\n- もしクエリ結果が「0件（該当なし）」だった、あるいは「2件以上（複数）」見つかっちゃった場合は、\n- **System.QueryException**（C）が発生してシステムがクラッシュしちゃうの！\n- これを防ぐためには、一旦 List<Account> accList = [SELECT ...]; のようにリストで受け取って、if (!accList.isEmpty()) で件数をチェックしてから変数に詰めるのがプロの防衛策だよ！"
+        },
+        {
+          "n": 33,
+          "category": "開発の基礎",
+          "text": "未管理パッケージ（Unmanaged Package）からインストールしたコンポーネントについて、正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "インストールした組織（パッケージの受信側）で、コードやメタデータを直接編集・カスタマイズできる。"
+            },
+            {
+              "key": "B",
+              "text": "パッケージのアップグレード（最新版の適用）がいつでも可能である。"
+            },
+            {
+              "key": "C",
+              "text": "インストールされたすべてのコンポーネントの名前空間が自動的に保護される。"
+            },
+            {
+              "key": "D",
+              "text": "Apexのコードカバー率の計算から自動的に除外される。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 「未管理パッケージ（Unmanaged Package）」っていうのは、オープンソースみたいなもの！\n- パッケージをインストールした組織（受信側）で、**中のApexコードや設定（メタデータ）を自由に変更・カスタマイズできる**（A）のが最大の特徴だよ。\n- ただし、インストールした後はパッケージ元からの「アプデ（アップグレード）」が一切できないから、使い捨てのテンプレートコードを配布するときとかによく使うよ。"
+        },
+        {
+          "n": 34,
+          "category": "ロジックと自動化",
+          "text": "次のコードにおいて、SOQLで取得した取引先（Account）レコードリストをディープコピー（参照ではなく、完全に新しいオブジェクトの複製）するために、clone() メソッドに渡すべき引数の組み合わせはどれですか？\n\n```apex\nList<Account> clonedList = originalList.deepClone(false, false, false);\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "(Boolean preserveId, Boolean isSystemFields, Boolean isDeepClone)"
+            },
+            {
+              "key": "B",
+              "text": "(Boolean preserveId, Boolean preserveReadonlyTimestamps, Boolean preserveAutonumber)"
+            },
+            {
+              "key": "C",
+              "text": "(Boolean preserveId, Boolean isDeepClone, Boolean isSystemFields)"
+            },
+            {
+              "key": "D",
+              "text": "引数は不要である。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- sObjectのリストを、参照（メモリのアドレス）を引き継がずに、完全に新しいデータとして複製（ディープコピー）したい場合は、deepClone メソッドを使用するよ！\n- 引数のシグネチャは **deepClone(preserveId, preserveReadonlyTimestamps, preserveAutonumber)** となっていて、\n- 1つ目：Id値を引き継ぐかどうか\n- 2つ目：作成日や更新日などの読み取り専用タイムスタンプを引き継ぐかどうか\n- 3つ目：自動採番フィールドの値を引き継ぐかどうか\n- を指定するの。この細かいメソッド引数はデベロッパー試験でたまに意地悪く聞かれるから、なんとなく単語を頭に入れておこう！"
+        },
+        {
+          "n": 35,
+          "category": "ユーザーインターフェース",
+          "text": "Visualforceにおいて、コントローラ側（Apex）のメソッドをJavaScriptから直接非同期（Ajax）で呼び出し、結果をJavaScriptのコールバック関数で受け取るためのJavaScript通信の仕組み（タグ）はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "<apex:actionFunction>"
+            },
+            {
+              "key": "B",
+              "text": "<apex:actionSupport>"
+            },
+            {
+              "key": "C",
+              "text": "<apex:actionStatus>"
+            },
+            {
+              "key": "D",
+              "text": "<apex:includeScript>"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Visualforceページにおいて、JavaScriptのコード（例えばボタンが押されたときや特定のタイマーなど）から、Apexコントローラのメソッドをバックグラウンド（非同期）で直接呼び出したいときに使うのが、**<apex:actionFunction>**（A）タグ！\n- これを使うと、JavaScript側に「Apexを呼ぶための偽のJavaScript関数」を自動で生成してくれて、それを呼ぶだけでApexの処理が走って結果をAjaxで反映できるの。超ベンリ！"
+        },
+        {
+          "n": 36,
+          "category": "テストとデバッグ",
+          "text": "開発環境（Sandbox）から本番環境へデプロイする際、「すべてのローカルテストを実行」を選択した場合に、どのテストクラスが実行されますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "組織内のすべてのテストクラス（管理パッケージ内のテストを含む）。"
+            },
+            {
+              "key": "B",
+              "text": "組織内のすべてのテストクラス（管理パッケージ内のテストを除く）。"
+            },
+            {
+              "key": "C",
+              "text": "デプロイ用の変更セットに含まれるテストクラスのみ。"
+            },
+            {
+              "key": "D",
+              "text": "過去30日間に実行されたテストクラスのみ。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- 本番組織へデプロイする際、リリースオプションで「すべてのローカルテストを実行」を選択した場合、\n- **「組織内に定義されているすべてのテストクラス（ただし、インストールされている管理パッケージ内のテストは除く）」**（B）が全部一斉に走り出すよ！\n- 管理パッケージ（他社製のツールなど）のテストは、すでに開発元が検証済みだから実行対象から除外して、自分たちが開発したコードのテスト（ローカルテスト）だけを厳密にチェックするの。"
+        },
+        {
+          "n": 37,
+          "category": "開発の基礎",
+          "text": "sObjectの動的な処理において、オブジェクトのフィールド値を文字列で指定して動的に取得するためのsObjectメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "obj.get(fieldName)"
+            },
+            {
+              "key": "B",
+              "text": "obj.getValue(fieldName)"
+            },
+            {
+              "key": "C",
+              "text": "obj.field(fieldName)"
+            },
+            {
+              "key": "D",
+              "text": "obj.fields.get(fieldName)"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 「sObjectのフィールド名を、文字列変数として動的に指定して値を取り出したい！」（例：fieldName = 'Name' にして、取引先名を取り出す）\n- そんな時に使うsObjectのメソッドが、**obj.get(fieldName)**（A）だよ！\n- 値を入れたい（セットしたい）ときは obj.put(fieldName, value) を使う。\n- これを知っておくと、どんなオブジェクトでも処理できる動的な汎用プログラムが書けるようになって、マジでITエンジニアとしてレベルアップするよ！アゲ！"
+        },
+        {
+          "n": 38,
+          "category": "ロジックと自動化",
+          "text": "Flow Builderの「決定（Decision）」要素を使用して条件分岐を行う際、条件式でサポートされて**いない**演算子はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "次の値に等しい（Equals）"
+            },
+            {
+              "key": "B",
+              "text": "次の値を含む（Contains）"
+            },
+            {
+              "key": "C",
+              "text": "次の正規表現に一致する（Regex Match）"
+            },
+            {
+              "key": "D",
+              "text": "次の値で始まる（Starts With）"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- Flow Builder（フロー）はノンプログラミングで超強力な分岐ロジック（決定 / Decision要素）が作れるけど、条件式の演算子として **「正規表現（Regex Match）」**（C）はさすがにサポートされて**いない**よ！\n- Equals（等しい）、Contains（含む）、StartsWith（始まる）、Is Null などの基本演算子はバッチリ揃ってるから、普通の分岐ならこれで十分カバーできちゃう！"
+        },
+        {
+          "n": 39,
+          "category": "ユーザーインターフェース",
+          "text": "AuraコンポーネントからLightning Web Component (LWC) への移行（マイグレーション）に関して、正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "AuraコンポーネントをLWCに直接自動変換するツールがある。"
+            },
+            {
+              "key": "B",
+              "text": "LWCコンポーネントの中に、古いAuraコンポーネントを子として配置（ネスト）することができる。"
+            },
+            {
+              "key": "C",
+              "text": "Auraコンポーネントの中に、LWCコンポーネントを子として配置（ネスト）することができる。"
+            },
+            {
+              "key": "D",
+              "text": "AuraとLWCは、同じLightningページ上で共存させて配置することはできない。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- SalesforceのUIフレームワークの進化の歴史だね！\n- 古い技術である「Auraコンポーネント」と、新しい標準技術である「LWC」の共存ルールは、\n- **「Auraコンポーネントの中に、LWCを子コンポーネントとして配置することはできる」**（C）！\n- でも、その逆（LWCの中にAuraを子として置くこと）は絶対にできないの。\n- 「新しいもの（LWC）は、古いもの（Aura）を受け入れられない」って覚えるとエモいし一発で覚えられるよ（笑）。"
+        },
+        {
+          "n": 40,
+          "category": "テストとデバッグ",
+          "text": "開発者がコードのパフォーマンスをデバッグするためにデバッグログを分析しています。「CPU時間制限（CPU Limit）」に達しそうになっている原因を特定するために、開発者コンソール（Developer Console）で最も役立つ表示ビューはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Execution Stack"
+            },
+            {
+              "key": "B",
+              "text": "Limits Tab"
+            },
+            {
+              "key": "C",
+              "text": "Execution Tree / Timeline"
+            },
+            {
+              "key": "D",
+              "text": "Variables Tab"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- 「Apexコードが重すぎて、どこでそんなに処理時間（CPU時間）を食ってるかわかんない！ピエン！」\n- そんなときに開発者コンソールでデバッグログを開いて役に立つのが、**Execution Tree（実行ツリー）や Timeline（タイムライン）**（C）ビュー！\n- どのメソッドの実行に何ミリ秒かかっているかがビジュアル的にグラフでパーセンテージ表示されるから、ボトルネックになっている重い処理を秒で見つけ出すことができるの！デバッグの強い味方だよ。"
+        },
+        {
+          "n": 41,
+          "category": "開発の基礎",
+          "text": "Apexクラスにおいて inherited sharing キーワードを使用した場合の挙動について、正しい記述はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "クラスは常に with sharing として動作する。"
+            },
+            {
+              "key": "B",
+              "text": "クラスは常に without sharing として動作する。"
+            },
+            {
+              "key": "C",
+              "text": "クラスを呼び出した親クラスの共有コンテキスト（with sharing または without sharing）を引き継いで動作する。"
+            },
+            {
+              "key": "D",
+              "text": "共有ルールが全く適用されない状態でオブジェクトレベルのCRUDチェックのみを強制する。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- inherited sharing（共有設定の継承）は、マジで賢いハイブリッドなキーワード！\n- このクラスを呼び出した親クラス（またはコンテキスト）が、\n- with sharing で宣言されていたら ➡ 自分自身も **with sharing** として動く。\n- without sharing で宣言されていたら ➡ 自分自身も **without sharing** として動く。\n- 呼び出し元に合わせて自分のスタンス（共有の有無）をカメレオンみたいに変えてくれるから、どんな場面でも安全かつ再利用しやすくなるベストプラクティスな宣言方法だよ！"
+        },
+        {
+          "n": 42,
+          "category": "ロジックと自動化",
+          "text": "Salesforceのトリガにおいて、System.isQueueable() や System.isFuture() を使う主な目的は何ですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "1回のトリガ内でDML操作を非同期で実行するため。"
+            },
+            {
+              "key": "B",
+              "text": "現在の実行コンテキストが非同期処理（QueueableやFuture）の最中であるかどうかを判定し、処理の無限ループや重複起動を防ぐため。"
+            },
+            {
+              "key": "C",
+              "text": "外部システムのコールアウトの応答時間を測定するため。"
+            },
+            {
+              "key": "D",
+              "text": "ガバナ制限を自動的にリセットするため。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- トリガの処理内で、同じレコードの更新によって再びトリガが連鎖起動して無限ループに陥っちゃうようなバグ（再帰）を防ぐために、\n- 「今、すでに非同期処理（FutureメソッドやQueueableジョブ）の中でこのトリガが動いてる最中かな？」\n- というのをチェックする際に、**System.isQueueable()** や **System.isFuture()**（B）などのコンテキスト判定メソッドを使うよ。\n- これで「非同期の最中なら、これ以上は非同期処理を呼ばずにおとなしく終了！」ってブレーキを踏めるの！"
+        },
+        {
+          "n": 43,
+          "category": "ユーザーインターフェース",
+          "text": "LWCでApexメソッドを命令的に呼び出す場合と、ワイヤサービス（@wire）を使って呼び出す場合を比較した際、**命令的な呼び出し**にのみ適しているユースケースはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "コンポーネントの読み込み（ロード）と同時にデータを画面に表示したい。"
+            },
+            {
+              "key": "B",
+              "text": "ユーザーがボタンをクリックしたタイミングなど、特定のユーザーアクションをきっかけにデータを保存・変更したい。"
+            },
+            {
+              "key": "C",
+              "text": "レコードデータが変更されたときに、画面をリアクティブに即時更新したい。"
+            },
+            {
+              "key": "D",
+              "text": "画面上の入力値が変わるたびに動的に検索クエリを走らせたい。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- LWCで、ボタンを押した瞬間に「データをデータベースにインサートする（書き換える）」といった処理（DML操作を伴う処理）は、必ずApexメソッドの **命令的（Imperative）呼び出し**（B）で行う必要があるよ！\n- なぜなら、もう一方の「ワイヤサービス（@wire）」はデータの「読み取り専用（Read-Only）」かつ「画面ロード時などの自動実行」が基本だから、意図しないタイミングでデータベースが更新されたら大惨事になっちゃう。\n- 「データの作成・変更はボタンを押した時、つまり命令的にやる！」が鉄則だよ！"
+        },
+        {
+          "n": 44,
+          "category": "テストとデバッグ",
+          "text": "システムで定義されている「ガバナ制限値」と「現在のトランザクション内での実際の消費量」をApexコード内で動的に比較して、制限ギリギリになったら処理を中断するようなプログラムを作りたい場合、どのクラスのメソッドを使用しますか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "System.Limits"
+            },
+            {
+              "key": "B",
+              "text": "System.Governor"
+            },
+            {
+              "key": "C",
+              "text": "Database.Limits"
+            },
+            {
+              "key": "D",
+              "text": "Apex.Debugger"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 「あと何回SOQLクエリを発行できる？」「あとどれくらいCPU時間を使える？」\n- こういったガバナ制限の「実数値」をプログラム内でリアルタイムに取得したいなら、**System.Limits** クラス（A）を使うよ！\n- Limits.getQueries()：これまでに発行したSOQLの回数\n- Limits.getLimitQueries()：発行できる最大数（100回）\n- これらを比較して、「もし制限の90%以上消費してたら処理を中断してエラーログを残す！」みたいな賢い防衛ロジックが書けちゃうの。マジでプロのコードって感じ！"
+        },
+        {
+          "n": 45,
+          "category": "開発の基礎",
+          "text": "Apexコード内で、外部キーのように機能する一意の識別子（External ID）フィールドを使用して、関連する親子レコードを1回のDML（upsert）で一度にデータベースに登録したい場合、正しい構文（アプローチ）はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "子レコードに親レコードのインスタンスをネストして insert する。"
+            },
+            {
+              "key": "B",
+              "text": "子レコードの参照関係フィールド（Parent_Object__r）に、External IDをセットした親オブジェクトのプロトタイプを代入して upsert する。"
+            },
+            {
+              "key": "C",
+              "text": "親レコードをまず挿入し、返ってきたIDを手動で子レコードにセットしてから子レコードを挿入する。（※1回のDMLではない）"
+            },
+            {
+              "key": "D",
+              "text": "リレーションシップフィールドにはExternal IDの値を直接代入することはできない。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- これ、試験で出るとちょっとビックリする高度なテクニック！\n- 1回のDML操作で、まだ作成されていない親レコードと子レコードを紐づけて一気にインサート（またはアップサート）したいとき、\n- 子レコードのリレーションフィールド（Parent_Object__r。末尾は __r だよ！）に対して、\n- new Parent_Object__c(External_ID_Field__c = '親子共通キー')\n- という風に「External IDだけをセットした親のオブジェクト参照」をブチ込んであげるの。\n- そうすると、Salesforceがインサート時に自動でそのキーを使って親子をガチャンと紐づけて保存してくれるの！\n- 親レコードのインサートを待たずに1発でDMLが済むから、マジでパフォーマンスがいいの。"
+        },
+        {
+          "n": 46,
+          "category": "ユーザーインターフェース",
+          "text": "LWCにおいて、コンポーネントが不要になりDOMから削除（アンマウント）された際に、メモリの解放やリスナーの削除などのクリーンアップ処理を行うために使用するライフサイクルメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "constructor()"
+            },
+            {
+              "key": "B",
+              "text": "connectedCallback()"
+            },
+            {
+              "key": "C",
+              "text": "renderedCallback()"
+            },
+            {
+              "key": "D",
+              "text": "disconnectedCallback()"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "- LWCコンポーネントが不要になって、画面（DOM）からバイバイ（削除）されたときに自動で呼ばれるライフサイクルフックは、**disconnectedCallback()**（D）だよ！\n- ここで、コンポーネントが動いている間に設定したグローバルなタイマー（setInterval）の解除や、イベントリスナーのクリーンアップをしてあげないと、メモリリーク（メモリが無駄に消費され続ける現象）が起きて画面がだんだん重くなっちゃうの。\n- 立つ鳥跡を濁さず、綺麗に片付けるのが優秀なデベロッパーの証だよ！✨"
+        },
+        {
+          "n": 47,
+          "category": "ロジックと自動化",
+          "text": "フロー（Flow）から呼び出されるApexメソッド（@InvocableMethod）の引数および戻り値の型に関する絶対的な制限ルールはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "引数や戻り値は、必ずリスト型（List<T>）の形式にする必要がある。"
+            },
+            {
+              "key": "B",
+              "text": "引数には Map 型しか指定できない。"
+            },
+            {
+              "key": "C",
+              "text": "引数は最大で5つまでしか定義できない。"
+            },
+            {
+              "key": "D",
+              "text": "戻り値は常に void でなければならない。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Flow Builder（フロー）からApexメソッド（@InvocableMethod）を呼び出すときの、絶対的なルール！\n- フローは複数レコードを「バルク（一括）」で裏で束ねて処理する可能性があるため、呼び出されるApex側のメソッドの引数と戻り値は、**「必ずリスト型（****List<T>****）」**（A）で定義されていなければならないの！\n- もし1件のデータしか扱わない場合でも、必ず List<String> や List<Account> みたいにリストの形で受け取って、リストの形で返してあげるのがフローとのお約束事だよ。"
+        },
+        {
+          "n": 48,
+          "category": "テストとデバッグ",
+          "text": "テストクラスにおいて、特定のメソッドが「システム例外」を投げることを正しくテストしてカバーするために使用する設計はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "try-catch ブロックで囲み、例外が発生しなかった場合に Assert.fail() を呼び出す。"
+            },
+            {
+              "key": "B",
+              "text": "System.assert(false) を例外が発生する前に配置する。"
+            },
+            {
+              "key": "C",
+              "text": "テストクラスに @isTest(SeeAllData=true) をつける。"
+            },
+            {
+              "key": "D",
+              "text": "例外が発生した瞬間にテストが強制終了するようにそのまま放置する。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 「この異常な値を入力したら、期待通りに例外（Exception）が発生するか？」\n- というテストコード（異常系テスト）を実装したい場合、\n-\ntry {\nmyMethodWithBadData(); // ここで例外が発生するはず！\nAssert.fail('例外が発生せずにここまで来ちゃったのはバグだよ！');\n} catch (MyException e) {\n// 期待通りに例外が発生したからテストクリア！\nSystem.assertEquals('想定エラーメッセージ', e.getMessage());\n}\n-\n- という風に、**try-catch** **ブロックで囲んで、もし例外が発生せずに** **try** **をすり抜けてしまったら** **Assert.fail()****（A）で意図的にテストをコケさせる** 設計にするのがベストプラクティスだよ！"
+        },
+        {
+          "n": 49,
+          "category": "開発の基礎",
+          "text": "Apexの Set コレクションが内部的に持っている重要な性質として、正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "値を追加した順序を厳密に保持する。"
+            },
+            {
+              "key": "B",
+              "text": "重複する値を格納することができず、要素の順序は保証されない。"
+            },
+            {
+              "key": "C",
+              "text": "キーと値のペアでデータを保持する。"
+            },
+            {
+              "key": "D",
+              "text": "インデックス（番号）を指定して set[0] のように要素を直接取り出すことができる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Apexの **Set（セット）** コレクションの2大特徴はこれ！\n1. **重複を許さない（ダブり厳禁のユニークな集まり）**\n2. **中身の要素の順番（インデックス番号）は一切保証されない**\n3. だから、順番通りに取り出したいときは List を使うべき。\n4. Setは「特定のレコードIDがこの中に含まれてる（.contains(id)）？」っていう存在チェックを爆速でやりたい時に最高のパフォーマンスを発揮するよ！"
+        },
+        {
+          "n": 50,
+          "category": "ユーザーインターフェース",
+          "text": "LWCのJavaScriptにおいて、コンポーネントが作成（初期化）されたばかりの最も早い段階で呼び出され、コンポーネント自身の初期設定を行うものの、この段階ではまだDOM要素（HTML要素）や属性にアクセスできないメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "constructor()"
+            },
+            {
+              "key": "B",
+              "text": "connectedCallback()"
+            },
+            {
+              "key": "C",
+              "text": "renderedCallback()"
+            },
+            {
+              "key": "D",
+              "text": "disconnectedCallback()"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCのコンポーネントがメモリ上に生み出された（インスタンス化された）瞬間に、全フックの中で一番最初に呼ばれるのが、おなじみの **constructor()**（A）！\n- この段階では、コンポーネントはまだ生まれてすぐで画面（DOM）に配置されていないから、\n- HTML要素にアクセスしたり、自分自身のプロパティ（属性）を設定しようとするとエラーになっちゃうの。\n- 初期設定はここではなく、DOMに接続されたタイミングの connectedCallback() でやるのが基本ルールだよ！"
+        },
+        {
+          "n": 51,
+          "category": "ロジックと自動化",
+          "text": "開発者が大量のレコードを一括処理するApexバッチを作成し、テストクラスを書いています。テストクラス内でバッチ処理を正しく実行して検証する際、バッチ呼び出しのコードを記述するべき場所はどこですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Test.startTest() より前"
+            },
+            {
+              "key": "B",
+              "text": "Test.startTest() と Test.stopTest() の間"
+            },
+            {
+              "key": "C",
+              "text": "Test.stopTest() より後ろ"
+            },
+            {
+              "key": "D",
+              "text": "テストクラスの @TestSetup メソッド内"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- バッチApex（非同期処理）をテストする場合、\n- 普通に呼び出すだけだと「いつバッチの処理が完了するかテストランナーには分からない」状態になっちゃう。\n- だから、バッチを起動するコード（Database.executeBatch(batchInstance)）は、必ず **Test.startTest()** **と** **Test.stopTest()** **の間（B）** に挟んであげるの！\n- そうすると、Test.stopTest() が呼ばれたその瞬間に、裏で動いていた非同期バッチ処理が「おらー！強制終了＆即時実行だー！」って同期的にすべて完了するから、その直後でアサーション（テスト結果の検証）ができるようになるんだよ！"
+        },
+        {
+          "n": 52,
+          "category": "ロジックと自動化",
+          "text": "Apexトリガ内で delete 操作が行われた（レコードが削除された）際、削除された元のレコードデータを保持している正しいコンテキスト変数はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Trigger.new"
+            },
+            {
+              "key": "B",
+              "text": "Trigger.old"
+            },
+            {
+              "key": "C",
+              "text": "Trigger.newMap"
+            },
+            {
+              "key": "D",
+              "text": "Trigger.oldMap のみ"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- レコードが削除（delete）された時のトリガ内では、\n- 削除されたレコードたちの「削除される前のデータ（中身）」が、**Trigger.old**（B）に格納されているよ！\n- もう削除されて新しくなったデータ（Trigger.new）なんて存在しないから、Trigger.new は null になるの。\n- だから、削除トリガ内で「削除されたレコードの情報を元に、関連レコードを更新する」みたいなロジックを書くなら、Trigger.old またはマップ版の Trigger.oldMap を使おうね！"
+        },
+        {
+          "n": 53,
+          "category": "開発の基礎",
+          "text": "SOQLのセキュリティ対策において、部分的にフィールドへのアクセス権がない場合に、クエリ全体をエラーにせず、アクセスできないフィールドのデータのみを自動的に除外して安全に読み込むことができるApexクラスのメソッドはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Security.stripInaccessible(AccessType.READABLE, queryResult)"
+            },
+            {
+              "key": "B",
+              "text": "String.escapeSingleQuotes(queryResult)"
+            },
+            {
+              "key": "C",
+              "text": "Schema.getGlobalDescribe()"
+            },
+            {
+              "key": "D",
+              "text": "Database.queryWithSecurity()"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- Q1でも出てきた、ユーザーの権限がないデータ（フィールド）を自動で排除（ストリップ）してくれるApexのスーパー救世主メソッドが、**Security.stripInaccessible(AccessType.READABLE, queryResult)**（A）！\n- これを使うと、クエリ結果（queryResult）の中から、現在のログインユーザーの権限（CRUD/FLS）で「読み取り不可」なフィールドの値をキレイに消し去った安全なレコードリストを返してくれるの。\n- セキュリティエラーで画面全体をバグらせずに、見せられるデータだけを賢く見せる実務でも超重宝するメソッドだよ！"
+        },
+        {
+          "n": 54,
+          "category": "ロジックと自動化",
+          "text": "あるシステムで、取引先（Account）レコードが作成された際、非同期で外部の在庫システムにAPI（コールアウト）で通知を行いたいと考えています。この処理をApexで実装する場合に、トリガに直接コールアウト処理を記述せず、どうやって設計すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "トリガから通常の insert DMLを発行する。"
+            },
+            {
+              "key": "B",
+              "text": "トリガから、@future(callout=true) アノテーションの付いた非同期メソッド、または Queueable を実装したクラスを呼び出す。"
+            },
+            {
+              "key": "C",
+              "text": "before insert トリガの中で直接 Http.send() を実行する。"
+            },
+            {
+              "key": "D",
+              "text": "トリガ内でワークフロールールを動的にアクティブにする。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Salesforceのトリガ（保存処理の最中）から、リアルタイムに外部へHTTPコールアウト（Web API連携）を投げようとすると、「保存トランザクションが完了するまで通信相手を待たせるな！ガバナ制限違反！」って怒られてシステムが即エラー（CalloutException）になっちゃうの。\n- これを防ぐために、トリガから呼び出すメソッドには **@future(callout=true)**（B）アノテーションをつけて、非同期処理（後回し）としてコールアウトを実行させるのが絶対の鉄則だよ！"
+        },
+        {
+          "n": 55,
+          "category": "ユーザーインターフェース",
+          "text": "Visualforceページにおいて、レコードのフィールドではなく、任意のテキスト入力欄や検索キーワード入力欄など、完全にカスタムの入力フィールドを画面に配置したい場合に使用する正しいタグはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "<apex:inputField>"
+            },
+            {
+              "key": "B",
+              "text": "<apex:inputText>"
+            },
+            {
+              "key": "C",
+              "text": "<apex:outputField>"
+            },
+            {
+              "key": "D",
+              "text": "<apex:inputForm>"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- Visualforceページで、オブジェクトの定義に紐づいていない「ただの自由なテキスト入力欄」や「検索用のキーワードボックス」を配置したいときは、**<apex:inputText>**（B）を使うよ！\n- オブジェクトのフィールドの型に連動させたいときは <apex:inputField>（A）だけど、自由なテキストなら単なる <input type=\"text\"> になる inputText が正解！"
+        },
+        {
+          "n": 56,
+          "category": "ロジックと自動化",
+          "text": "1回のトランザクションで、DML操作（insert, update, delete など）によって更新できるsObjectレコードの最大件数はいくつですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "150"
+            },
+            {
+              "key": "B",
+              "text": "1,000"
+            },
+            {
+              "key": "C",
+              "text": "10,000"
+            },
+            {
+              "key": "D",
+              "text": "50,000"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "- 1回の同期トランザクション（リクエスト）の中で、DML操作（レコードの作成・更新・削除など）によって処理できる「最大レコード数（合計）」は、ずばり **10,000件**（C）まで！\n- （ちなみにDMLを「呼び出す回数」の制限は150回だよ！）\n- 例えば、1回のDMLで1万件を超えるレコードを一括更新しようとすると、その瞬間にエラー（LimitException）でクラッシュしちゃうから、それ以上のデータを扱うならバッチApex（Q30参照）を使ってね！"
+        },
+        {
+          "n": 57,
+          "category": "開発の基礎",
+          "text": "管理パッケージ（Managed Package）の最大の特徴について、正しい説明はどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "パッケージのインストール先の組織で、Apexコードを自由に表示・編集できる。"
+            },
+            {
+              "key": "B",
+              "text": "パッケージのアップグレード（新バージョンのリリース）がいつでも実行できる。"
+            },
+            {
+              "key": "C",
+              "text": "インストール先の組織の共有ルールをすべて上書きする。"
+            },
+            {
+              "key": "D",
+              "text": "開発者コンソールでいつでもデバッグログを直接確認できる。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- AppExchangeとかで有料配布されるような「管理パッケージ（Managed Package）」の最大の特徴は、\n- **「パッケージの開発元が、いつでも最新のバグ修正や新機能をアップグレード（リリース）して、インストール先の組織に適用できる」**（B）こと！\n- また、インストールした組織のユーザーからは中身のApexコードが一切見えない（知的財産が保護される）仕組みになっているのも特徴。\n- Q33の「未管理パッケージ」と完全に真逆の性質だから、対比で覚えておくとテストで絶対に迷わないよ！"
+        },
+        {
+          "n": 58,
+          "category": "テストとデバッグ",
+          "text": "Apexコードの例外処理において、例外が発生した「エラーメッセージ（Error Message）」をプログラムで動的に取得するために、Exceptionオブジェクト（変数 e）のどのメソッドを呼び出すべきですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "e.getLineNumber()"
+            },
+            {
+              "key": "B",
+              "text": "e.getMessage()"
+            },
+            {
+              "key": "C",
+              "text": "e.getTypeName()"
+            },
+            {
+              "key": "D",
+              "text": "e.getCause()"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "- try-catch ブロックで例外（エラー）をキャッチしたとき、そのエラーが発生した「具体的なメッセージ（例：レコードが重複しています、など）」を取り出してログに残したいなら、Exceptionオブジェクトの **getMessage()**（B）メソッドを呼び出すよ！\n- ちなみに getLineNumber()（A）は「コードの何行目でエラーが起きたか」を、getTypeName()（C）は「DmlExceptionなどの例外の種類」を教えてくれるメソッドだよ！"
+        },
+        {
+          "n": 59,
+          "category": "ユーザーインターフェース",
+          "text": "LWCで、ある親コンポーネントが、その直下にある子コンポーネントの公開メソッド（JavaScript関数）を呼び出して処理を実行させたい場合、親コンポーネント側から子コンポーネントの要素を検索してメソッドを呼ぶための正しいJavaScriptコードはどれですか？（子コンポーネントのタグ名を <c-child-comp> とします）",
+          "options": [
+            {
+              "key": "A",
+              "text": "this.template.querySelector('c-child-comp').myMethod();"
+            },
+            {
+              "key": "B",
+              "text": "this.querySelector('c-child-comp').fireEvent('myMethod');"
+            },
+            {
+              "key": "C",
+              "text": "component.find('childComp').myMethod();"
+            },
+            {
+              "key": "D",
+              "text": "this.getChildComp().myMethod();"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- LWCにおいて、親コンポーネントのJavaScriptから、すぐ下にある子コンポーネント（例：<c-child-comp>）をDOMの中から見つけ出して、子コンポーネント側で公開されているメソッドを直接呼び出したいときは、\n- **this.template.querySelector('c-child-comp').myMethod();**（A）\n- という書き方をするよ！\n- Auraコンポーネントの component.find()（C）と混ざって間違えやすい超定番の移行・UI問題だから、LWCでは this.template.querySelector を使うんだ！ってしっかり覚えておいてね！"
+        },
+        {
+          "n": 60,
+          "category": "ロジックと自動化",
+          "text": "Apexの処理中に発生した一時的なエラーから復旧するため、データベースへのトランザクション全体をロールバックし、エラーの起きた原因データ（sObjectリスト）を特定して、残りのデータだけで再処理を行いたい場合に、最も適したクラスはどれですか？",
+          "options": [
+            {
+              "key": "A",
+              "text": "Database.Savepoint と Database.rollback()"
+            },
+            {
+              "key": "B",
+              "text": "System.abortJob()"
+            },
+            {
+              "key": "C",
+              "text": "Database.executeBatch()"
+            },
+            {
+              "key": "D",
+              "text": "Test.startTest()"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "- 「10件のデータを一括更新したけど、途中の5件目でヤバいエラーが出ちゃった！\n- 一旦全部なかったことにロールバックするけど、どのデータがエラーの原因か突き止めて、エラーデータだけを除外して残りの正常なデータだけで再処理したい！」\n- そんな高度なリカバリー設計をする時に活躍するのが、**Database.Savepoint** **と** **Database.rollback()**（A）のコンビ！\n- 一旦セーブポイントを作っておいて、try-catchでエラーが出たらロールバッ"
+        }
+      ]
+    }
+  ]
+}
