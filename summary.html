@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -26,6 +26,7 @@
   --c-warn:#B25800; --c-warn-bg:#FBF0E2; --c-warn-bd:#F1D9BA;
   --c-step:#0B6E99; --c-step-bg:#E7F4FA; --c-step-bd:#BFE3F0;
   --c-sum:#2E844A; --c-sum-bg:#EAF5EC; --c-sum-bd:#C5E5CD;
+  --c-triv:#C0398B; --c-triv-bg:#FCEAF4; --c-triv-bd:#F2CBE2;
 }
 [data-theme="dark"]{
   --blue:#1B96FF; --blue-d:#57ABFF; --navy:#C9E2FF;
@@ -44,6 +45,7 @@
   --c-warn:#F0B36A; --c-warn-bg:#2C2113; --c-warn-bd:#4A3820;
   --c-step:#6FC5E8; --c-step-bg:#12242D; --c-step-bd:#234049;
   --c-sum:#5FD18E; --c-sum-bg:#15291E; --c-sum-bd:#264A33;
+  --c-triv:#F19BD0; --c-triv-bg:#2A1622; --c-triv-bd:#46283A;
 }
 
 *{box-sizing:border-box}
@@ -91,12 +93,14 @@ body{
   border:1px solid transparent;background:transparent;color:var(--text-2);cursor:pointer;transition:.15s;flex-shrink:0}
 .icon-btn:hover{background:var(--side-bg);color:var(--text);border-color:var(--border)}
 .menu-toggle{display:none}
+/* クイックリンク群のラッパー。デスクトップでは display:contents で透過し、
+   各リンクを topbar の直接の flex 子要素として従来どおり横並びさせる */
+.quicklinks{display:contents}
 .summary-link{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;text-decoration:none;
   font-size:13px;font-weight:700;color:#fff;border-radius:10px;padding:8px 14px;
   background:linear-gradient(95deg,#ff5fa2,#ff8a5b);box-shadow:0 1px 4px rgba(255,95,162,.35);transition:.15s}
 .summary-link:hover{filter:brightness(1.06);transform:translateY(-1px)}
 .summary-link .ico{width:15px;height:15px}
-@media(max-width:560px){.summary-link span{display:none}}
 #themeToggle .ico-moon{display:none}
 [data-theme="dark"] #themeToggle .ico-sun{display:none}
 [data-theme="dark"] #themeToggle .ico-moon{display:block}
@@ -226,6 +230,7 @@ body{
 .callout.warning{--cl:var(--c-warn);--bg:var(--c-warn-bg);--bd:var(--c-warn-bd)}
 .callout.steps{--cl:var(--c-step);--bg:var(--c-step-bg);--bd:var(--c-step-bd)}
 .callout.summary{--cl:var(--c-sum);--bg:var(--c-sum-bg);--bd:var(--c-sum-bd)}
+.callout.trivia{--cl:var(--c-triv);--bg:var(--c-triv-bg);--bd:var(--c-triv-bd)}
 .callout.steps .callout-body ol{counter-reset:step;list-style:none;padding-left:0}
 .callout.steps .callout-body ol>li{position:relative;padding-left:34px;margin:10px 0;min-height:24px}
 .callout.steps .callout-body ol>li::before{counter-increment:step;content:counter(step);
@@ -334,7 +339,10 @@ body{
   .toc{display:none}
 }
 @media(max-width:860px){
-  :root{--side-w:300px}
+  /* モバイル/タブレットではトップバーを2段組みにする。
+     1段目: メニュー・ブランド・検索・テーマ切替 / 2段目: クイックリンクを横スクロール。
+     --header-h を2段分に拡張し、fixed なサイドバー・スクリムの位置揃えを保つ */
+  :root{--side-w:300px; --header-h:100px}
   .layout{grid-template-columns:minmax(0,1fr)}
   .menu-toggle{display:grid}
   .sidebar{position:fixed;top:var(--header-h);left:0;z-index:35;width:var(--side-w);
@@ -345,11 +353,27 @@ body{
   .content{padding:0 20px}
   .brand-text small{display:none}
   .topbar-progress{display:none}
+
+  .topbar{flex-wrap:wrap;align-content:center;height:var(--header-h);
+    padding:8px 12px;gap:8px 10px;overflow:hidden}
+  .menu-toggle{order:1}
+  .brand{order:2}
+  .search-wrap{order:3;flex:1 1 80px;margin-left:0;max-width:none}
+  #themeToggle{order:4}
+  /* 2段目: クイックリンクを必ず全幅で折り返し、横スクロールできる帯にする */
+  .quicklinks{order:5;display:flex;flex:1 1 100%;align-items:center;gap:8px;
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    margin:0 -12px;padding:0 12px}
+  .quicklinks::-webkit-scrollbar{display:none}
+  .summary-link{flex:0 0 auto;padding:7px 12px;font-size:12px}
+  .summary-link .ico{width:14px;height:14px}
 }
 @media(max-width:560px){
   .unit-title{font-size:24px}
   .pager{grid-template-columns:1fr}
   .search-wrap{max-width:none}
+  /* 横幅が厳しい端末ではブランド名テキストを省きアイコンのみに */
+  .brand-text{display:none}
 }
 .scrim{display:none}
 
@@ -393,45 +417,91 @@ body{
 .token.regex,.token.variable{color:var(--tok-attr)}
 .token.deleted{color:var(--tok-key)}
 </style>
+<style>
+/* このページ専用：右側 TOC が無いので 2 カラムにする */
+.summary-body .layout{grid-template-columns:var(--side-w) minmax(0,1fr)}
+@media(max-width:1100px){.summary-body .layout{grid-template-columns:1fr}}
+/* 読みやすさのため本文幅を制限して中央寄せ */
+.summary-body .content .article{max-width:900px;margin:0 auto}
+/* 見出しジャンプ時に固定ヘッダーへ隠れないよう余白を確保 */
+.summary-body .prose h1{scroll-margin-top:74px}
+.summary-body .prose h2{scroll-margin-top:74px}
+.summary-body .prose h3{scroll-margin-top:74px}
+/* 現在地のセクション見出し（H2）をハイライト */
+.summary-body .nav-topic>button.active{color:var(--blue);background:var(--accent-soft)}
+.summary-body .nav-topic>button.active .t-num{background:var(--blue);color:#fff}
+/* H3 を持たないセクション（leaf）は見出し自身がジャンプリンクになる */
+.summary-body .nav-topic.leaf>button{cursor:pointer}
+</style>
 </head>
 <body class="summary-body">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.5" y1="4.5" x2="6.6" y2="6.6"/><line x1="17.4" y1="17.4" x2="19.5" y2="19.5"/><line x1="4.5" y1="19.5" x2="6.6" y2="17.4"/><line x1="17.4" y1="6.6" x2="19.5" y2="4.5"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
     <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><line x1="4" y1="19" x2="4" y2="5"/></symbol>
     <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></symbol>
-    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
     <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17.5" x2="12" y2="17.5"/></symbol>
     <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.5" y2="6"/><line x1="3" y1="12" x2="3.5" y2="12"/><line x1="3" y1="18" x2="3.5" y2="18"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 21V4h13l-2 4 2 4H4"/></symbol>
+    <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></symbol>
     <symbol id="i-hash" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></symbol>
     <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
-    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 21V4h13l-2 4 2 4H4"/></symbol>
-    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
   </defs>
 </svg>
 
 <header class="topbar">
+  <button class="icon-btn menu-toggle" id="menuToggle" aria-label="メニュー"><svg class="ico"><use href="#i-menu"/></svg></button>
   <a class="brand" href="index.html">
     <span class="brand-mark" style="background:linear-gradient(135deg,#ff7eb3,#ff758c)"><svg class="ico"><use href="#i-bulb"/></svg></span>
     <span class="brand-text"><b>直前まとめチートシート</b><small>Platform デベロッパー</small></span>
   </a>
-  <div class="sum-actions">
-    <a class="back-link" href="index.html"><svg class="ico"><use href="#i-arrow-left"/></svg>学習ノートへ</a>
-    <a class="back-link" href="matome.html"><svg class="ico"><use href="#i-list"/></svg>単元まとめ</a>
-    <a class="back-link" href="numbers.html"><svg class="ico"><use href="#i-hash"/></svg>数字まとめ</a>
-    <a class="back-link" href="reference.html"><svg class="ico"><use href="#i-code"/></svg>リファレンス</a>
-    <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
-      <svg class="ico ico-sun"><use href="#i-sun"/></svg>
-      <svg class="ico ico-moon"><use href="#i-moon"/></svg>
-    </button>
+  <div class="search-wrap">
+    <svg class="ico search-ico"><use href="#i-search"/></svg>
+    <input type="search" id="searchInput" placeholder="見出しを絞り込み ( / )" autocomplete="off" spellcheck="false">
+    <span class="search-count" id="searchCount"></span>
   </div>
+  <div class="quicklinks">
+    <a class="summary-link" href="index.html" title="学習ノート本編へ">
+      <svg class="ico"><use href="#i-arrow-left"/></svg><span>本編</span>
+    </a>
+    <a class="summary-link" href="matome.html" title="単元まとめ・試験対策">
+      <svg class="ico"><use href="#i-list"/></svg><span>単元まとめ</span>
+    </a>
+    <a class="summary-link" href="reference.html" title="構文・メソッドリファレンス">
+      <svg class="ico"><use href="#i-code"/></svg><span>リファレンス</span>
+    </a>
+    <a class="summary-link" href="glossary.html" title="用語集">
+      <svg class="ico"><use href="#i-book"/></svg><span>用語集</span>
+    </a>
+    <a class="summary-link" href="comparison.html" title="比較表">
+      <svg class="ico"><use href="#i-table"/></svg><span>比較表</span>
+    </a>
+    <a class="summary-link" href="numbers.html" title="数字まとめ（数値・上限値）">
+      <svg class="ico"><use href="#i-hash"/></svg><span>数字まとめ</span>
+    </a>
+  </div>
+  <button class="icon-btn" id="themeToggle" aria-label="テーマ切替">
+    <svg class="ico ico-sun"><use href="#i-sun"/></svg>
+    <svg class="ico ico-moon"><use href="#i-moon"/></svg>
+  </button>
 </header>
 
-<main class="sum-main">
-  <article id="doc" class="article prose"></article>
-</main>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav" id="nav" aria-label="チートシート目次"></nav>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <main class="content" id="content">
+    <article id="doc" class="article prose"></article>
+  </main>
+</div>
 
 <script>/* marked.min.js */
 /**
@@ -2503,7 +2573,7 @@ Expecting `+Qe.join(", ")+", got '"+(this.terminals_[Ne]||Ne)+"'":Dt="Parse erro
   }
 `;function NWe(i,s,u=!1){var R,F,j;const d=i;let p="default";(((R=d==null?void 0:d.classes)==null?void 0:R.length)||0)>0&&(p=((d==null?void 0:d.classes)||[]).join(" ")),p=p+" flowchart-label";let v=0,b="",y;switch(d.type){case"round":v=5,b="rect";break;case"composite":v=0,b="composite",y=0;break;case"square":b="rect";break;case"diamond":b="question";break;case"hexagon":b="hexagon";break;case"block_arrow":b="block_arrow";break;case"odd":b="rect_left_inv_arrow";break;case"lean_right":b="lean_right";break;case"lean_left":b="lean_left";break;case"trapezoid":b="trapezoid";break;case"inv_trapezoid":b="inv_trapezoid";break;case"rect_left_inv_arrow":b="rect_left_inv_arrow";break;case"circle":b="circle";break;case"ellipse":b="ellipse";break;case"stadium":b="stadium";break;case"subroutine":b="subroutine";break;case"cylinder":b="cylinder";break;case"group":b="rect";break;case"doublecircle":b="doublecircle";break;default:b="rect"}const T=om((d==null?void 0:d.styles)||[]),_=d.label,A=d.size||{width:0,height:0,x:0,y:0};return{labelStyle:T.labelStyle,shape:b,labelText:_,rx:v,ry:v,class:p,style:T.style,id:d.id,directions:d.directions,width:A.width,height:A.height,x:A.x,y:A.y,positioned:u,intersect:void 0,type:d.type,padding:y??(((j=(F=Vh())==null?void 0:F.block)==null?void 0:j.padding)||0)}}async function kcn(i,s,u){const d=NWe(s,u,!1);if(d.type==="group")return;const p=await tJ(i,d),v=p.node().getBBox(),b=u.getBlock(d.id);b.size={width:v.width,height:v.height,x:0,y:0,node:p},u.setBlock(b),p.remove()}async function Ecn(i,s,u){const d=NWe(s,u,!0);u.getBlock(d.id).type!=="space"&&(await tJ(i,d),s.intersect=d==null?void 0:d.intersect,$me(d))}async function dwe(i,s,u,d){for(const p of s)await d(i,p,u),p.children&&await dwe(i,p.children,u,d)}async function Tcn(i,s,u){await dwe(i,s,u,kcn)}async function Ccn(i,s,u){await dwe(i,s,u,Ecn)}async function Scn(i,s,u,d,p){const v=new B0({multigraph:!0,compound:!0});v.setGraph({rankdir:"TB",nodesep:10,ranksep:10,marginx:8,marginy:8});for(const b of u)b.size&&v.setNode(b.id,{width:b.size.width,height:b.size.height,intersect:b.intersect});for(const b of s)if(b.start&&b.end){const y=d.getBlock(b.start),T=d.getBlock(b.end);if(y!=null&&y.size&&(T!=null&&T.size)){const _=y.size,A=T.size,P=[{x:_.x,y:_.y},{x:_.x+(A.x-_.x)/2,y:_.y+(A.y-_.y)/2},{x:A.x,y:A.y}];await IUe(i,{v:b.start,w:b.end,name:b.id},{...b,arrowTypeEnd:b.arrowTypeEnd,arrowTypeStart:b.arrowTypeStart,points:P,classes:"edge-thickness-normal edge-pattern-solid flowchart-link LS-a1 LE-b1"},void 0,"block",v,p),b.label&&(await zme(i,{...b,label:b.label,labelStyle:"stroke: #333; stroke-width: 1.5px;fill:none;",arrowTypeEnd:b.arrowTypeEnd,arrowTypeStart:b.arrowTypeStart,points:P,classes:"edge-thickness-normal edge-pattern-solid flowchart-link LS-a1 LE-b1"}),await MUe({...b,x:P[1].x,y:P[1].y},{originalPath:P}))}}}const e0=((RWe=(FWe=qt())==null?void 0:FWe.block)==null?void 0:RWe.padding)||8;function _cn(i,s){if(i===0||!Number.isInteger(i))throw new Error("Columns must be an integer !== 0.");if(s<0||!Number.isInteger(s))throw new Error("Position must be a non-negative integer."+s);if(i<0)return{px:s,py:0};if(i===1)return{px:0,py:s};const u=s%i,d=Math.floor(s/i);return{px:u,py:d}}const Acn=i=>{let s=0,u=0;for(const d of i.children){const{width:p,height:v,x:b,y}=d.size||{width:0,height:0,x:0,y:0};Xe.debug("getMaxChildSize abc95 child:",d.id,"width:",p,"height:",v,"x:",b,"y:",y,d.type),d.type!=="space"&&(p>s&&(s=p/(i.widthInColumns||1)),v>u&&(u=v))}return{width:s,height:u}};function gwe(i,s,u=0,d=0){var b,y,T,_,A,P,R,F,j,K,ee;Xe.debug("setBlockSizes abc95 (start)",i.id,(b=i==null?void 0:i.size)==null?void 0:b.x,"block width =",i==null?void 0:i.size,"sieblingWidth",u),(y=i==null?void 0:i.size)!=null&&y.width||(i.size={width:u,height:d,x:0,y:0});let p=0,v=0;if(((T=i.children)==null?void 0:T.length)>0){for(const de of i.children)gwe(de,s);const ie=Acn(i);p=ie.width,v=ie.height,Xe.debug("setBlockSizes abc95 maxWidth of",i.id,":s children is ",p,v);for(const de of i.children)de.size&&(Xe.debug(`abc95 Setting size of children of ${i.id} id=${de.id} ${p} ${v} ${de.size}`),de.size.width=p*(de.widthInColumns||1)+e0*((de.widthInColumns||1)-1),de.size.height=v,de.size.x=0,de.size.y=0,Xe.debug(`abc95 updating size of ${i.id} children child:${de.id} maxWidth:${p} maxHeight:${v}`));for(const de of i.children)gwe(de,s,p,v);const oe=i.columns||-1;let pe=0;for(const de of i.children)pe+=de.widthInColumns||1;let be=i.children.length;oe>0&&oe<pe&&(be=oe),i.widthInColumns;const ae=Math.ceil(pe/be);let ne=be*(p+e0)+e0,se=ae*(v+e0)+e0;if(ne<u){Xe.debug(`Detected to small siebling: abc95 ${i.id} sieblingWidth ${u} sieblingHeight ${d} width ${ne}`),ne=u,se=d;const de=(u-be*e0-e0)/be,X=(d-ae*e0-e0)/ae;Xe.debug("Size indata abc88",i.id,"childWidth",de,"maxWidth",p),Xe.debug("Size indata abc88",i.id,"childHeight",X,"maxHeight",v),Xe.debug("Size indata abc88 xSize",be,"padding",e0);for(const ge of i.children)ge.size&&(ge.size.width=de,ge.size.height=X,ge.size.x=0,ge.size.y=0)}if(Xe.debug(`abc95 (finale calc) ${i.id} xSize ${be} ySize ${ae} columns ${oe}${i.children.length} width=${Math.max(ne,((_=i.size)==null?void 0:_.width)||0)}`),ne<(((A=i==null?void 0:i.size)==null?void 0:A.width)||0)){ne=((P=i==null?void 0:i.size)==null?void 0:P.width)||0;const de=oe>0?Math.min(i.children.length,oe):i.children.length;if(de>0){const X=(ne-de*e0-e0)/de;Xe.debug("abc95 (growing to fit) width",i.id,ne,(R=i.size)==null?void 0:R.width,X);for(const ge of i.children)ge.size&&(ge.size.width=X)}}i.size={width:ne,height:se,x:0,y:0}}Xe.debug("setBlockSizes abc94 (done)",i.id,(F=i==null?void 0:i.size)==null?void 0:F.x,(j=i==null?void 0:i.size)==null?void 0:j.width,(K=i==null?void 0:i.size)==null?void 0:K.y,(ee=i==null?void 0:i.size)==null?void 0:ee.height)}function PWe(i,s){var d,p,v,b,y,T,_,A,P,R,F,j,K,ee,ie,oe,pe;Xe.debug(`abc85 layout blocks (=>layoutBlocks) ${i.id} x: ${(d=i==null?void 0:i.size)==null?void 0:d.x} y: ${(p=i==null?void 0:i.size)==null?void 0:p.y} width: ${(v=i==null?void 0:i.size)==null?void 0:v.width}`);const u=i.columns||-1;if(Xe.debug("layoutBlocks columns abc95",i.id,"=>",u,i),i.children&&i.children.length>0){const be=((y=(b=i==null?void 0:i.children[0])==null?void 0:b.size)==null?void 0:y.width)||0,ae=i.children.length*be+(i.children.length-1)*e0;Xe.debug("widthOfChildren 88",ae,"posX");let ne=0;Xe.debug("abc91 block?.size?.x",i.id,(T=i==null?void 0:i.size)==null?void 0:T.x);let se=(_=i==null?void 0:i.size)!=null&&_.x?((A=i==null?void 0:i.size)==null?void 0:A.x)+(-((P=i==null?void 0:i.size)==null?void 0:P.width)/2||0):-e0,de=0;for(const X of i.children){const ge=i;if(!X.size)continue;const{width:W,height:xe}=X.size,{px:U,py:Fe}=_cn(u,ne);if(Fe!=de&&(de=Fe,se=(R=i==null?void 0:i.size)!=null&&R.x?((F=i==null?void 0:i.size)==null?void 0:F.x)+(-((j=i==null?void 0:i.size)==null?void 0:j.width)/2||0):-e0,Xe.debug("New row in layout for block",i.id," and child ",X.id,de)),Xe.debug(`abc89 layout blocks (child) id: ${X.id} Pos: ${ne} (px, py) ${U},${Fe} (${(K=ge==null?void 0:ge.size)==null?void 0:K.x},${(ee=ge==null?void 0:ge.size)==null?void 0:ee.y}) parent: ${ge.id} width: ${W}${e0}`),ge.size){const Pe=W/2;X.size.x=se+e0+Pe,Xe.debug(`abc91 layout blocks (calc) px, pyid:${X.id} startingPos=X${se} new startingPosX${X.size.x} ${Pe} padding=${e0} width=${W} halfWidth=${Pe} => x:${X.size.x} y:${X.size.y} ${X.widthInColumns} (width * (child?.w || 1)) / 2 ${W*((X==null?void 0:X.widthInColumns)||1)/2}`),se=X.size.x+Pe,X.size.y=ge.size.y-ge.size.height/2+Fe*(xe+e0)+xe/2+e0,Xe.debug(`abc88 layout blocks (calc) px, pyid:${X.id}startingPosX${se}${e0}${Pe}=>x:${X.size.x}y:${X.size.y}${X.widthInColumns}(width * (child?.w || 1)) / 2${W*((X==null?void 0:X.widthInColumns)||1)/2}`)}X.children&&PWe(X),ne+=(X==null?void 0:X.widthInColumns)||1,Xe.debug("abc88 columnsPos",X,ne)}}Xe.debug(`layout blocks (<==layoutBlocks) ${i.id} x: ${(ie=i==null?void 0:i.size)==null?void 0:ie.x} y: ${(oe=i==null?void 0:i.size)==null?void 0:oe.y} width: ${(pe=i==null?void 0:i.size)==null?void 0:pe.width}`)}function BWe(i,{minX:s,minY:u,maxX:d,maxY:p}={minX:0,minY:0,maxX:0,maxY:0}){if(i.size&&i.id!=="root"){const{x:v,y:b,width:y,height:T}=i.size;v-y/2<s&&(s=v-y/2),b-T/2<u&&(u=b-T/2),v+y/2>d&&(d=v+y/2),b+T/2>p&&(p=b+T/2)}if(i.children)for(const v of i.children)({minX:s,minY:u,maxX:d,maxY:p}=BWe(v,{minX:s,minY:u,maxX:d,maxY:p}));return{minX:s,minY:u,maxX:d,maxY:p}}function Lcn(i){const s=i.getBlock("root");if(!s)return;gwe(s,i,0,0),PWe(s),Xe.debug("getBlocks",JSON.stringify(s,null,2));const{minX:u,minY:d,maxX:p,maxY:v}=BWe(s),b=v-d,y=p-u;return{x:u,y:d,width:y,height:b}}const Mcn=Object.freeze(Object.defineProperty({__proto__:null,diagram:{parser:ucn,db:ycn,renderer:{draw:async function(i,s,u,d){const{securityLevel:p,block:v}=Vh(),b=d.db;let y;p==="sandbox"&&(y=Ir("#i"+s));const T=Ir(p==="sandbox"?y.nodes()[0].contentDocument.body:"body"),_=p==="sandbox"?T.select(`[id="${s}"]`):Ir(`[id="${s}"]`);Sme(_,["point","circle","cross"],d.type,s);const P=b.getBlocks(),R=b.getBlocksFlat(),F=b.getEdges(),j=_.insert("g").attr("class","block");await Tcn(j,P,b);const K=Lcn(b);if(await Ccn(j,P,b),await Scn(j,F,R,b,s),K){const ee=K,ie=Math.max(1,Math.round(.125*(ee.width/ee.height))),oe=ee.height+ie+10,pe=ee.width+10,{useMaxWidth:be}=v;Ng(_,oe,pe,!!be),Xe.debug("Here Bounds",K,ee),_.attr("viewBox",`${ee.x-5} ${ee.y-5} ${ee.width+10} ${ee.height+10}`)}_F(zFe)},getClasses:function(i,s){return s.db.getClasses()}},styles:xcn}},Symbol.toStringTag,{value:"Module"}));return um});
 </script>
-<script>window.__DOC__ = "# 🎀 直前まとめチートシート\n\nやっほー！👋✨ ウチが試験範囲ぜーんぶギュッと絞ってまとめたから、ここだけは絶対おさえてこ💪💯\n細かい解説は各ユニットを見てね。**このページは「最後の総ざらい」用**だよ〜😎\n\n\u003e [!ポイント] 試験のキホン情報（ここマジ大事）\n\u003e\n\u003e - 4セクション構成、配点は **27 / 28 / 25 / 20**（合計100%）。\n\u003e - **②自動化とロジック（28%）＋①基本（27%）= 55%**！まずここ固めたら勝ち確🔥\n\u003e - 合格ラインの目安は **68%**くらい。択一＆複数選択でだいたい60問。\n\n---\n\n## 🗺 まずは全体マップ\n\n```mermaid\nflowchart TD\n    EXAM([\"Platform デベロッパー試験\u003cbr/\u003e合計 100%\"])\n    EXAM --\u003e S1[\"① 開発者の基本事項\u003cbr/\u003e27%\"]\n    EXAM --\u003e S2[\"② プロセスの自動化とロジック\u003cbr/\u003e28% ◀ 最大の山場\"]\n    EXAM --\u003e S3[\"③ ユーザーインターフェース\u003cbr/\u003e25%\"]\n    EXAM --\u003e S4[\"④ テスト・デバッグ・リリース\u003cbr/\u003e20%\"]\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\n    class S2 hl;\n    class S1,S3,S4 soft;\n```\n\n| セクション | 配点 | ざっくり内容 |\n| --- | --- | --- |\n| ① 開発者の基本事項 | **27%** | マルチテナント、MVC、データモデル、宣言型 vs Apex |\n| ② プロセスの自動化とロジック | **28%** | Apex・SOQL/SOSL/DML・トリガー・フロー・ガバナ制限 |\n| ③ ユーザーインターフェース | **25%** | LWC・Aura・Visualforce |\n| ④ テスト・デバッグ・リリース | **20%** | Apexテスト・デバッグログ・デプロイ |\n\n---\n\n## 🧩 ① 開発者の基本事項\n\n\u003e [!まとめ] ここだけは押さえる\n\u003e\n\u003e - **マルチテナント**：1つの基盤を全社で共有 → だから**ガバナ制限**がある（独り占め禁止✋）。\n\u003e - **MVC**：Model（オブジェクト/項目）・View（画面=LWC/VF）・Controller（ロジック=Apex）。\n\u003e - **メタデータ駆動**：設定もコードもメタデータ。だから宣言的に作れる。\n\n**自動化は「まず宣言型、ダメならApex」がド定番😎**\n\n```mermaid\nflowchart TD\n    Q1{\"1レコード内の\u003cbr/\u003e計算で足りる？\"}\n    Q1 --\u003e|\"はい\"| F[\"数式項目\u003cbr/\u003e（読み取り専用・自動計算）\"]\n    Q1 --\u003e|\"いいえ\"| Q2{\"子レコードの\u003cbr/\u003e集計？\"}\n    Q2 --\u003e|\"はい\"| R[\"積み上げ集計\u003cbr/\u003e（主従関係が必須）\"]\n    Q2 --\u003e|\"いいえ\"| Q3{\"ノーコードの\u003cbr/\u003eフローで実現できる？\"}\n    Q3 --\u003e|\"はい\"| FL[\"フロー（Flow）\"]\n    Q3 --\u003e|\"いいえ・複雑\"| AP[\"Apex（トリガー/クラス）\"]\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\n    class F,R,FL soft;\n    class AP hl;\n```\n\n\u003e [!注意] リレーションのひっかけ⚠️\n\u003e\n\u003e - **主従（Master-Detail）**：親消すと子も消える🪦／子は親必須／**積み上げ集計が使える**／子に所有者なし。\n\u003e - **参照（Lookup）**：ゆるい関係／親消しても子は残る／積み上げ集計は標準では不可。\n\u003e - 「積み上げ集計したい」と来たら **主従関係**！これ鉄板の出題パターン💯\n\n---\n\n## 🗃 カスタムデータ格納（Custom Metadata / Settings / Labels）\n\n> [!ポイント] 3つの違い（超頻出比較💯）\n>\n> | 種別 | 用途 | Apex から変更 | デプロイ可 |\n> | --- | --- | --- | --- |\n> | **Custom Labels** | 翻訳対応の文字列定数 | 不可 | 可 |\n> | **Custom Settings（List型）** | 設定値（一覧形式） | 可（DML） | 可 |\n> | **Custom Settings（Hierarchy型）** | org/profile/user 階層設定 | 可（DML） | 可 |\n> | **Custom Metadata Types** | 設定データ（パッケージ同梱可） | **不可** | **可** |\n\n> [!注意] ひっかけポイント⚠️\n>\n> - Custom Metadata は **Apex から DML で変更できない**（読み取り専用！）。\n> - Custom Settings は DML で変更可（テストでも作成可能）。\n> - Custom Labels は `System.Label.ラベル名`（Apex）/ `$Label.ラベル名`（VF）で参照。\n\n\n---\n\n## ⚙️ ② プロセスの自動化とロジック（最重要・28%）\n\n### 🔑 SOQL / SOSL / DML 使い分け\n\n| やりたいこと | 使うやつ | ひとこと |\n| --- | --- | --- |\n| 特定オブジェクトを条件で取得 | **SOQL** | `[SELECT Id FROM Account WHERE ...]` |\n| 複数オブジェクトを横断テキスト検索 | **SOSL** | `FIND 'スミス' IN ALL FIELDS RETURNING ...` |\n| レコードの作成・更新・削除 | **DML** | `insert` / `update` / `upsert` / `delete` |\n\n\u003e [!ポイント] SOQL vs SOSL の見分け（超頻出✨）\n\u003e\n\u003e - **どのオブジェクトか分かってる** → SOQL。\n\u003e - **キーワードを複数オブジェクトから探す・あいまい検索** → SOSL。\n\u003e - SOQL は最大2万件、SOSL は最大2千件返す。SOSL は**テキスト検索インデックス**を使うよ。\n\n\u003e [!注意] DML のひっかけ⚠️\n\u003e\n\u003e - `upsert`：あれば更新・なければ作成（**外部ID or Id** で判定）。\n\u003e - `merge`：取引先・取引先責任者・リードだけ、最大3件マージ。\n\u003e - `Database.insert(list, false)`：**部分成功**を許可（全部こけない）。`insert list;` は1件でもダメなら**全ロールバック**。\n\n### 🔗 SOQL リレーション クエリ（親・子を跨いで取得）\n\n> [!ポイント] 2パターンの関係クエリ（頻出💯）\n>\n> **① 子 → 親（ドット記法）**：子クエリから親項目を参照\n>\n> ```apex\n> SELECT Id, LastName, Account.Name FROM Contact WHERE Account.Industry = 'Technology'\n> ```\n>\n> **② 親 → 子（サブクエリ）**：親クエリに子レコードを埋め込む\n>\n> ```apex\n> SELECT Id, Name, (SELECT Id, LastName FROM Contacts) FROM Account\n> ```\n\n> [!注意] サブクエリのルール⚠️\n>\n> - `FROM` には**リレーション名（複数形）**を書く（標準は `Contacts`・`Opportunities` など）。\n> - カスタムオブジェクトは `__r` サフィックスのリレーション名（例：`Custom_Items__r`）。\n> - ネストは**1レベルまで**（サブクエリの中にサブクエリは不可）。\n> - 結果は `account.Contacts` のように `List<sObject>` で取得。\n\n\n### 🧱 Apex の基本\n\n\u003e [!用語] sObject（エスオブジェクト）\n\u003e\n\u003e Salesforce のレコードを表すデータ型。`Account a = new Account(Name='Acme');` みたいに使う。DB の1行 = 1 sObject だよ。\n\n\u003e [!まとめ] コレクション3兄弟（マジ頻出）\n\u003e\n\u003e - **List**：順番あり・重複OK（`List\u003cAccount\u003e`）。\n\u003e - **Set**：重複なし・順番なし。\n\u003e - **Map**：キーと値のペア（`Map\u003cId, Account\u003e`）。トリガーで超使う！\n\n### ⚡ トリガー（ここが28%の主役）\n\n\u003e [!ポイント] コンテキスト変数（暗記マスト📝）\n\u003e\n\u003e | 変数 | 中身 | 使える場面 |\n\u003e | --- | --- | --- |\n\u003e | `Trigger.new` | 新しい値のリスト | insert / update（**before/after**） |\n\u003e | `Trigger.old` | 古い値のリスト | update / delete |\n\u003e | `Trigger.newMap` | ID→新レコードのMap | update / after insert |\n\u003e | `Trigger.oldMap` | ID→旧レコードのMap | update / delete |\n\u003e | `Trigger.isBefore/isAfter` | タイミング判定 | 全部 |\n\n\u003e [!注意] before と after の使い分け（ド頻出⚠️）\n\u003e\n\u003e - **before**：同じレコードの**項目を更新**するなら before（DML不要でそのまま代入✨）。\n\u003e - **after**：**レコードIDが必要**な処理（関連レコード作成・他オブジェクト更新）は after。\n\u003e - after では `Trigger.new` のレコードは**読み取り専用**！更新しようとするとエラー💥\n\n**トリガーの保存実行順（Order of Execution）ざっくり版👇**\n\n```mermaid\nflowchart TD\n    A[\"1. レコード読み込み（既存値）\"]\n    B[\"2. 新値を反映・システム検証\"]\n    C[\"3. before トリガー\"]\n    D[\"4. 入力規則・重複ルール\"]\n    E[\"5. レコード保存（まだコミットしない）\"]\n    F[\"6. after トリガー\"]\n    G[\"7. 積み上げ集計・ワークフロー\"]\n    H[\"8. フロー（保存後）・エスカレーション\"]\n    I[\"9. DBにコミット✅\"]\n    A --\u003e B --\u003e C --\u003e D --\u003e E --\u003e F --\u003e G --\u003e H --\u003e I\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\n    class C,F hl;\n    class A,B,D,E,G,H,I soft;\n```\n\n\u003e [!ポイント] 一括化（バルク化）＝トリガー設計の命🔥\n\u003e\n\u003e - **ループの中で SOQL / DML は絶対NG**🙅‍♀️ → ガバナ制限に即死。\n\u003e - SOQL は**ループの外で1回**。`WHERE Id IN :Trigger.new` でまとめて取得。\n\u003e - 更新するレコードは **List に溜めて、ループの外で1回 DML**。\n\u003e - トリガーは**1回200件**のバッチで動く前提でコード書く！\n\n### ⏳ 非同期 Apex の使い分け（決定木で覚えて✨）\n\n```mermaid\nflowchart TD\n    Q1{\"決まった時刻に\u003cbr/\u003e実行したい？\"}\n    Q1 --\u003e|\"はい\"| SCH[\"Schedulable\u003cbr/\u003e（Apex スケジューラ）\"]\n    Q1 --\u003e|\"いいえ\"| Q2{\"大量データ\u003cbr/\u003e（数万〜数百万件）？\"}\n    Q2 --\u003e|\"はい\"| BAT[\"Batch Apex\u003cbr/\u003e（分割処理・最大5千万件）\"]\n    Q2 --\u003e|\"いいえ\"| Q3{\"ジョブの連鎖や\u003cbr/\u003e複雑な型を渡したい？\"}\n    Q3 --\u003e|\"はい\"| QUE[\"Queueable\u003cbr/\u003e（チェーン可・sObject渡せる）\"]\n    Q3 --\u003e|\"いいえ・単純\"| FUT[\"future メソッド\u003cbr/\u003e（@future・戻り値void）\"]\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\n    class BAT,QUE hl;\n    class SCH,FUT soft;\n```\n\n\u003e [!注意] 非同期のひっかけ⚠️\n\u003e\n\u003e - `@future` は **戻り値 void**・引数は**プリミティブのみ**（sObject ❌）・future から future ❌。\n\u003e - **コールアウト**（外部API）するなら `@future(callout=true)`。\n\u003e - Batch は `Database.Batchable` を実装（**start → execute（200件ずつ）→ finish**）。\n\u003e - Queueable は **sObject も渡せる**し**チェーン**もできる（future の上位互換的存在😎）。\n\n### ⚠️ Apex 例外処理 & セーブポイント\n\n> [!ポイント] try-catch-finally の基本（必ず書ける？）\n>\n> ```apex\n> try {\n>     insert accList;\n> } catch (DmlException e) {\n>     System.debug(e.getMessage());\n> } catch (Exception e) {\n>     System.debug(e.getMessage());\n> } finally {\n>     // 成功・失敗に関わらず実行\n> }\n> ```\n\n> [!まとめ] よく出る例外クラス\n>\n> | 例外 | 発生条件 |\n> | --- | --- |\n> | `DmlException` | insert/update/delete 失敗（必須項目なし等） |\n> | `QueryException` | SOQL が期待と違う（0件を1件変数に代入 等） |\n> | `NullPointerException` | null オブジェクトのプロパティにアクセス |\n> | `LimitException` | ガバナ制限超過（catch **不可能**⚠️） |\n> | `CalloutException` | 外部サービス呼び出し失敗 |\n\n> [!ポイント] Savepoint / Rollback（部分的な巻き戻し）\n>\n> ```apex\n> Savepoint sp = Database.setSavepoint();\n> try {\n>     // 処理A → 処理B\n> } catch (Exception e) {\n>     Database.rollback(sp); // SP の時点まで巻き戻す\n> }\n> ```\n>\n> - トランザクション内で**部分ロールバック**したいときに使う。\n> - `setSavepoint()` と `rollback()` は DML ステートメント数にカウントされる点に注意。\n\n\n---\n\n## 📊 ガバナ制限 早見表（暗記ゾーン📝🔥）\n\n\u003e [!ポイント] これ覚えたら自動化セクションがグッと楽になる\n\u003e\n\u003e | 制限 | 同期 | 非同期 |\n\u003e | --- | --- | --- |\n\u003e | SOQL クエリ発行数 | **100** | 200 |\n\u003e | SOQL 取得行数 | 50,000 | 50,000 |\n\u003e | DML ステートメント数 | **150** | 150 |\n\u003e | DML 処理行数 | 10,000 | 10,000 |\n\u003e | SOSL クエリ数 | 20 | 20 |\n\u003e | CPU 時間 | 10,000ms | 60,000ms |\n\u003e | ヒープサイズ | 6 MB | 12 MB |\n\n\u003e [!注意] 数字のゴロ合わせ💡\n\u003e\n\u003e 「**SOQL は100、DML は150**」だけは絶対！ここ間違えると一気に失点だよ〜😢\n\u003e 行数系は「**SOQL 5万行・DML 1万行**」でセット暗記。\n\n---\n\n## 🎨 ③ ユーザーインターフェース（25%）\n\n\u003e [!まとめ] UI技術 早わかり\n\u003e\n\u003e | 技術 | 何者？ | いつ使う |\n\u003e | --- | --- | --- |\n\u003e | **LWC** | Web標準ベースの最新コンポーネント | **新規開発の第一選択**✨ |\n\u003e | **Aura** | 旧世代のコンポーネント | 既存資産の保守 |\n\u003e | **Visualforce** | 古いページベースのUI | レガシー・PDF出力など |\n\n\u003e [!ポイント] LWC の超重要キーワード\n\u003e\n\u003e | デコレータ | 役割 |\n\u003e | --- | --- |\n\u003e | `@api` | プロパティ/メソッドを**公開**（親→子で値渡し） |\n\u003e | `@track` | オブジェクト/配列の内部変更を追跡 |\n\u003e | `@wire` | Apex や UI API から**リアクティブにデータ取得** |\n\n\u003e [!注意] LWC イベントの向き（ひっかけ注意⚠️）\n\u003e\n\u003e - **子 → 親**：`CustomEvent` を `dispatchEvent` で発火、親は `on○○` で受ける。\n\u003e - **親 → 子**：子の `@api` プロパティに値を渡す。\n\u003e - **無関係どうし**：**LMS（Lightning Message Service）** で通信。\n\n**LWC が Apex を呼ぶ流れ（@wire のイメージ）**\n\n```mermaid\nsequenceDiagram\n    participant LWC as LWC コンポーネント\n    participant Apex as Apex メソッド\n    participant DB as データベース\n    LWC-\u003e\u003eApex: AuraEnabled メソッドを wire で購読\n    Apex-\u003e\u003eDB: SOQL で取得\n    DB--\u003e\u003eApex: レコード返却\n    Apex--\u003e\u003eLWC: data または error を配信\n```\n\n\u003e [!ポイント] Apex 連携の作法（出る！）\n\u003e\n\u003e - LWC から呼ぶ → **`@AuraEnabled`**（読み取り専用は `cacheable=true`、付けると **DML不可**）。\n\u003e - フロー / Agentforce から呼ぶ → **`@InvocableMethod`**（引数・戻り値は **List**）。\n\n### 🔄 LWC ライフサイクルフック（順序を覚えて！）\n\n> [!ポイント] ライフサイクルの流れ\n>\n> **constructor → connectedCallback → render → renderedCallback → disconnectedCallback**\n\n> [!まとめ] 各フックの役割\n>\n> | フック | タイミング | 主な用途 |\n> | --- | --- | --- |\n> | `constructor()` | コンポーネント作成直後（DOM未接続） | 初期値設定（`@api` はまだ利用不可） |\n> | `connectedCallback()` | DOM に接続された直後 | データ取得・イベントリスナー登録 |\n> | `renderedCallback()` | レンダリング毎（再描画でも呼ばれる） | DOM 直接操作（無限ループ注意⚠️） |\n> | `disconnectedCallback()` | DOM から切り離された後 | リスナー解除・後処理 |\n> | `errorCallback(error, stack)` | **子**でエラー発生時 | エラーバウンダリ（親が子のエラーを捕捉） |\n\n> [!注意] ひっかけポイント⚠️\n>\n> - `constructor` 内では `@api` プロパティは**まだ設定されていない**。\n> - `renderedCallback` は再レンダリングの**たびに**呼ばれる → 条件なしの処理は**無限ループ**の危険あり。\n> - `errorCallback` は**親コンポーネントに定義**して子のエラーを捕捉する（子自身では使えない）。\n\n\n---\n\n## 🧪 ④ テスト・デバッグ・リリース（20%）\n\n\u003e [!ポイント] Apex テストの鉄則（毎回出る💯）\n\u003e\n\u003e - 本番デプロイには**全体コードカバレッジ 75% 以上**＋**全テスト合格**が必須。\n\u003e - テストメソッドは **`@isTest`**。テストクラスにも `@isTest`。\n\u003e - **`Test.startTest()` / `Test.stopTest()`** の間で対象を実行 → **ガバナ制限がリセット**＆非同期もここで完了。\n\u003e - **`@testSetup`** で共通テストデータを1回作成（使い回し）。\n\u003e - テストは**自分でデータを作る**のが原則（`@isTest(SeeAllData=true)` は基本使わない🙅‍♀️）。\n\u003e - コールアウトのテストは **`Test.setMock`** でモック。\n\n\u003e [!用語] アサーション（Assert）\n\u003e\n\u003e 期待値どおりか確認する命綱。`Assert.areEqual(期待, 実際);` みたいに書く。これが無いテストは意味ナシ❌\n\n\u003e [!まとめ] デバッグ & リリース道具箱\n\u003e\n\u003e - **デバッグログ**：トレースフラグ設定 → `System.debug()` ＋ ログレベルで追う。\n\u003e - **Apex Replay Debugger**：ログを**再生**して変数チェック（VS Code）。\n\u003e - **環境の流れ**：Scratch組織（開発）→ Sandbox（テスト/UAT）→ **本番**。\n\u003e - **DX / CLI**：ソース駆動開発＆CI/CD。コンソールはサッと確認用。\n\n\u003e [!注意] Sandbox 種別（地味に出る⚠️）\n\u003e\n\u003e Developer / Developer Pro / Partial Copy / **Full**。右にいくほど本番データを多く含む。Full だけ本番の全データコピー🗂\n\n---\n\n## 🔐 セキュリティ（②④にまたがる頻出ネタ）\n\n\u003e [!ポイント] 鉄板の防御パターン\n\u003e\n\u003e - **`with sharing`**：実行ユーザーの共有設定を尊重（デフォは `without sharing` 相当に注意）。\n\u003e - **SOQLインジェクション対策**：**バインド変数**（`:変数`）を使う！動的SOQLの文字列連結は危険💥 → `String.escapeSingleQuotes()`。\n\u003e - **CRUD/FLS**：`WITH USER_MODE`・`WITH SECURITY_ENFORCED`・`Security.stripInaccessible()`。\n\u003e - **CSRF / SSRF**：勝手なリクエスト/内部アクセスを防ぐ。許可リストで宛先を絞る。\n\n---\n\n## 📡 Platform Events（イベント駆動型統合）\n\n> [!用語] Platform Events とは\n>\n> Salesforce 内外でリアルタイムなイベント通知ができる **pub/sub（発行/購読）** の仕組み。オブジェクト名は `__e` サフィックス。\n\n> [!ポイント] 使い方（試験に出るポイント）\n>\n> - **Apex でパブリッシュ**：`EventBus.publish(new Order_Placed__e(Amount__c=100));`\n> - **Apex でサブスクライブ**：`after insert` トリガーを使う（`Trigger.new` でイベントデータ受取）。\n> - **LWC / Aura**：CometD 経由でリアルタイム購読可能。\n> - トランザクションに**紐づかない** → rollback してもイベントは飛ぶ⚠️。\n> - 通常の sObject とは異なり、**before insert は存在しない**（after insert のみ）。\n\n---\n\n## 🔒 権限設定とデータ共有の仕組み\n\n> [!まとめ] 権限の多層構造（広げる方向で考える）\n>\n> | レイヤー | 何を制御？ | ポイント |\n> | --- | --- | --- |\n> | **OWD（組織共有デフォルト）** | オブジェクト全体の**最小**権限 | ここが基準。Public Read/Write/Private 等 |\n> | **ロール階層** | 上位ロールが下位の所有レコードを参照可 | 所有者ベース |\n> | **共有ルール** | OWD をグループ単位で緩和 | Private の OWD を一部ロールに緩和 等 |\n> | **プロファイル** | ユーザーに**必ず1つ**割り当て | 全体的な機能・オブジェクト権限 |\n> | **権限セット** | プロファイルに**追加**で権限付与 | 柔軟に複数割り当て可 |\n> | **権限セットグループ** | 権限セットを束ねる | 大規模管理に便利 |\n\n> [!注意] ひっかけポイント⚠️\n>\n> - OWD は「広げる」のではなく「**最も制限した状態を設定**」→ 共有ルール等で**広げていく**。\n> - プロファイルで禁止 → 権限セットで許可 → **権限セットの許可が優先**（OR ロジック）。\n> - **`with sharing`**：実行ユーザーの共有設定を尊重。\n> - **`without sharing`**：共有設定を無視して実行（管理者権限相当）。\n> - **`inherited sharing`**：呼び出し元のコンテキストを引き継ぐ。\n>\n> | クラス宣言 | 共有ルール適用 | 主な用途 |\n> | --- | --- | --- |\n> | `with sharing` | 適用 | 通常のビジネスロジック |\n> | `without sharing` | 適用しない | 管理者専用処理・システム処理 |\n> | `inherited sharing` | 呼び出し元に従う | 共通ユーティリティクラス |\n\n\n---\n\n## ✅ 直前チェックリスト（試験前に流し読み👀）\n\n\u003e [!まとめ] これ全部「うん！」って言えたら準備OK😎🎉\n\u003e\n\u003e - [ ] 主従 vs 参照、積み上げ集計は主従が必須 → 言える？\n\u003e - [ ] SOQL=100 / DML=150、行数 5万 / 1万 → 即答できる？\n\u003e - [ ] before（項目更新）/ after（ID必要・関連操作）の違い → OK？\n\u003e - [ ] トリガーは**ループ外でSOQL/DML**・200件前提 → 染み付いてる？\n\u003e - [ ] future / Batch / Queueable / Schedulable の使い分け → 決定木で出る？\n\u003e - [ ] 実行順序：before → 検証 → 保存 → after → 集計/WF → コミット → 言える？\n\u003e - [ ] テスト 75%・startTest/stopTest・@testSetup・setMock → バッチリ？\n\u003e - [ ] LWC：@api/@wire、子→親はCustomEvent、@AuraEnabled → OK？\n\u003e - [ ] with sharing ＆ バインド変数でインジェクション対策 → OK？\n> - [ ] Custom Metadata は DML 不可・Custom Settings は DML 可 → 言える？\n> - [ ] SOQL サブクエリ（親→子）とドット記法（子→親）の書き方 → OK？\n> - [ ] LWC lifecycle: constructor → connectedCallback → renderedCallback → 言える？\n> - [ ] Platform Events は `__e` サフィックス・after insert のみ → 覚えた？\n> - [ ] OWD は最小権限基準・権限セットはプロファイルに追加（OR）→ OK？\n\nここまで来たアナタは超エラい！🙌💖 あとは自信もって本番いってこ〜！受かったら教えてね🍀✨\n\n---\n\n\u003e [!注意] このページについて\n\u003e\n\u003e これは**要点だけ**を絞ったチートシートだよ。あいまいな所は各トピックの詳しいユニットに戻って確認してね📖 トップに戻るには上の「学習ノートへ」リンクからどうぞ！\n";</script>
+<script>window.__DOC__ = "# 🎀 直前まとめチートシート\r\n\r\nやっほー！👋✨ ウチが試験範囲ぜーんぶギュッと絞ってまとめたから、ここだけは絶対おさえてこ💪💯\r\n細かい解説は各ユニットを見てね。**このページは「最後の総ざらい」用**だよ〜😎\r\n\r\n\u003e [!ポイント] 試験のキホン情報（ここマジ大事）\r\n\u003e\r\n\u003e - 4セクション構成、配点は **27 / 28 / 25 / 20**（合計100%）。\r\n\u003e - **②自動化とロジック（28%）＋①基本（27%）= 55%**！まずここ固めたら勝ち確🔥\r\n\u003e - 合格ラインの目安は **68%**くらい。択一＆複数選択でだいたい60問。\r\n\r\n---\r\n\r\n## 🗺 まずは全体マップ\r\n\r\n```mermaid\r\nflowchart TD\r\n    EXAM([\"Platform デベロッパー試験\u003cbr/\u003e合計 100%\"])\r\n    EXAM --\u003e S1[\"① 開発者の基本事項\u003cbr/\u003e27%\"]\r\n    EXAM --\u003e S2[\"② プロセスの自動化とロジック\u003cbr/\u003e28% ◀ 最大の山場\"]\r\n    EXAM --\u003e S3[\"③ ユーザーインターフェース\u003cbr/\u003e25%\"]\r\n    EXAM --\u003e S4[\"④ テスト・デバッグ・リリース\u003cbr/\u003e20%\"]\r\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\r\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\r\n    class S2 hl;\r\n    class S1,S3,S4 soft;\r\n```\r\n\r\n| セクション | 配点 | ざっくり内容 |\r\n| --- | --- | --- |\r\n| ① 開発者の基本事項 | **27%** | マルチテナント、MVC、データモデル、宣言型 vs Apex |\r\n| ② プロセスの自動化とロジック | **28%** | Apex・SOQL/SOSL/DML・トリガー・フロー・ガバナ制限 |\r\n| ③ ユーザーインターフェース | **25%** | LWC・Aura・Visualforce |\r\n| ④ テスト・デバッグ・リリース | **20%** | Apexテスト・デバッグログ・デプロイ |\r\n\r\n---\r\n\r\n## 🧩 ① 開発者の基本事項\r\n\r\n\u003e [!まとめ] ここだけは押さえる\r\n\u003e\r\n\u003e - **マルチテナント**：1つの基盤を全社で共有 → だから**ガバナ制限**がある（独り占め禁止✋）。\r\n\u003e - **MVC**：Model（オブジェクト/項目）・View（画面=LWC/VF）・Controller（ロジック=Apex）。\r\n\u003e - **メタデータ駆動**：設定もコードもメタデータ。だから宣言的に作れる。\r\n\r\n**自動化は「まず宣言型、ダメならApex」がド定番😎**\r\n\r\n```mermaid\r\nflowchart TD\r\n    Q1{\"1レコード内の\u003cbr/\u003e計算で足りる？\"}\r\n    Q1 --\u003e|\"はい\"| F[\"数式項目\u003cbr/\u003e（読み取り専用・自動計算）\"]\r\n    Q1 --\u003e|\"いいえ\"| Q2{\"子レコードの\u003cbr/\u003e集計？\"}\r\n    Q2 --\u003e|\"はい\"| R[\"積み上げ集計\u003cbr/\u003e（主従関係が必須）\"]\r\n    Q2 --\u003e|\"いいえ\"| Q3{\"ノーコードの\u003cbr/\u003eフローで実現できる？\"}\r\n    Q3 --\u003e|\"はい\"| FL[\"フロー（Flow）\"]\r\n    Q3 --\u003e|\"いいえ・複雑\"| AP[\"Apex（トリガー/クラス）\"]\r\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\r\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\r\n    class F,R,FL soft;\r\n    class AP hl;\r\n```\r\n\r\n\u003e [!注意] リレーションのひっかけ⚠️\r\n\u003e\r\n\u003e - **主従（Master-Detail）**：親消すと子も消える🪦／子は親必須／**積み上げ集計が使える**／子に所有者なし。\r\n\u003e - **参照（Lookup）**：ゆるい関係／親消しても子は残る／積み上げ集計は標準では不可。\r\n\u003e - 「積み上げ集計したい」と来たら **主従関係**！これ鉄板の出題パターン💯\r\n\r\n---\r\n\r\n## ⚙️ ② プロセスの自動化とロジック（最重要・28%）\r\n\r\n### 🔑 SOQL / SOSL / DML 使い分け\r\n\r\n| やりたいこと | 使うやつ | ひとこと |\r\n| --- | --- | --- |\r\n| 特定オブジェクトを条件で取得 | **SOQL** | `[SELECT Id FROM Account WHERE ...]` |\r\n| 複数オブジェクトを横断テキスト検索 | **SOSL** | `FIND 'スミス' IN ALL FIELDS RETURNING ...` |\r\n| レコードの作成・更新・削除 | **DML** | `insert` / `update` / `upsert` / `delete` |\r\n\r\n\u003e [!ポイント] SOQL vs SOSL の見分け（超頻出✨）\r\n\u003e\r\n\u003e - **どのオブジェクトか分かってる** → SOQL。\r\n\u003e - **キーワードを複数オブジェクトから探す・あいまい検索** → SOSL。\r\n\u003e - SOQL は最大2万件、SOSL は最大2千件返す。SOSL は**テキスト検索インデックス**を使うよ。\r\n\r\n\u003e [!注意] DML のひっかけ⚠️\r\n\u003e\r\n\u003e - `upsert`：あれば更新・なければ作成（**外部ID or Id** で判定）。\r\n\u003e - `merge`：取引先・取引先責任者・リードだけ、最大3件マージ。\r\n\u003e - `Database.insert(list, false)`：**部分成功**を許可（全部こけない）。`insert list;` は1件でもダメなら**全ロールバック**。\r\n\r\n### 🧱 Apex の基本\r\n\r\n\u003e [!用語] sObject（エスオブジェクト）\r\n\u003e\r\n\u003e Salesforce のレコードを表すデータ型。`Account a = new Account(Name='Acme');` みたいに使う。DB の1行 = 1 sObject だよ。\r\n\r\n\u003e [!まとめ] コレクション3兄弟（マジ頻出）\r\n\u003e\r\n\u003e - **List**：順番あり・重複OK（`List\u003cAccount\u003e`）。\r\n\u003e - **Set**：重複なし・順番なし。\r\n\u003e - **Map**：キーと値のペア（`Map\u003cId, Account\u003e`）。トリガーで超使う！\r\n\r\n### ⚡ トリガー（ここが28%の主役）\r\n\r\n\u003e [!ポイント] コンテキスト変数（暗記マスト📝）\r\n\u003e\r\n\u003e | 変数 | 中身 | 使える場面 |\r\n\u003e | --- | --- | --- |\r\n\u003e | `Trigger.new` | 新しい値のリスト | insert / update（**before/after**） |\r\n\u003e | `Trigger.old` | 古い値のリスト | update / delete |\r\n\u003e | `Trigger.newMap` | ID→新レコードのMap | update / after insert |\r\n\u003e | `Trigger.oldMap` | ID→旧レコードのMap | update / delete |\r\n\u003e | `Trigger.isBefore/isAfter` | タイミング判定 | 全部 |\r\n\r\n\u003e [!注意] before と after の使い分け（ド頻出⚠️）\r\n\u003e\r\n\u003e - **before**：同じレコードの**項目を更新**するなら before（DML不要でそのまま代入✨）。\r\n\u003e - **after**：**レコードIDが必要**な処理（関連レコード作成・他オブジェクト更新）は after。\r\n\u003e - after では `Trigger.new` のレコードは**読み取り専用**！更新しようとするとエラー💥\r\n\r\n**トリガーの保存実行順（Order of Execution）ざっくり版👇**\r\n\r\n```mermaid\r\nflowchart TD\r\n    A[\"1. レコード読み込み（既存値）\"]\r\n    B[\"2. 新値を反映・システム検証\"]\r\n    C[\"3. before トリガー\"]\r\n    D[\"4. 入力規則・重複ルール\"]\r\n    E[\"5. レコード保存（まだコミットしない）\"]\r\n    F[\"6. after トリガー\"]\r\n    G[\"7. 積み上げ集計・ワークフロー\"]\r\n    H[\"8. フロー（保存後）・エスカレーション\"]\r\n    I[\"9. DBにコミット✅\"]\r\n    A --\u003e B --\u003e C --\u003e D --\u003e E --\u003e F --\u003e G --\u003e H --\u003e I\r\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\r\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\r\n    class C,F hl;\r\n    class A,B,D,E,G,H,I soft;\r\n```\r\n\r\n\u003e [!ポイント] 一括化（バルク化）＝トリガー設計の命🔥\r\n\u003e\r\n\u003e - **ループの中で SOQL / DML は絶対NG**🙅‍♀️ → ガバナ制限に即死。\r\n\u003e - SOQL は**ループの外で1回**。`WHERE Id IN :Trigger.new` でまとめて取得。\r\n\u003e - 更新するレコードは **List に溜めて、ループの外で1回 DML**。\r\n\u003e - トリガーは**1回200件**のバッチで動く前提でコード書く！\r\n\r\n### ⏳ 非同期 Apex の使い分け（決定木で覚えて✨）\r\n\r\n```mermaid\r\nflowchart TD\r\n    Q1{\"決まった時刻に\u003cbr/\u003e実行したい？\"}\r\n    Q1 --\u003e|\"はい\"| SCH[\"Schedulable\u003cbr/\u003e（Apex スケジューラ）\"]\r\n    Q1 --\u003e|\"いいえ\"| Q2{\"大量データ\u003cbr/\u003e（数万〜数百万件）？\"}\r\n    Q2 --\u003e|\"はい\"| BAT[\"Batch Apex\u003cbr/\u003e（分割処理・最大5千万件）\"]\r\n    Q2 --\u003e|\"いいえ\"| Q3{\"ジョブの連鎖や\u003cbr/\u003e複雑な型を渡したい？\"}\r\n    Q3 --\u003e|\"はい\"| QUE[\"Queueable\u003cbr/\u003e（チェーン可・sObject渡せる）\"]\r\n    Q3 --\u003e|\"いいえ・単純\"| FUT[\"future メソッド\u003cbr/\u003e（@future・戻り値void）\"]\r\n    classDef hl fill:#0176D3,stroke:#032D60,color:#fff;\r\n    classDef soft fill:#E8F2FC,stroke:#0176D3,color:#032D60;\r\n    class BAT,QUE hl;\r\n    class SCH,FUT soft;\r\n```\r\n\r\n\u003e [!注意] 非同期のひっかけ⚠️\r\n\u003e\r\n\u003e - `@future` は **戻り値 void**・引数は**プリミティブのみ**（sObject ❌）・future から future ❌。\r\n\u003e - **コールアウト**（外部API）するなら `@future(callout=true)`。\r\n\u003e - Batch は `Database.Batchable` を実装（**start → execute（200件ずつ）→ finish**）。\r\n\u003e - Queueable は **sObject も渡せる**し**チェーン**もできる（future の上位互換的存在😎）。\r\n\r\n---\r\n\r\n## 📊 ガバナ制限 早見表（暗記ゾーン📝🔥）\r\n\r\n\u003e [!ポイント] これ覚えたら自動化セクションがグッと楽になる\r\n\u003e\r\n\u003e | 制限 | 同期 | 非同期 |\r\n\u003e | --- | --- | --- |\r\n\u003e | SOQL クエリ発行数 | **100** | 200 |\r\n\u003e | SOQL 取得行数 | 50,000 | 50,000 |\r\n\u003e | DML ステートメント数 | **150** | 150 |\r\n\u003e | DML 処理行数 | 10,000 | 10,000 |\r\n\u003e | SOSL クエリ数 | 20 | 20 |\r\n\u003e | CPU 時間 | 10,000ms | 60,000ms |\r\n\u003e | ヒープサイズ | 6 MB | 12 MB |\r\n\r\n\u003e [!注意] 数字のゴロ合わせ💡\r\n\u003e\r\n\u003e 「**SOQL は100、DML は150**」だけは絶対！ここ間違えると一気に失点だよ〜😢\r\n\u003e 行数系は「**SOQL 5万行・DML 1万行**」でセット暗記。\r\n\r\n---\r\n\r\n## 🎨 ③ ユーザーインターフェース（25%）\r\n\r\n\u003e [!まとめ] UI技術 早わかり\r\n\u003e\r\n\u003e | 技術 | 何者？ | いつ使う |\r\n\u003e | --- | --- | --- |\r\n\u003e | **LWC** | Web標準ベースの最新コンポーネント | **新規開発の第一選択**✨ |\r\n\u003e | **Aura** | 旧世代のコンポーネント | 既存資産の保守 |\r\n\u003e | **Visualforce** | 古いページベースのUI | レガシー・PDF出力など |\r\n\r\n\u003e [!ポイント] LWC の超重要キーワード\r\n\u003e\r\n\u003e | デコレータ | 役割 |\r\n\u003e | --- | --- |\r\n\u003e | `@api` | プロパティ/メソッドを**公開**（親→子で値渡し） |\r\n\u003e | `@track` | オブジェクト/配列の内部変更を追跡 |\r\n\u003e | `@wire` | Apex や UI API から**リアクティブにデータ取得** |\r\n\r\n\u003e [!注意] LWC イベントの向き（ひっかけ注意⚠️）\r\n\u003e\r\n\u003e - **子 → 親**：`CustomEvent` を `dispatchEvent` で発火、親は `on○○` で受ける。\r\n\u003e - **親 → 子**：子の `@api` プロパティに値を渡す。\r\n\u003e - **無関係どうし**：**LMS（Lightning Message Service）** で通信。\r\n\r\n**LWC が Apex を呼ぶ流れ（@wire のイメージ）**\r\n\r\n```mermaid\r\nsequenceDiagram\r\n    participant LWC as LWC コンポーネント\r\n    participant Apex as Apex メソッド\r\n    participant DB as データベース\r\n    LWC-\u003e\u003eApex: AuraEnabled メソッドを wire で購読\r\n    Apex-\u003e\u003eDB: SOQL で取得\r\n    DB--\u003e\u003eApex: レコード返却\r\n    Apex--\u003e\u003eLWC: data または error を配信\r\n```\r\n\r\n\u003e [!ポイント] Apex 連携の作法（出る！）\r\n\u003e\r\n\u003e - LWC から呼ぶ → **`@AuraEnabled`**（読み取り専用は `cacheable=true`、付けると **DML不可**）。\r\n\u003e - フロー / Agentforce から呼ぶ → **`@InvocableMethod`**（引数・戻り値は **List**）。\r\n\r\n---\r\n\r\n## 🧪 ④ テスト・デバッグ・リリース（20%）\r\n\r\n\u003e [!ポイント] Apex テストの鉄則（毎回出る💯）\r\n\u003e\r\n\u003e - 本番デプロイには**全体コードカバレッジ 75% 以上**＋**全テスト合格**が必須。\r\n\u003e - テストメソッドは **`@isTest`**。テストクラスにも `@isTest`。\r\n\u003e - **`Test.startTest()` / `Test.stopTest()`** の間で対象を実行 → **ガバナ制限がリセット**＆非同期もここで完了。\r\n\u003e - **`@testSetup`** で共通テストデータを1回作成（使い回し）。\r\n\u003e - テストは**自分でデータを作る**のが原則（`@isTest(SeeAllData=true)` は基本使わない🙅‍♀️）。\r\n\u003e - コールアウトのテストは **`Test.setMock`** でモック。\r\n\r\n\u003e [!用語] アサーション（Assert）\r\n\u003e\r\n\u003e 期待値どおりか確認する命綱。`Assert.areEqual(期待, 実際);` みたいに書く。これが無いテストは意味ナシ❌\r\n\r\n\u003e [!まとめ] デバッグ & リリース道具箱\r\n\u003e\r\n\u003e - **デバッグログ**：トレースフラグ設定 → `System.debug()` ＋ ログレベルで追う。\r\n\u003e - **Apex Replay Debugger**：ログを**再生**して変数チェック（VS Code）。\r\n\u003e - **環境の流れ**：Scratch組織（開発）→ Sandbox（テスト/UAT）→ **本番**。\r\n\u003e - **DX / CLI**：ソース駆動開発＆CI/CD。コンソールはサッと確認用。\r\n\r\n\u003e [!注意] Sandbox 種別（地味に出る⚠️）\r\n\u003e\r\n\u003e Developer / Developer Pro / Partial Copy / **Full**。右にいくほど本番データを多く含む。Full だけ本番の全データコピー🗂\r\n\r\n---\r\n\r\n## 🔐 セキュリティ（②④にまたがる頻出ネタ）\r\n\r\n\u003e [!ポイント] 鉄板の防御パターン\r\n\u003e\r\n\u003e - **`with sharing`**：実行ユーザーの共有設定を尊重（デフォは `without sharing` 相当に注意）。\r\n\u003e - **SOQLインジェクション対策**：**バインド変数**（`:変数`）を使う！動的SOQLの文字列連結は危険💥 → `String.escapeSingleQuotes()`。\r\n\u003e - **CRUD/FLS**：`WITH USER_MODE`・`WITH SECURITY_ENFORCED`・`Security.stripInaccessible()`。\r\n\u003e - **CSRF / SSRF**：勝手なリクエスト/内部アクセスを防ぐ。許可リストで宛先を絞る。\r\n\r\n---\r\n\r\n## ✅ 直前チェックリスト（試験前に流し読み👀）\r\n\r\n\u003e [!まとめ] これ全部「うん！」って言えたら準備OK😎🎉\r\n\u003e\r\n\u003e - [ ] 主従 vs 参照、積み上げ集計は主従が必須 → 言える？\r\n\u003e - [ ] SOQL=100 / DML=150、行数 5万 / 1万 → 即答できる？\r\n\u003e - [ ] before（項目更新）/ after（ID必要・関連操作）の違い → OK？\r\n\u003e - [ ] トリガーは**ループ外でSOQL/DML**・200件前提 → 染み付いてる？\r\n\u003e - [ ] future / Batch / Queueable / Schedulable の使い分け → 決定木で出る？\r\n\u003e - [ ] 実行順序：before → 検証 → 保存 → after → 集計/WF → コミット → 言える？\r\n\u003e - [ ] テスト 75%・startTest/stopTest・@testSetup・setMock → バッチリ？\r\n\u003e - [ ] LWC：@api/@wire、子→親はCustomEvent、@AuraEnabled → OK？\r\n\u003e - [ ] with sharing ＆ バインド変数でインジェクション対策 → OK？\r\n\r\nここまで来たアナタは超エラい！🙌💖 あとは自信もって本番いってこ〜！受かったら教えてね🍀✨\r\n\r\n---\r\n\r\n\u003e [!注意] このページについて\r\n\u003e\r\n\u003e これは**要点だけ**を絞ったチートシートだよ。あいまいな所は各トピックの詳しいユニットに戻って確認してね📖 トップに戻るには上の「学習ノートへ」リンクからどうぞ！\r\n";</script>
 <script>(function () {
   'use strict';
   const LS_THEME = 'sfpd-theme';
@@ -2549,6 +2619,7 @@ Expecting `+Qe.join(", ")+", got '"+(this.terminals_[Ne]||Ne)+"'":Dt="Parse erro
     host.innerHTML = window.marked ? marked.parse(window.__DOC__ || '') : '';
     transformCallouts(host);
     host.querySelectorAll('h1,h2,h3').forEach((h, i) => { h.id = 'h-' + i; });
+    buildNav(host);
     host.querySelectorAll('table').forEach(tb => { const w = document.createElement('div'); w.className = 'table-wrap'; tb.parentNode.insertBefore(w, tb); w.appendChild(tb); });
 
     host.querySelectorAll('pre > code').forEach(code => {
@@ -2578,7 +2649,138 @@ Expecting `+Qe.join(", ")+", got '"+(this.terminals_[Ne]||Ne)+"'":Dt="Parse erro
       });
     });
     renderMermaid(host);
+
+    // サイドバーの状態を初期化（現在地ハイライト＋絞り込みの再適用）
+    activeId = null;
+    syncActive();
+    applyFilter();
   }
+
+  // ----- サイドバー（H2 セクション → H3 サブ項目）の構築 -----
+  const nav = document.getElementById('nav');
+  let navItems = []; // { id, el, btn, topicEl }
+
+  function buildNav(host) {
+    if (!nav) return;
+    const sections = [].slice.call(host.querySelectorAll('h2'));
+    nav.innerHTML = '';
+    navItems = [];
+
+    sections.forEach((h2, ti) => {
+      // この h2 の次の h2 までに現れる h3 を集める
+      const subs = [];
+      let n = h2.nextElementSibling;
+      while (n && n.tagName !== 'H2') {
+        if (n.tagName === 'H3') subs.push(n);
+        n = n.nextElementSibling;
+      }
+
+      const topic = document.createElement('div');
+      topic.className = 'nav-topic' + (subs.length ? '' : ' leaf') + (ti === 0 ? ' open' : '');
+      topic.dataset.ti = ti;
+
+      const btn = document.createElement('button');
+      btn.dataset.id = h2.id;
+      btn.innerHTML = '<span class="t-num">' + (ti + 1) + '</span>' +
+        '<span class="t-title">' + escapeHtml(h2.textContent) + '</span>' +
+        (subs.length ? '<span class="t-done">' + subs.length + '</span>' +
+          '<svg class="ico t-chev"><use href="#i-chevron"/></svg>' : '');
+      btn.addEventListener('click', () => {
+        if (subs.length) topic.classList.toggle('open');
+        h2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeDrawer();
+      });
+      topic.appendChild(btn);
+      navItems.push({ id: h2.id, el: h2, btn: btn, topicEl: topic });
+
+      if (subs.length) {
+        const list = document.createElement('div');
+        list.className = 'nav-units';
+        subs.forEach(h3 => {
+          const ub = document.createElement('button');
+          ub.className = 'nav-unit';
+          ub.dataset.id = h3.id;
+          ub.innerHTML = '<span>' + escapeHtml(h3.textContent) + '</span>';
+          ub.addEventListener('click', () => {
+            h3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            closeDrawer();
+          });
+          list.appendChild(ub);
+          navItems.push({ id: h3.id, el: h3, btn: ub, topicEl: topic });
+        });
+        topic.appendChild(list);
+      }
+
+      nav.appendChild(topic);
+    });
+  }
+
+  // ----- スクロールスパイ（現在地ハイライト） -----
+  let activeId = null;
+  function syncActive() {
+    if (!navItems.length) return;
+    const offset = 90; // ヘッダー高さ + 余白
+    let current = navItems[0];
+    for (const it of navItems) {
+      if (it.el.getBoundingClientRect().top - offset <= 0) current = it; else break;
+    }
+    if (current.id === activeId) return;
+    activeId = current.id;
+    nav.querySelectorAll('.nav-unit, .nav-topic > button').forEach(b => b.classList.remove('active'));
+    current.btn.classList.add('active');
+    // 該当セクションを開いて他は閉じる
+    if (current.topicEl && !current.topicEl.classList.contains('open')) {
+      nav.querySelectorAll('.nav-topic.open').forEach(tp => { if (tp !== current.topicEl) tp.classList.remove('open'); });
+      current.topicEl.classList.add('open');
+    }
+    current.btn.scrollIntoView({ block: 'nearest' });
+  }
+
+  // ----- 見出しの絞り込み（サイドバー検索） -----
+  const searchInput = document.getElementById('searchInput');
+  const searchCount = document.getElementById('searchCount');
+  function applyFilter() {
+    if (!searchInput) return;
+    const q = (searchInput.value || '').trim().toLowerCase();
+    let hit = 0;
+    nav.querySelectorAll('.nav-topic').forEach(tp => {
+      const topicBtn = tp.querySelector(':scope > button');
+      const topicMatch = !q || (topicBtn && topicBtn.textContent.toLowerCase().includes(q));
+      let childHit = 0;
+      tp.querySelectorAll('.nav-unit').forEach(b => {
+        const match = !q || b.textContent.toLowerCase().includes(q);
+        b.style.display = match ? '' : 'none';
+        if (match) childHit++;
+      });
+      const show = topicMatch || childHit > 0;
+      tp.style.display = show ? '' : 'none';
+      if (show) hit++;
+      if (q && childHit) tp.classList.add('open');
+    });
+    searchCount.textContent = q ? hit + ' 件' : '';
+  }
+  if (searchInput) {
+    searchInput.addEventListener('input', applyFilter);
+    document.addEventListener('keydown', e => {
+      if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
+      if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; applyFilter(); searchInput.blur(); }
+    });
+  }
+
+  // ----- モバイル用ドロワー -----
+  const sidebar = document.getElementById('sidebar');
+  const scrim = document.getElementById('scrim');
+  const menuToggle = document.getElementById('menuToggle');
+  function closeDrawer() { if (sidebar) sidebar.classList.remove('open'); if (scrim) scrim.classList.remove('show'); }
+  if (menuToggle) menuToggle.addEventListener('click', () => { sidebar.classList.toggle('open'); scrim.classList.toggle('show'); });
+  if (scrim) scrim.addEventListener('click', closeDrawer);
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { syncActive(); ticking = false; });
+  }, { passive: true });
 
   let seq = 0;
   function renderMermaid(container) {
