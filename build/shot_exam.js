@@ -8,15 +8,19 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
   const p = await b.newPage({ viewport: { width: 1100, height: 1000 } });
   p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
   p.on('pageerror', e => errs.push('PAGEERROR: ' + e.message));
+  p.on('dialog', d => d.accept());
   await p.goto(FILE, { waitUntil: 'load' });
   await p.waitForTimeout(400);
   const start = await p.evaluate(() => ({
     setCards: document.querySelectorAll('.set-card').length,
+    modeBtns: document.querySelectorAll('.ms-btn').length,
+    activeMode: document.querySelector('.ms-btn.active') ? document.querySelector('.ms-btn.active').dataset.mode : '(none)',
     title: document.querySelector('.exam-hero h1').textContent,
   }));
   await p.screenshot({ path: path.join(OUT, 'exam_start.png') });
 
-  // セット1を開始
+  // ===== 一括回答モード：セット1 =====
+  await p.evaluate(() => document.querySelector('.ms-btn[data-mode="all"]').click());
   await p.evaluate(() => document.querySelectorAll('.set-card')[0].click());
   await p.waitForTimeout(400);
   const quiz = await p.evaluate(() => ({
@@ -25,10 +29,11 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
     multi: document.querySelectorAll('.q-card .q-multi').length,
     codeBlocks: document.querySelectorAll('.q-card .code-block').length,
     highlighted: document.querySelectorAll('.q-card .token').length,
+    gradeBtnVisible: !document.getElementById('gradeBtn').hidden,
   }));
   await p.screenshot({ path: path.join(OUT, 'exam_quiz.png') });
 
-  // 全問に回答（正解と一部わざと不正解を混ぜる）：奇数問は正解、偶数問は誤答 or 未選択を避け全問回答
+  // 全問に回答（1/3 はわざと不正解）
   const answered = await p.evaluate(() => {
     const data = window.__EXAM__.sets[0].questions;
     let cnt = 0;
@@ -37,42 +42,108 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
       const q = data.find(x => x.n === n);
       const opts = card.querySelectorAll('.opt');
       if (i % 3 === 0) {
-        // わざと不正解：正解でない最初の選択肢を1つ
         const wrong = [...opts].find(o => !q.answer.includes(o.dataset.key));
         if (wrong) { wrong.click(); cnt++; }
       } else {
-        // 正解：正解 letter をすべて選択
         q.answer.forEach(k => { const o = [...opts].find(x => x.dataset.key === k); if (o) o.click(); });
         cnt++;
       }
     });
-    return { cnt, answeredText: document.getElementById('answeredCount').textContent };
+    return { cnt, barText: document.getElementById('barText').textContent };
   });
 
-  // 採点（confirm が出ても OK）
-  p.on('dialog', d => d.accept());
   await p.evaluate(() => document.getElementById('gradeBtn').click());
   await p.waitForTimeout(500);
   const result = await p.evaluate(() => ({
     pct: document.querySelector('.score-ring .pct') ? document.querySelector('.score-ring .pct').textContent : '(none)',
     verdict: document.querySelector('.verdict') ? document.querySelector('.verdict').textContent : '(none)',
-    detail: document.querySelector('.detail') ? document.querySelector('.detail').textContent : '',
     correctCards: document.querySelectorAll('.q-card.is-correct').length,
     wrongCards: document.querySelectorAll('.q-card.is-wrong').length,
     explainsShown: document.querySelectorAll('.q-card.graded .explain').length,
     barHidden: document.getElementById('quizBar').hidden,
   }));
   await p.screenshot({ path: path.join(OUT, 'exam_result.png') });
-  // 採点後の1問目付近
-  await p.evaluate(() => { const c = document.querySelector('.q-card'); if (c) c.scrollIntoView(); });
-  await p.waitForTimeout(300);
-  await p.screenshot({ path: path.join(OUT, 'exam_graded.png') });
 
-  // 「間違えonly」フィルタ
   const filtered = await p.evaluate(() => {
     document.getElementById('wrongOnly').click();
     return [...document.querySelectorAll('.q-card')].filter(c => c.style.display !== 'none').length;
   });
+
+  // ===== 1問1答モード：セット4 =====
+  await p.evaluate(() => document.getElementById('backBtn').click());
+  await p.evaluate(() => document.querySelector('.ms-btn[data-mode="one"]').click());
+  await p.waitForTimeout(200);
+  await p.evaluate(() => document.querySelectorAll('.set-card')[3].click());
+  await p.waitForTimeout(400);
+  const one1 = await p.evaluate(() => ({
+    qCards: document.querySelectorAll('.q-card').length,
+    barText: document.getElementById('barText').textContent,
+    oneBtnVisible: !document.getElementById('oneBtn').hidden,
+    oneBtnDisabled: document.getElementById('oneBtn').disabled,
+    skipVisible: !document.getElementById('skipBtn').hidden,
+    gradeHidden: document.getElementById('gradeBtn').hidden,
+  }));
+  await p.screenshot({ path: path.join(OUT, 'exam_one_start.png') });
+
+  // 1問目（複数選択）：正解を選んで「回答する」→即時フィードバック
+  const one2 = await p.evaluate(() => {
+    const qs = window.__EXAM__.sets[3].questions;
+    const card = document.querySelector('.q-card');
+    const q = qs.find(x => x.n === +card.dataset.n);
+    const opts = [...card.querySelectorAll('.opt')];
+    q.answer.forEach(k => { const o = opts.find(x => x.dataset.key === k); if (o) o.click(); });
+    if (q.multi) document.getElementById('oneBtn').click(); // 回答する
+    return {
+      graded: card.classList.contains('graded'),
+      correct: card.classList.contains('is-correct'),
+      explainVisible: getComputedStyle(card.querySelector('.explain')).display !== 'none',
+      oneBtnLabel: document.getElementById('oneBtn').textContent,
+      skipHidden: document.getElementById('skipBtn').hidden,
+    };
+  });
+  await p.screenshot({ path: path.join(OUT, 'exam_one_graded.png') });
+
+  // 2問目はわざと不正解、3問目はスキップ
+  const one3 = await p.evaluate(() => {
+    document.getElementById('oneBtn').click(); // 次へ
+    const qs = window.__EXAM__.sets[3].questions;
+    let card = document.querySelector('.q-card');
+    let q = qs.find(x => x.n === +card.dataset.n);
+    const wrong = [...card.querySelectorAll('.opt')].filter(o => !q.answer.includes(o.dataset.key)).slice(0, q.multi ? q.answer.length : 1);
+    wrong.forEach(o => o.click());
+    if (q.multi) document.getElementById('oneBtn').click();
+    const wrongShown = card.classList.contains('is-wrong');
+    document.getElementById('oneBtn').click();  // 次へ（3問目）
+    const before = +document.querySelector('.q-card').dataset.n;
+    document.getElementById('skipBtn').click(); // スキップ
+    const after = +document.querySelector('.q-card').dataset.n;
+    return { wrongShown, skipMoved: before !== after, barText: document.getElementById('barText').textContent };
+  });
+
+  // 残り全問を正解で完走 → 結果画面
+  const one4 = await p.evaluate(() => {
+    const qs = window.__EXAM__.sets[3].questions;
+    let guard = 0;
+    while (!document.getElementById('quizBar').hidden && guard < 300) {
+      guard++;
+      const card = document.querySelector('.q-card');
+      const q = qs.find(x => x.n === +card.dataset.n);
+      const opts = [...card.querySelectorAll('.opt')];
+      q.answer.forEach(k => { const o = opts.find(x => x.dataset.key === k); if (o) o.click(); });
+      const btn = document.getElementById('oneBtn');
+      if (q.multi) btn.click(); // 回答する
+      btn.click();              // 次へ / 結果を見る
+    }
+    return {
+      finished: document.getElementById('quizBar').hidden,
+      pct: document.querySelector('.score-ring .pct') ? document.querySelector('.score-ring .pct').textContent : '(none)',
+      allCards: document.querySelectorAll('.q-card').length,
+      gradedCards: document.querySelectorAll('.q-card.graded').length,
+      guard,
+    };
+  });
+  await p.waitForTimeout(400);
+  await p.screenshot({ path: path.join(OUT, 'exam_one_result.png') });
 
   // ダークモード
   await p.click('#themeToggle');
@@ -81,10 +152,14 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
 
   await b.close();
   console.log('START:', JSON.stringify(start));
-  console.log('QUIZ:', JSON.stringify(quiz));
-  console.log('ANSWERED:', JSON.stringify(answered));
-  console.log('RESULT:', JSON.stringify(result));
+  console.log('QUIZ(all):', JSON.stringify(quiz));
+  console.log('ANSWERED(all):', JSON.stringify(answered));
+  console.log('RESULT(all):', JSON.stringify(result));
   console.log('wrongOnly後の表示問数:', filtered);
+  console.log('ONE開始:', JSON.stringify(one1));
+  console.log('ONE即時判定:', JSON.stringify(one2));
+  console.log('ONE誤答/スキップ:', JSON.stringify(one3));
+  console.log('ONE完走:', JSON.stringify(one4));
   console.log('console errors:', errs.length);
   errs.slice(0, 8).forEach(e => console.log(' -', e));
 })();

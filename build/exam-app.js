@@ -2,7 +2,9 @@
   'use strict';
   const DATA = window.__EXAM__ || { sets: [] };
   const LS_THEME = 'sfpd-theme';
+  const LS_MODE = 'sfpd-exam-mode';
   const ansKey = id => 'sfpd-exam-ans-' + id;
+  const oneKey = id => 'sfpd-exam-one-' + id;
   const bestKey = id => 'sfpd-exam-best-' + id;
   const PASS = 68; // 合格ライン（%）
 
@@ -52,14 +54,20 @@
   const questionsEl = document.getElementById('questions');
   const resultMount = document.getElementById('resultMount');
   const quizTitle = document.getElementById('quizTitle');
-  const answeredCount = document.getElementById('answeredCount');
-  const totalCount = document.getElementById('totalCount');
+  const barText = document.getElementById('barText');
   const answeredBar = document.getElementById('answeredBar');
+  const gradeBtn = document.getElementById('gradeBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const oneBtn = document.getElementById('oneBtn');
+  const modeDesc = document.getElementById('modeDesc');
 
   // ----- 状態 -----
+  let mode = localStorage.getItem(LS_MODE) === 'one' ? 'one' : 'all'; // 'all'=一括採点 / 'one'=1問1答
   let curSet = null;       // 現在のセット
   let answers = {};        // { 問番号: [選択した letter, ...] }
-  let graded = false;
+  let graded = false;      // 一括モード：採点済みか
+  let oneIdx = 0;          // 1問1答モード：現在の問題インデックス
+  let oneGraded = [];      // 1問1答モード：判定済みの問番号
 
   function loadAnswers(id) {
     try { return JSON.parse(localStorage.getItem(ansKey(id)) || '{}'); } catch (e) { return {}; }
@@ -67,18 +75,42 @@
   function saveAnswers() {
     if (curSet) localStorage.setItem(ansKey(curSet.id), JSON.stringify(answers));
   }
+  function loadOne(id) {
+    try { return JSON.parse(localStorage.getItem(oneKey(id)) || 'null'); } catch (e) { return null; }
+  }
+  function saveOne() {
+    if (curSet) localStorage.setItem(oneKey(curSet.id), JSON.stringify({ a: answers, g: oneGraded, i: oneIdx }));
+  }
   function getBest(id) {
     const v = parseInt(localStorage.getItem(bestKey(id)), 10);
     return isNaN(v) ? null : v;
   }
+
+  // ----- 回答モード切替 -----
+  function applyMode(m) {
+    mode = m;
+    localStorage.setItem(LS_MODE, m);
+    document.querySelectorAll('.ms-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+    modeDesc.textContent = m === 'one'
+      ? '1問回答するごとに正誤と解説がすぐ表示されます。学習・復習向けのモードです。'
+      : 'すべての問題に回答してから「採点する」でまとめて採点します。本番形式のモードです。';
+    renderStart();
+  }
+  document.querySelectorAll('.ms-btn').forEach(b => b.addEventListener('click', () => applyMode(b.dataset.mode)));
 
   // ----- スタート画面 -----
   function renderStart() {
     setGrid.innerHTML = '';
     DATA.sets.forEach((s, i) => {
       const best = getBest(s.id);
-      const savedAns = loadAnswers(s.id);
-      const answered = Object.keys(savedAns).filter(k => (savedAns[k] || []).length).length;
+      let answered = 0;
+      if (mode === 'one') {
+        const sv = loadOne(s.id);
+        if (sv && (sv.i || 0) < s.questions.length) answered = (sv.g || []).length;
+      } else {
+        const savedAns = loadAnswers(s.id);
+        answered = Object.keys(savedAns).filter(k => (savedAns[k] || []).length).length;
+      }
       const card = document.createElement('button');
       card.className = 'set-card';
       card.innerHTML =
@@ -98,69 +130,82 @@
   // ----- 試験開始 -----
   function startSet(s) {
     curSet = s;
-    answers = loadAnswers(s.id);
     graded = false;
     quizTitle.textContent = s.title;
     resultMount.innerHTML = '';
-    renderQuestions();
     startScreen.hidden = true;
     quizScreen.hidden = false;
     quizBar.hidden = false;
-    totalCount.textContent = s.questions.length;
-    updateAnswered();
+    if (mode === 'one') {
+      const sv = loadOne(s.id);
+      if (sv && (sv.i || 0) < s.questions.length) {
+        answers = sv.a || {}; oneGraded = sv.g || []; oneIdx = sv.i || 0;
+      } else {
+        answers = {}; oneGraded = []; oneIdx = 0; saveOne();
+      }
+      renderOne();
+    } else {
+      answers = loadAnswers(s.id);
+      renderQuestions();
+      updateAllBar();
+    }
     window.scrollTo(0, 0);
+  }
+
+  // 問題カードを生成
+  function buildCard(q) {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q-' + q.n;
+    card.dataset.n = q.n;
+
+    const top = document.createElement('div');
+    top.className = 'q-top';
+    top.innerHTML = '<span class="q-num">' + q.n + '</span>' +
+      (q.category ? '<span class="q-cat">' + escapeHtml(q.category) + '</span>' : '') +
+      (q.multi ? '<span class="q-multi">複数選択</span>' : '') +
+      '<span class="q-mark ok"><svg class="ico"><use href="#i-check"/></svg>正解</span>' +
+      '<span class="q-mark ng"><svg class="ico"><use href="#i-x"/></svg>不正解</span>';
+    card.appendChild(top);
+
+    const text = document.createElement('div');
+    text.className = 'q-text';
+    text.innerHTML = mdHTML(q.text);
+    enhanceCode(text);
+    card.appendChild(text);
+
+    const opts = document.createElement('div');
+    opts.className = 'opts';
+    q.options.forEach(o => {
+      const opt = document.createElement('div');
+      opt.className = 'opt' + (q.multi ? ' multi' : '');
+      opt.dataset.key = o.key;
+      const selected = (answers[q.n] || []).includes(o.key);
+      if (selected) opt.classList.add('selected');
+      opt.innerHTML = '<span class="mark">' + o.key + '</span><span class="otext">' + mdHTML(o.text).replace(/^<p>|<\/p>\s*$/g, '') + '</span>';
+      enhanceCode(opt);
+      opt.addEventListener('click', () => onSelect(q, o.key, opt, opts));
+      opts.appendChild(opt);
+    });
+    card.appendChild(opts);
+
+    const exp = document.createElement('div');
+    exp.className = 'explain';
+    exp.innerHTML = '<div class="explain-head"><svg class="ico"><use href="#i-bulb"/></svg>解説</div>' +
+      '<div class="explain-body"></div>';
+    card.appendChild(exp);
+
+    return card;
   }
 
   function renderQuestions() {
     questionsEl.innerHTML = '';
-    curSet.questions.forEach(q => {
-      const card = document.createElement('div');
-      card.className = 'q-card';
-      card.id = 'q-' + q.n;
-      card.dataset.n = q.n;
-
-      const top = document.createElement('div');
-      top.className = 'q-top';
-      top.innerHTML = '<span class="q-num">' + q.n + '</span>' +
-        (q.category ? '<span class="q-cat">' + escapeHtml(q.category) + '</span>' : '') +
-        (q.multi ? '<span class="q-multi">複数選択</span>' : '') +
-        '<span class="q-mark ok"><svg class="ico"><use href="#i-check"/></svg>正解</span>' +
-        '<span class="q-mark ng"><svg class="ico"><use href="#i-x"/></svg>不正解</span>';
-      card.appendChild(top);
-
-      const text = document.createElement('div');
-      text.className = 'q-text';
-      text.innerHTML = mdHTML(q.text);
-      enhanceCode(text);
-      card.appendChild(text);
-
-      const opts = document.createElement('div');
-      opts.className = 'opts';
-      q.options.forEach(o => {
-        const opt = document.createElement('div');
-        opt.className = 'opt' + (q.multi ? ' multi' : '');
-        opt.dataset.key = o.key;
-        const selected = (answers[q.n] || []).includes(o.key);
-        if (selected) opt.classList.add('selected');
-        opt.innerHTML = '<span class="mark">' + o.key + '</span><span class="otext">' + mdHTML(o.text).replace(/^<p>|<\/p>\s*$/g, '') + '</span>';
-        enhanceCode(opt);
-        opt.addEventListener('click', () => onSelect(q, o.key, opt, opts));
-        opts.appendChild(opt);
-      });
-      card.appendChild(opts);
-
-      const exp = document.createElement('div');
-      exp.className = 'explain';
-      exp.innerHTML = '<div class="explain-head"><svg class="ico"><use href="#i-bulb"/></svg>解説</div>' +
-        '<div class="explain-body"></div>';
-      card.appendChild(exp);
-
-      questionsEl.appendChild(card);
-    });
+    curSet.questions.forEach(q => questionsEl.appendChild(buildCard(q)));
   }
 
   function onSelect(q, key, optEl, optsEl) {
-    if (graded) return;
+    if (mode === 'all' && graded) return;
+    if (mode === 'one' && oneGraded.includes(q.n)) return;
     let sel = answers[q.n] || [];
     if (q.multi) {
       if (sel.includes(key)) sel = sel.filter(k => k !== key);
@@ -171,15 +216,14 @@
       optsEl.querySelectorAll('.opt').forEach(o => o.classList.toggle('selected', o === optEl));
     }
     answers[q.n] = sel;
-    saveAnswers();
-    updateAnswered();
-  }
-
-  function updateAnswered() {
-    const total = curSet.questions.length;
-    const done = curSet.questions.filter(q => (answers[q.n] || []).length).length;
-    answeredCount.textContent = done;
-    answeredBar.style.width = (done / total * 100) + '%';
+    if (mode === 'one') {
+      saveOne();
+      if (!q.multi) judgeCurrent();  // 単一選択は即判定
+      else updateOneBar();
+    } else {
+      saveAnswers();
+      updateAllBar();
+    }
   }
 
   // 選択の正誤判定（多肢選択は集合一致）
@@ -189,7 +233,37 @@
     return sel.length === ans.length && sel.every((v, i) => v === ans[i]);
   }
 
-  // ----- 採点 -----
+  // 1問分のカードに正誤・解説を表示
+  function gradeCardView(q) {
+    const card = document.getElementById('q-' + q.n);
+    const opts = card.querySelector('.opts');
+    opts.classList.add('graded');
+    card.classList.add('graded');
+    const ok = isCorrect(q);
+    card.classList.add(ok ? 'is-correct' : 'is-wrong');
+    const sel = answers[q.n] || [];
+    opts.querySelectorAll('.opt').forEach(opt => {
+      const k = opt.dataset.key;
+      if ((q.answer || []).includes(k)) opt.classList.add('correct');
+      else if (sel.includes(k)) opt.classList.add('wrong');
+    });
+    const body = card.querySelector('.explain-body');
+    body.innerHTML = '<p><b>正解：' + (q.answer || []).join('・') + '</b></p>' + mdHTML(q.explanation);
+    enhanceCode(body);
+    return ok;
+  }
+
+  // ===== 一括採点モード =====
+  function updateAllBar() {
+    const total = curSet.questions.length;
+    const done = curSet.questions.filter(q => (answers[q.n] || []).length).length;
+    barText.innerHTML = '回答 <b>' + done + '</b> / ' + total;
+    answeredBar.style.width = (done / total * 100) + '%';
+    gradeBtn.hidden = false;
+    skipBtn.hidden = true;
+    oneBtn.hidden = true;
+  }
+
   function grade() {
     const unanswered = curSet.questions.filter(q => !(answers[q.n] || []).length).length;
     if (unanswered > 0) {
@@ -197,30 +271,74 @@
     }
     graded = true;
     let correct = 0;
-    curSet.questions.forEach(q => {
-      const card = document.getElementById('q-' + q.n);
-      const opts = card.querySelector('.opts');
-      opts.classList.add('graded');
-      card.classList.add('graded');
-      const ok = isCorrect(q);
-      if (ok) correct++;
-      card.classList.add(ok ? 'is-correct' : 'is-wrong');
-      const sel = answers[q.n] || [];
-      opts.querySelectorAll('.opt').forEach(opt => {
-        const k = opt.dataset.key;
-        const isAns = (q.answer || []).includes(k);
-        const isSel = sel.includes(k);
-        if (isAns) opt.classList.add('correct');
-        else if (isSel) opt.classList.add('wrong');
-      });
-      const body = card.querySelector('.explain-body');
-      const correctLabel = (q.answer || []).join('・');
-      body.innerHTML = '<p><b>正解：' + correctLabel + '</b></p>' + mdHTML(q.explanation);
-      enhanceCode(body);
-    });
+    curSet.questions.forEach(q => { if (gradeCardView(q)) correct++; });
+    finishQuiz(correct);
+  }
+
+  // ===== 1問1答モード =====
+  function renderOne() {
+    questionsEl.innerHTML = '';
+    const q = curSet.questions[oneIdx];
+    questionsEl.appendChild(buildCard(q));
+    if (oneGraded.includes(q.n)) gradeCardView(q);
+    updateOneBar();
+  }
+
+  function judgeCurrent() {
+    const q = curSet.questions[oneIdx];
+    if (oneGraded.includes(q.n) || !(answers[q.n] || []).length) return;
+    oneGraded.push(q.n);
+    saveOne();
+    gradeCardView(q);
+    updateOneBar();
+  }
+
+  function oneNext() {
+    if (oneIdx + 1 >= curSet.questions.length) { finishOne(); return; }
+    oneIdx++;
+    saveOne();
+    renderOne();
+    window.scrollTo(0, 0);
+  }
+
+  function updateOneBar() {
+    const total = curSet.questions.length;
+    const q = curSet.questions[oneIdx];
+    const done = oneGraded.length;
+    const correct = curSet.questions.filter(x => oneGraded.includes(x.n) && isCorrect(x)).length;
+    barText.innerHTML = '問 <b>' + (oneIdx + 1) + '</b> / ' + total +
+      (done ? '<span class="bar-sub">正解 ' + correct + '/' + done + '</span>' : '');
+    answeredBar.style.width = (done / total * 100) + '%';
+    gradeBtn.hidden = true;
+    oneBtn.hidden = false;
+    const isG = oneGraded.includes(q.n);
+    skipBtn.hidden = isG;
+    if (isG) {
+      oneBtn.disabled = false;
+      oneBtn.innerHTML = oneIdx + 1 >= total
+        ? '<svg class="ico"><use href="#i-flag"/></svg>結果を見る'
+        : '次へ<svg class="ico"><use href="#i-arrow-right"/></svg>';
+    } else {
+      oneBtn.disabled = !(answers[q.n] || []).length;
+      oneBtn.innerHTML = '<svg class="ico"><use href="#i-check"/></svg>回答する';
+    }
+  }
+
+  function finishOne() {
+    oneIdx = curSet.questions.length; // 完走マーク（次回はフレッシュ開始）
+    saveOne();
+    graded = true;
+    let correct = 0;
+    curSet.questions.forEach(q => { if (isCorrect(q)) correct++; });
+    renderQuestions();               // 全問を採点済み表示にして復習できるようにする
+    curSet.questions.forEach(q => gradeCardView(q));
+    finishQuiz(correct);
+  }
+
+  // ===== 共通：結果表示 =====
+  function finishQuiz(correct) {
     const total = curSet.questions.length;
     const pct = Math.round(correct / total * 100);
-    // ベストスコア更新
     const prevBest = getBest(curSet.id);
     if (prevBest == null || pct > prevBest) localStorage.setItem(bestKey(curSet.id), String(pct));
     renderResult(correct, total, pct);
@@ -262,12 +380,19 @@
 
   function retry() {
     answers = {};
-    saveAnswers();
     graded = false;
     resultMount.innerHTML = '';
-    renderQuestions();
     quizBar.hidden = false;
-    updateAnswered();
+    if (mode === 'one') {
+      oneIdx = 0;
+      oneGraded = [];
+      saveOne();
+      renderOne();
+    } else {
+      saveAnswers();
+      renderQuestions();
+      updateAllBar();
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -282,8 +407,14 @@
 
   // ----- イベント -----
   document.getElementById('backBtn').addEventListener('click', showStart);
-  document.getElementById('gradeBtn').addEventListener('click', grade);
+  gradeBtn.addEventListener('click', grade);
+  skipBtn.addEventListener('click', oneNext);
+  oneBtn.addEventListener('click', () => {
+    const q = curSet.questions[oneIdx];
+    if (oneGraded.includes(q.n)) oneNext();
+    else judgeCurrent();
+  });
 
   // ----- 初期化 -----
-  renderStart();
+  applyMode(mode);
 })();

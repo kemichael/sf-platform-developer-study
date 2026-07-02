@@ -16,6 +16,15 @@
 .exam-hero h1{font-size:30px;line-height:1.25;margin:6px 0 8px;color:var(--navy)}
 .exam-hero p{color:var(--text-2);font-size:14px;line-height:1.8;margin:0 0 8px}
 .exam-hero .note{font-size:12.5px;color:var(--text-3)}
+
+/* --- 回答モード切替 --- */
+.mode-select{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:22px}
+.ms-label{font-size:13px;font-weight:800;color:var(--text-2)}
+.ms-seg{display:inline-flex;border:1px solid var(--border);border-radius:11px;background:var(--surface);padding:3px;gap:3px}
+.ms-btn{border:none;background:transparent;color:var(--text-2);font-size:13px;font-weight:700;border-radius:8px;padding:7px 16px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.ms-btn .ico{width:14px;height:14px}
+.ms-btn.active{background:linear-gradient(95deg,#ff5fa2,#ff8a5b);color:#fff}
+.ms-desc{flex-basis:100%;margin:0;font-size:12.5px;color:var(--text-3)}
 .set-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:24px}
 .set-card{text-align:left;border:1px solid var(--border);background:var(--surface);border-radius:16px;
   padding:18px 18px 16px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
@@ -113,7 +122,9 @@
 .quiz-bar .answered b{color:var(--text);font-size:15px}
 .quiz-bar .qb-bar{flex:1;height:7px;border-radius:99px;background:var(--border);overflow:hidden;min-width:60px}
 .quiz-bar .qb-bar span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--ok),#43b96a);transition:width .3s}
-.quiz-bar .btn.primary{flex-shrink:0}
+.quiz-bar .btn{flex-shrink:0}
+.quiz-bar .bar-sub{margin-left:10px;color:var(--ok);font-weight:700}
+.btn[disabled]{opacity:.45;cursor:default;pointer-events:none}
 
 /* コード（問題文・解説中） */
 .q-text code,.explain-body code,.opt .otext code{font-family:var(--mono);font-size:.9em;
@@ -189,8 +200,16 @@
   <section id="startScreen">
     <div class="exam-hero">
       <h1>模擬試験</h1>
-      <p>本番と同じ <b>60 問 1 セット</b> の四択形式。すべて回答して「採点する」を押すと、正解率・合否判定・各問の解説が表示されます。</p>
+      <p>本番形式の択一・複数選択問題。<b>一括回答</b>（全問回答してからまとめて採点）と <b>1問1答</b>（1問ごとに正誤と解説を確認）の2モードから選べます。</p>
       <p class="note">合格ライン目安は約 68%（PDI 本番準拠）。回答内容はブラウザに自動保存され、次回続きから再開できます。</p>
+    </div>
+    <div class="mode-select">
+      <span class="ms-label">回答モード</span>
+      <div class="ms-seg">
+        <button type="button" class="ms-btn" data-mode="all"><svg class="ico"><use href="#i-list"/></svg>一括回答</button>
+        <button type="button" class="ms-btn" data-mode="one"><svg class="ico"><use href="#i-target"/></svg>1問1答</button>
+      </div>
+      <p class="ms-desc" id="modeDesc"></p>
     </div>
     <div class="set-grid" id="setGrid"></div>
   </section>
@@ -209,8 +228,10 @@
 <!-- 採点バー（採点前のみ表示） -->
 <div class="quiz-bar" id="quizBar" hidden>
   <div class="quiz-bar-inner">
-    <span class="answered">回答 <b id="answeredCount">0</b> / <span id="totalCount">0</span></span>
+    <span class="answered" id="barText">回答 <b>0</b> / 0</span>
     <div class="qb-bar"><span id="answeredBar"></span></div>
+    <button class="btn" id="skipBtn" hidden>スキップ</button>
+    <button class="btn primary" id="oneBtn" hidden></button>
     <button class="btn primary" id="gradeBtn"><svg class="ico"><use href="#i-check"/></svg>採点する</button>
   </div>
 </div>

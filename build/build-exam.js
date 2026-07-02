@@ -1,12 +1,12 @@
 /*
  * 模擬試験ページのビルド
  *
- * build/exam-data.json（3 セット × 60 問の構造化データ）を、共有 CSS・
+ * build/exam-data.json（4 セット・計 279 問の構造化データ）を、共有 CSS・
  * marked / Prism ライブラリ・専用スクリプトとともに自己完結した exam.html に出力する。
  *
- * 問題の追加・修正は build/exam-data.json を編集（1 セット = 60 問）してから
- * 本スクリプトを再実行する。元の Google ドキュメントから再生成する場合は
- * build/parse-exam.js を使う。
+ * 問題の追加・修正は build/exam-data.json を編集してから本スクリプトを再実行する。
+ * Set 1〜3 を元の Google ドキュメントから再生成する場合は build/parse-exam.js、
+ * Set 4 の元データ（memo-2.md）を再パースする場合は build/parse-memo2.js を使う。
  */
 const fs = require('fs');
 const path = require('path');
