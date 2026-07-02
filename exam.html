@@ -538,6 +538,32 @@ body{
 .quiz-bar .bar-sub{margin-left:10px;color:var(--ok);font-weight:700}
 .btn[disabled]{opacity:.45;cursor:default;pointer-events:none}
 
+/* --- 問題一覧（ジャンプ用パネル） --- */
+.quiz-bar-inner{position:relative}
+.qnav{position:absolute;bottom:calc(100% + 12px);right:22px;width:min(560px,calc(100vw - 28px));max-height:46vh;overflow:auto;
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 34px rgba(0,0,0,.18);padding:14px}
+.qnav-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:700;color:var(--text-3);margin-bottom:11px}
+.qnav-head .qh-title{font-size:12.5px;font-weight:800;color:var(--text-2);margin-right:auto}
+.qnav-head .lg{display:inline-flex;align-items:center;gap:5px}
+.qnav-head .dot{width:10px;height:10px;border-radius:3px;border:1.5px solid var(--border);background:var(--surface)}
+.qnav-head .dot.done{background:var(--accent-soft);border-color:var(--blue)}
+.qnav-head .dot.ok{background:var(--ok-bg);border-color:var(--ok)}
+.qnav-head .dot.ng{background:var(--bad-bg);border-color:var(--bad)}
+.qnav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px}
+.qn-btn{height:34px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-2);
+  font-weight:700;font-size:12.5px;cursor:pointer;transition:.12s;font-variant-numeric:tabular-nums}
+.qn-btn:hover{border-color:var(--blue);color:var(--blue)}
+.qn-btn.done{background:var(--accent-soft);border-color:var(--blue);color:var(--blue)}
+.qn-btn.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.qn-btn.ng{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.qn-btn.current{outline:2px solid var(--blue);outline-offset:1px}
+.q-card{scroll-margin-top:70px}
+@media(max-width:640px){
+  .qnav{right:14px}
+  .qnav-grid{grid-template-columns:repeat(auto-fill,minmax(36px,1fr))}
+  .quiz-bar .btn .bt-label{display:none}
+}
+
 /* コード（問題文・解説中） */
 .q-text code,.explain-body code,.opt .otext code{font-family:var(--mono);font-size:.9em;
   background:var(--inline-code-bg);color:var(--inline-code);padding:.1em .4em;border-radius:5px}
@@ -642,9 +668,19 @@ body{
   <div class="quiz-bar-inner">
     <span class="answered" id="barText">回答 <b>0</b> / 0</span>
     <div class="qb-bar"><span id="answeredBar"></span></div>
+    <button class="btn" id="qnavBtn" title="問題一覧を開いて好きな問題へジャンプ"><svg class="ico"><use href="#i-table"/></svg><span class="bt-label">問題一覧</span></button>
     <button class="btn" id="skipBtn" hidden>スキップ</button>
     <button class="btn primary" id="oneBtn" hidden></button>
-    <button class="btn primary" id="gradeBtn"><svg class="ico"><use href="#i-check"/></svg>採点する</button>
+    <button class="btn primary" id="gradeBtn"><svg class="ico"><use href="#i-check"/></svg><span class="bt-label">採点する</span></button>
+    <div class="qnav" id="qnavPanel" hidden>
+      <div class="qnav-head">
+        <span class="qh-title">問題一覧（タップで移動）</span>
+        <span class="lg" id="lgDone"><span class="dot done"></span>回答済み</span>
+        <span class="lg" id="lgOk"><span class="dot ok"></span>正解</span>
+        <span class="lg" id="lgNg"><span class="dot ng"></span>不正解</span>
+      </div>
+      <div class="qnav-grid" id="qnavGrid"></div>
+    </div>
   </div>
 </div>
 
@@ -740,6 +776,9 @@ Prism.languages.sql={comment:{pattern:/(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#
   const skipBtn = document.getElementById('skipBtn');
   const oneBtn = document.getElementById('oneBtn');
   const modeDesc = document.getElementById('modeDesc');
+  const qnavBtn = document.getElementById('qnavBtn');
+  const qnavPanel = document.getElementById('qnavPanel');
+  const qnavGrid = document.getElementById('qnavGrid');
 
   // ----- 状態 -----
   let mode = localStorage.getItem(LS_MODE) === 'one' ? 'one' : 'all'; // 'all'=一括採点 / 'one'=1問1答
@@ -906,6 +945,51 @@ Prism.languages.sql={comment:{pattern:/(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#
     }
   }
 
+  // ----- 問題一覧（ジャンプ用パネル） -----
+  function closeQnav() { qnavPanel.hidden = true; }
+
+  function renderQnav() {
+    if (!curSet || qnavPanel.hidden) return;
+    qnavGrid.innerHTML = '';
+    // 凡例：1問1答は正誤、一括は回答済みのみ表示
+    document.getElementById('lgDone').hidden = mode === 'one';
+    document.getElementById('lgOk').hidden = mode !== 'one';
+    document.getElementById('lgNg').hidden = mode !== 'one';
+    curSet.questions.forEach((q, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'qn-btn';
+      b.textContent = q.n;
+      if (mode === 'one') {
+        if (i === oneIdx) b.classList.add('current');
+        if (oneGraded.includes(q.n)) b.classList.add(isCorrect(q) ? 'ok' : 'ng');
+      } else if ((answers[q.n] || []).length) {
+        b.classList.add('done');
+      }
+      b.addEventListener('click', () => {
+        closeQnav();
+        if (mode === 'one') {
+          oneIdx = i;
+          saveOne();
+          renderOne();
+          window.scrollTo(0, 0);
+        } else {
+          const card = document.getElementById('q-' + q.n);
+          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+      qnavGrid.appendChild(b);
+    });
+  }
+
+  qnavBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    qnavPanel.hidden = !qnavPanel.hidden;
+    renderQnav();
+  });
+  qnavPanel.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', () => closeQnav());
+
   // 選択の正誤判定（多肢選択は集合一致）
   function isCorrect(q) {
     const sel = (answers[q.n] || []).slice().sort();
@@ -942,6 +1026,7 @@ Prism.languages.sql={comment:{pattern:/(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#
     gradeBtn.hidden = false;
     skipBtn.hidden = true;
     oneBtn.hidden = true;
+    renderQnav();
   }
 
   function grade() {
@@ -974,7 +1059,8 @@ Prism.languages.sql={comment:{pattern:/(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#
   }
 
   function oneNext() {
-    if (oneIdx + 1 >= curSet.questions.length) { finishOne(); return; }
+    // 全問判定済み、または最終問題まで来たら結果表示へ
+    if (oneGraded.length >= curSet.questions.length || oneIdx + 1 >= curSet.questions.length) { finishOne(); return; }
     oneIdx++;
     saveOne();
     renderOne();
@@ -995,13 +1081,14 @@ Prism.languages.sql={comment:{pattern:/(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#
     skipBtn.hidden = isG;
     if (isG) {
       oneBtn.disabled = false;
-      oneBtn.innerHTML = oneIdx + 1 >= total
+      oneBtn.innerHTML = (done >= total || oneIdx + 1 >= total)
         ? '<svg class="ico"><use href="#i-flag"/></svg>結果を見る'
         : '次へ<svg class="ico"><use href="#i-arrow-right"/></svg>';
     } else {
       oneBtn.disabled = !(answers[q.n] || []).length;
       oneBtn.innerHTML = '<svg class="ico"><use href="#i-check"/></svg>回答する';
     }
+    renderQnav();
   }
 
   function finishOne() {
@@ -1022,6 +1109,7 @@ Prism.languages.sql={comment:{pattern:/(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#
     const prevBest = getBest(curSet.id);
     if (prevBest == null || pct > prevBest) localStorage.setItem(bestKey(curSet.id), String(pct));
     renderResult(correct, total, pct);
+    closeQnav();
     quizBar.hidden = true;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -1077,6 +1165,7 @@ Prism.languages.sql={comment:{pattern:/(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#
   }
 
   function showStart() {
+    closeQnav();
     quizScreen.hidden = true;
     quizBar.hidden = true;
     startScreen.hidden = false;

@@ -60,6 +60,9 @@
   const skipBtn = document.getElementById('skipBtn');
   const oneBtn = document.getElementById('oneBtn');
   const modeDesc = document.getElementById('modeDesc');
+  const qnavBtn = document.getElementById('qnavBtn');
+  const qnavPanel = document.getElementById('qnavPanel');
+  const qnavGrid = document.getElementById('qnavGrid');
 
   // ----- 状態 -----
   let mode = localStorage.getItem(LS_MODE) === 'one' ? 'one' : 'all'; // 'all'=一括採点 / 'one'=1問1答
@@ -226,6 +229,51 @@
     }
   }
 
+  // ----- 問題一覧（ジャンプ用パネル） -----
+  function closeQnav() { qnavPanel.hidden = true; }
+
+  function renderQnav() {
+    if (!curSet || qnavPanel.hidden) return;
+    qnavGrid.innerHTML = '';
+    // 凡例：1問1答は正誤、一括は回答済みのみ表示
+    document.getElementById('lgDone').hidden = mode === 'one';
+    document.getElementById('lgOk').hidden = mode !== 'one';
+    document.getElementById('lgNg').hidden = mode !== 'one';
+    curSet.questions.forEach((q, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'qn-btn';
+      b.textContent = q.n;
+      if (mode === 'one') {
+        if (i === oneIdx) b.classList.add('current');
+        if (oneGraded.includes(q.n)) b.classList.add(isCorrect(q) ? 'ok' : 'ng');
+      } else if ((answers[q.n] || []).length) {
+        b.classList.add('done');
+      }
+      b.addEventListener('click', () => {
+        closeQnav();
+        if (mode === 'one') {
+          oneIdx = i;
+          saveOne();
+          renderOne();
+          window.scrollTo(0, 0);
+        } else {
+          const card = document.getElementById('q-' + q.n);
+          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+      qnavGrid.appendChild(b);
+    });
+  }
+
+  qnavBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    qnavPanel.hidden = !qnavPanel.hidden;
+    renderQnav();
+  });
+  qnavPanel.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', () => closeQnav());
+
   // 選択の正誤判定（多肢選択は集合一致）
   function isCorrect(q) {
     const sel = (answers[q.n] || []).slice().sort();
@@ -262,6 +310,7 @@
     gradeBtn.hidden = false;
     skipBtn.hidden = true;
     oneBtn.hidden = true;
+    renderQnav();
   }
 
   function grade() {
@@ -294,7 +343,8 @@
   }
 
   function oneNext() {
-    if (oneIdx + 1 >= curSet.questions.length) { finishOne(); return; }
+    // 全問判定済み、または最終問題まで来たら結果表示へ
+    if (oneGraded.length >= curSet.questions.length || oneIdx + 1 >= curSet.questions.length) { finishOne(); return; }
     oneIdx++;
     saveOne();
     renderOne();
@@ -315,13 +365,14 @@
     skipBtn.hidden = isG;
     if (isG) {
       oneBtn.disabled = false;
-      oneBtn.innerHTML = oneIdx + 1 >= total
+      oneBtn.innerHTML = (done >= total || oneIdx + 1 >= total)
         ? '<svg class="ico"><use href="#i-flag"/></svg>結果を見る'
         : '次へ<svg class="ico"><use href="#i-arrow-right"/></svg>';
     } else {
       oneBtn.disabled = !(answers[q.n] || []).length;
       oneBtn.innerHTML = '<svg class="ico"><use href="#i-check"/></svg>回答する';
     }
+    renderQnav();
   }
 
   function finishOne() {
@@ -342,6 +393,7 @@
     const prevBest = getBest(curSet.id);
     if (prevBest == null || pct > prevBest) localStorage.setItem(bestKey(curSet.id), String(pct));
     renderResult(correct, total, pct);
+    closeQnav();
     quizBar.hidden = true;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -397,6 +449,7 @@
   }
 
   function showStart() {
+    closeQnav();
     quizScreen.hidden = true;
     quizBar.hidden = true;
     startScreen.hidden = false;

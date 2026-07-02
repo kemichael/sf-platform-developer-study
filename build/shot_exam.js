@@ -52,6 +52,19 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
     return { cnt, barText: document.getElementById('barText').textContent };
   });
 
+  // 問題一覧パネル（一括モード）：開いて Q30 へスクロールジャンプ
+  const navAll = await p.evaluate(() => {
+    window.scrollTo(0, 0);
+    document.getElementById('qnavBtn').click();
+    const btns = document.querySelectorAll('.qn-btn');
+    const r = { panelOpen: !document.getElementById('qnavPanel').hidden, count: btns.length,
+      doneMarked: document.querySelectorAll('.qn-btn.done').length };
+    btns[29].click();
+    return r;
+  });
+  await p.waitForTimeout(800);
+  navAll.scrolled = await p.evaluate(() => window.scrollY > 500);
+
   await p.evaluate(() => document.getElementById('gradeBtn').click());
   await p.waitForTimeout(500);
   const result = await p.evaluate(() => ({
@@ -84,6 +97,23 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
     gradeHidden: document.getElementById('gradeBtn').hidden,
   }));
   await p.screenshot({ path: path.join(OUT, 'exam_one_start.png') });
+
+  // 問題一覧パネル（1問1答モード）：Q10 へジャンプ → Q1 へ戻る
+  await p.evaluate(() => document.getElementById('qnavBtn').click());
+  await p.waitForTimeout(200);
+  await p.screenshot({ path: path.join(OUT, 'exam_qnav.png') });
+  const navOne = await p.evaluate(() => {
+    const btns = document.querySelectorAll('.qn-btn');
+    const r = { count: btns.length, current: document.querySelectorAll('.qn-btn.current').length };
+    btns[9].click(); // Q10 へ
+    r.jumped = +document.querySelector('.q-card').dataset.n;
+    r.closedAfterJump = document.getElementById('qnavPanel').hidden;
+    r.barText = document.getElementById('barText').textContent;
+    document.getElementById('qnavBtn').click();
+    document.querySelectorAll('.qn-btn')[0].click(); // Q1 へ戻る
+    r.back = +document.querySelector('.q-card').dataset.n;
+    return r;
+  });
 
   // 1問目（複数選択）：正解を選んで「回答する」→即時フィードバック
   const one2 = await p.evaluate(() => {
@@ -156,6 +186,8 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
   console.log('ANSWERED(all):', JSON.stringify(answered));
   console.log('RESULT(all):', JSON.stringify(result));
   console.log('wrongOnly後の表示問数:', filtered);
+  console.log('NAV(all):', JSON.stringify(navAll));
+  console.log('NAV(one):', JSON.stringify(navOne));
   console.log('ONE開始:', JSON.stringify(one1));
   console.log('ONE即時判定:', JSON.stringify(one2));
   console.log('ONE誤答/スキップ:', JSON.stringify(one3));
