@@ -114,9 +114,13 @@
         const savedAns = loadAnswers(s.id);
         answered = Object.keys(savedAns).filter(k => (savedAns[k] || []).length).length;
       }
-      const card = document.createElement('button');
+      const hasProgress = answered > 0 || best != null;
+      const card = document.createElement('div');
       card.className = 'set-card';
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
       card.innerHTML =
+        (hasProgress ? '<button type="button" class="sc-reset" title="このセットの回答記録をリセット"><svg class="ico"><use href="#i-trash"/></svg></button>' : '') +
         '<span class="sc-badge"><svg class="ico" style="width:13px;height:13px"><use href="#i-edit"/></svg>SET ' + (i + 1) + '</span>' +
         '<span class="sc-title">' + escapeHtml(s.title) + '</span>' +
         '<span class="sc-meta">' +
@@ -126,6 +130,19 @@
         '</span>' +
         '<span class="sc-go">' + (answered ? '続きから' : 'スタート') + '<svg class="ico"><use href="#i-arrow-right"/></svg></span>';
       card.addEventListener('click', () => startSet(s));
+      card.addEventListener('keydown', e => {
+        if (e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); startSet(s); }
+      });
+      if (hasProgress) {
+        card.querySelector('.sc-reset').addEventListener('click', e => {
+          e.stopPropagation();
+          if (!confirm('SET ' + (i + 1) + '「' + s.title + '」の回答記録と最高得点をリセットしますか？')) return;
+          localStorage.removeItem(ansKey(s.id));
+          localStorage.removeItem(oneKey(s.id));
+          localStorage.removeItem(bestKey(s.id));
+          renderStart();
+        });
+      }
       setGrid.appendChild(card);
     });
   }

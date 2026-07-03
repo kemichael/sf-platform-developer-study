@@ -19,6 +19,29 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
   }));
   await p.screenshot({ path: path.join(OUT, 'exam_start.png') });
 
+  // ===== セット選択画面：回答記録リセット（セット2） =====
+  await p.evaluate(() => {
+    const id = window.__EXAM__.sets[1].id;
+    localStorage.setItem('sfpd-exam-ans-' + id, JSON.stringify({ 1: ['A'] }));
+    localStorage.setItem('sfpd-exam-best-' + id, '80');
+  });
+  await p.reload({ waitUntil: 'load' });
+  await p.waitForTimeout(300);
+  const resetBefore = await p.evaluate(() => ({
+    resetBtns: document.querySelectorAll('.sc-reset').length,
+    set2HasBest: document.querySelectorAll('.set-card')[1].textContent.includes('最高 80%'),
+  }));
+  await p.evaluate(() => document.querySelectorAll('.set-card')[1].querySelector('.sc-reset').click());
+  await p.waitForTimeout(200);
+  const resetAfter = await p.evaluate(() => {
+    const id = window.__EXAM__.sets[1].id;
+    return {
+      resetBtns: document.querySelectorAll('.sc-reset').length,
+      ansCleared: localStorage.getItem('sfpd-exam-ans-' + id) === null,
+      bestCleared: localStorage.getItem('sfpd-exam-best-' + id) === null,
+    };
+  });
+
   // ===== 一括回答モード：セット1 =====
   await p.evaluate(() => document.querySelector('.ms-btn[data-mode="all"]').click());
   await p.evaluate(() => document.querySelectorAll('.set-card')[0].click());
@@ -182,6 +205,8 @@ const OUT = path.resolve(__dirname, '..', 'design_iterations');
 
   await b.close();
   console.log('START:', JSON.stringify(start));
+  console.log('RESET(before):', JSON.stringify(resetBefore));
+  console.log('RESET(after):', JSON.stringify(resetAfter));
   console.log('QUIZ(all):', JSON.stringify(quiz));
   console.log('ANSWERED(all):', JSON.stringify(answered));
   console.log('RESULT(all):', JSON.stringify(result));
