@@ -5077,7 +5077,7 @@
         {
           "n": 1,
           "category": "",
-          "text": "Salesforce にデータをインポートおよびエクスポートする場合、正しい 2 つのステートメントはどれですか。\n2つの回答を選択してください",
+          "text": "Salesforce にデータをインポートおよびエクスポートする場合、正しい 2 つのステートメントはどれですか。\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -5089,7 +5089,7 @@
             },
             {
               "key": "C",
-              "text": "バルク APL を使用すると、ストレージ制限を回避せずに開発環境で大量のデータをインポートできます。"
+              "text": "Bulk API を使用すると、ストレージ制限を回避せずに開発環境で大量のデータをインポートできます。"
             },
             {
               "key": "D",
@@ -5142,7 +5142,7 @@
             },
             {
               "key": "B",
-              "text": "ストリーミング API を使用して、リアルタイムのロールアップ サマリーを作成します。"
+              "text": "ストリーミング API を使用して、リアルタイムにロールアップサマリーを作成します。"
             },
             {
               "key": "C",
@@ -5150,7 +5150,7 @@
             },
             {
               "key": "D",
-              "text": "メタデータ API を使用して、リアルタイムのロールアップ サマリーを作成します。"
+              "text": "メタデータ API を使用して、リアルタイムにロールアップサマリーを作成します。"
             }
           ],
           "answer": [
@@ -5166,7 +5166,7 @@
           "options": [
             {
               "key": "A",
-              "text": "Lightning Web コンポーネントを Visualforce コンポーネントとして埋め込み、ページ レイアウトに直接追加します。"
+              "text": "Lightning Web コンポーネントを Visualforce コンポーネントとして埋め込み、ページレイアウトに直接追加します。"
             },
             {
               "key": "B",
@@ -5219,7 +5219,7 @@
         {
           "n": 6,
           "category": "",
-          "text": "開発者は、販売記録のリストを表示する Lightning Web コンポーネントを作成しています。\n営業担当者ユーザーは、各レコードの手数料フィールドを表示できる必要があります。営業アシスタントユーザーは、手数料フィールドを除くレコードのすべてのフィールドを表示できる必要があります。\nコンポーネントが両方のユーザーに対してエラーなしで機能するようにするには、これをどのように強制すればよいでしょうか?",
+          "text": "開発者は、販売記録のリストを表示する Lightning Web コンポーネントを作成しています。\n営業担当者ユーザーは、各レコードの手数料項目を表示できる必要があります。営業アシスタントユーザーは、手数料項目を除くレコードのすべての項目を表示できる必要があります。\nコンポーネントが両方のユーザーに対してエラーなしで機能するようにするには、これをどのように強制すればよいでしょうか?",
           "options": [
             {
               "key": "A",
@@ -5227,7 +5227,7 @@
             },
             {
               "key": "B",
-              "text": "Security.stripInaccessible Le を使用して、現在のユーザーがアクセスできないフィールドを削除します。"
+              "text": "Security.stripInaccessible() を使用して、現在のユーザーがアクセスできない項目を削除します。"
             },
             {
               "key": "C",
@@ -5242,7 +5242,7 @@
             "B"
           ],
           "multi": false,
-          "explanation": "**`Security.stripIna​ccessible()`** は、現在のユーザーの項目レベルセキュリティ（FLS）に基づいてアクセス権のない項目をクエリ結果から**エラーを発生させずに除去**します。これにより、手数料項目が見える営業担当者にはすべての項目が、見えない営業アシスタントには手数料以外の項目が表示され、どちらのユーザーでもエラーなく動作します（B が正解）。\n\n他の選択肢が誤りの理由:\n- **A**: `WITH SECURITY_ENFORCED` はアクセス権のない項目がクエリに含まれると**例外をスロー**するため、営業アシスタントにはエラーが発生してしまいます。\n- **C**: Lightning Locker はコンポーネント間の JavaScript 分離のためのセキュリティ機構であり、FLS や共有ルールを適用するものではありません。\n- **D**: Lightning Data Service（`lightning/ui*Api` モジュール）は単一レコードの操作が中心で、レコードのリスト表示という要件には適していません。"
+          "explanation": "**`Security.stripInaccessible()`** は、現在のユーザーの項目レベルセキュリティ（FLS）に基づいてアクセス権のない項目をクエリ結果から**エラーを発生させずに除去**します。これにより、手数料項目が見える営業担当者にはすべての項目が、見えない営業アシスタントには手数料以外の項目が表示され、どちらのユーザーでもエラーなく動作します（B が正解）。\n\n他の選択肢が誤りの理由:\n- **A**: `WITH SECURITY_ENFORCED` はアクセス権のない項目がクエリに含まれると**例外をスロー**するため、営業アシスタントにはエラーが発生してしまいます。\n- **C**: Lightning Locker はコンポーネント間の JavaScript 分離のためのセキュリティ機構であり、FLS や共有ルールを適用するものではありません。\n- **D**: Lightning Data Service（`lightning/ui*Api` モジュール）は単一レコードの操作が中心で、レコードのリスト表示という要件には適していません。"
         },
         {
           "n": 7,
@@ -5275,7 +5275,7 @@
         {
           "n": 8,
           "category": "",
-          "text": "匿名 Apex コードを実行する 2 つのユースケースは何ですか?\n2つの回答を選択してください",
+          "text": "匿名 Apex コードを実行する 2 つのユースケースは何ですか?\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -5308,7 +5308,7 @@
           "options": [
             {
               "key": "A",
-              "text": "VSコード"
+              "text": "VS Code"
             },
             {
               "key": "B",
@@ -5416,11 +5416,11 @@
         {
           "n": 13,
           "category": "",
-          "text": "Candidate _c カスタム オブジェクトには Primaryld_c カスタム フィールドが存在します。このフィールドは各候補者の ID 番号を保存するために使用され、スキーマ定義では Unique としてマークされています。\nデータ拡充プロセスの一環として、Universal Containers には、システム内のすべての候補者の更新されたデータを含む CSV ファイルがあります。ファイルには、各候補者の主な情報がデータ ポイントとして含まれています。Universal Containers は、すべてのデータ行がシステム内の候補者に正しくマッピングされていることを確認しながら、この情報を Salesforce にアップロードしたいと考えています。\nデータのアップロードを効率化するために、開発者はどの手法を実装する必要がありますか?",
+          "text": "Candidate__c カスタムオブジェクトには PrimaryId__c カスタム項目が存在します。この項目は各候補者の ID 番号を保存するために使用され、スキーマ定義では Unique としてマークされています。\nデータ拡充プロセスの一環として、Universal Containers には、システム内のすべての候補者の更新されたデータを含む CSV ファイルがあります。ファイルには、各候補者の主な情報がデータ ポイントとして含まれています。Universal Containers は、すべてのデータ行がシステム内の候補者に正しくマッピングされていることを確認しながら、この情報を Salesforce にアップロードしたいと考えています。\nデータのアップロードを効率化するために、開発者はどの手法を実装する必要がありますか?",
           "options": [
             {
               "key": "A",
-              "text": "CSV を candidate__c に関連するカスタム オブジェクトにアップロードします。"
+              "text": "CSV を Candidate__c に関連するカスタム オブジェクトにアップロードします。"
             },
             {
               "key": "B",
@@ -5428,7 +5428,7 @@
             },
             {
               "key": "C",
-              "text": "Primarytd_c フィールド定義を更新して、外部 ID としてマークします。"
+              "text": "PrimaryId__c 項目定義を更新して、外部 ID としてマークします。"
             },
             {
               "key": "D",
@@ -5444,11 +5444,11 @@
         {
           "n": 14,
           "category": "",
-          "text": "組織内の Account オブジェクトには、Branch と呼ばれる子オブジェクトとのマスター詳細関係があります。次の自動化が存在します。\n* ロールアップサマリーフィールド\n* カスタム検証ルール\n* 重複ルール\n開発者はアカウント オブジェクトにトリガーを作成しました。\nトリガー コードをテストする際に開発者が考慮すべき 2 つのことは何ですか?\n2つの回答を選択してください",
+          "text": "組織内の Account オブジェクトには、Branch と呼ばれる子オブジェクトとのマスター詳細関係があります。次の自動化が存在します。\n* ロールアップサマリー項目\n* カスタム検証ルール\n* 重複ルール\n開発者はアカウント オブジェクトにトリガーを作成しました。\nトリガー コードをテストする際に開発者が考慮すべき 2 つのことは何ですか?\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
-              "text": "ロールアップ サマリー フィールドにより、親レコードが保存されることがあります。"
+              "text": "ロールアップサマリー項目により、親レコードが保存されることがあります。"
             },
             {
               "key": "B",
@@ -5473,7 +5473,7 @@
         {
           "n": 15,
           "category": "",
-          "text": "Apex テストクラスで @testSetup アノテーションを使用することに関して正しい 2 つの記述はどれですか。\n2つの回答を選択してください",
+          "text": "Apex テストクラスで @testSetup アノテーションを使用することに関して正しい 2 つの記述はどれですか。\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -5481,7 +5481,7 @@
             },
             {
               "key": "B",
-              "text": "テスト セットアップ メソッドでは、テスト データが 1 回挿入され、テスト クラス内のすべてのテスト メソッドで使用できるようになります。"
+              "text": "テストセットアップメソッドでは、テストデータが 1 回挿入され、テストクラス内のすべてのテストメソッドで使用できるようになります。"
             },
             {
               "key": "C",
@@ -5514,11 +5514,11 @@
             },
             {
               "key": "C",
-              "text": "ビジュアルフォース"
+              "text": "Visualforce"
             },
             {
               "key": "D",
-              "text": "VUE JavaScript フレームワーク"
+              "text": "Vue.js フレームワーク"
             }
           ],
           "answer": [
@@ -5530,11 +5530,11 @@
         {
           "n": 17,
           "category": "",
-          "text": "開発者は、Expense _c オブジェクトで次のトリガーを識別します。\n```apex\ndeleteExpense,\napplyDefaultsToExpense,\nvalidateExpenseUpdate;\n```\nトリガーは、それぞれ削除前、挿入前、更新イベントの前に処理されます。\nトリガーのベスト プラクティスに従うために、開発者が実装する必要がある 2 つの手法はどれですか。\n2つの回答を選択してください",
+          "text": "開発者は、Expense__c オブジェクトで次のトリガーを識別します。\n```apex\ndeleteExpense,\napplyDefaultsToExpense,\nvalidateExpenseUpdate;\n```\nトリガーは、それぞれ削除前、挿入前、更新イベントの前に処理されます。\nトリガーのベスト プラクティスに従うために、開発者が実装する必要がある 2 つの手法はどれですか。\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
-              "text": "Unity の 3 つのトリガーすべてが、すべてのイベントを含む Expense__c オブジェクトの単一のトリガーになります。"
+              "text": "3 つのトリガーすべてを統合し、すべてのイベントを含む Expense__c オブジェクトの単一のトリガーにします。"
             },
             {
               "key": "B",
@@ -5546,7 +5546,7 @@
             },
             {
               "key": "D",
-              "text": "Expense __c オブジェクトの 3 つのトリガーをすべて維持しますが、Apex ロジックをトリガー定義から移動します。"
+              "text": "Expense__c オブジェクトの 3 つのトリガーをすべて維持しますが、Apex ロジックをトリガー定義から移動します。"
             }
           ],
           "answer": [
@@ -5559,7 +5559,7 @@
         {
           "n": 18,
           "category": "",
-          "text": "ユーザーがアカウントの郵便番号を編集する場合、「タイムゾーン」という名前のカスタムアカウントテキストフィールドを、PostalCodeToTimezone__c という別のカスタムオブジェクトの値に基づいて更新する必要があります。\nこの機能を実装する最適な方法は何ですか?",
+          "text": "ユーザーがアカウントの郵便番号を編集する場合、アカウントのカスタムテキスト項目「タイムゾーン」を、PostalCodeToTimezone__c という別のカスタムオブジェクトの値に基づいて更新する必要があります。\nこの機能を実装する最適な方法は何ですか?",
           "options": [
             {
               "key": "A",
@@ -5571,7 +5571,7 @@
             },
             {
               "key": "C",
-              "text": "数式フィールドを作成します。"
+              "text": "数式項目を作成します。"
             },
             {
               "key": "D",
@@ -5587,7 +5587,7 @@
         {
           "n": 19,
           "category": "",
-          "text": "開発者は、Apex クラスを使用するカスタム注文管理アプリを作成しました。注文は、Order オブジェクトと、Order と主従関係にある OrderlItem オブジェクトによって表されます。注文処理中に、注文が複数の注文に分割される場合があります。\nコードで既存の OrderItem レコードの一部を新しい Order レコードに移動できるようにするには、開発者は何をする必要がありますか?",
+          "text": "開発者は、Apex クラスを使用するカスタム注文管理アプリを作成しました。注文は、Order オブジェクトと、Order と主従関係にある OrderItem オブジェクトによって表されます。注文処理中に、注文が複数の注文に分割される場合があります。\nコードで既存の OrderItem レコードの一部を新しい Order レコードに移動できるようにするには、開発者は何をする必要がありますか?",
           "options": [
             {
               "key": "A",
@@ -5603,19 +5603,19 @@
             },
             {
               "key": "D",
-              "text": "マスター詳細関係の再印刷を許可するオプションを選択します。"
+              "text": "マスター詳細関係で「親の変更を許可（Allow Reparenting）」オプションを有効にします。"
             }
           ],
           "answer": [
             "D"
           ],
           "multi": false,
-          "explanation": "主従関係（マスター詳細関係）では、デフォルトで子レコードの親を変更（付け替え）できません。既存の OrderItem レコードを別の Order レコードへ移動できるようにするには、マスター詳細関係の項目定義で **「親の変更を許可（Allow reparenting）」オプションを有効化**します（D が正解。「再印刷」は reparenting の誤訳です）。これにより主従関係を維持したまま親の付け替えが可能になります。\n\n他の選択肢が誤りの理由:\n- **A（without sharing）**: 共有ルールの適用を無効化するだけで、親の付け替え可否には影響しません。\n- **B**: 参照関係への変更でも付け替えは可能になりますが、ロールアップサマリー等の主従関係の利点を失うため不要な変更です。\n- **C**: ジャンクションオブジェクトは多対多関係のためのもので、本要件には不適切です。"
+          "explanation": "主従関係（マスター詳細関係）では、デフォルトで子レコードの親を変更（付け替え）できません。既存の OrderItem レコードを別の Order レコードへ移動できるようにするには、マスター詳細関係の項目定義で **「親の変更を許可（Allow Reparenting）」オプションを有効化**します（D が正解）。これにより主従関係を維持したまま親の付け替えが可能になります。\n\n他の選択肢が誤りの理由:\n- **A（without sharing）**: 共有ルールの適用を無効化するだけで、親の付け替え可否には影響しません。\n- **B**: 参照関係への変更でも付け替えは可能になりますが、ロールアップサマリー等の主従関係の利点を失うため不要な変更です。\n- **C**: ジャンクションオブジェクトは多対多関係のためのもので、本要件には不適切です。"
         },
         {
           "n": 20,
           "category": "",
-          "text": "開発者は、親 Lightning Web コンポーネント内にネストされた子 Lightning Web コンポーネントを作成しました。親コンポーネントは、子コンポーネントに文字列値を渡す必要があります。\nこれを実現するにはどの 2 つの方法がありますか?\n2つの回答を選択してください",
+          "text": "開発者は、親 Lightning Web コンポーネント内にネストされた子 Lightning Web コンポーネントを作成しました。親コンポーネントは、子コンポーネントに文字列値を渡す必要があります。\nこれを実現するにはどの 2 つの方法がありますか?\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -5648,7 +5648,7 @@
           "options": [
             {
               "key": "A",
-              "text": "雷撃アクション"
+              "text": "Lightning アクション"
             },
             {
               "key": "B",
@@ -5660,14 +5660,14 @@
             },
             {
               "key": "D",
-              "text": "雷流"
+              "text": "Lightning フロー"
             }
           ],
           "answer": [
             "C"
           ],
           "multi": false,
-          "explanation": "Lightning Experience で標準ボタン（編集ボタンなど）を上書きできるのは、**Lightning コンポーネント**です（C が正解）。具体的には `lightning:actionOverride` インターフェースを実装した Aura コンポーネント（または LWC をラップしたもの）をアクションの上書きに指定します。\n\n他の選択肢が誤りの理由:\n- **A（Lightning アクション）**: クイックアクションはボタンの追加はできますが、標準ボタンの上書きには使えません。\n- **B（Lightning ページ）**: Lightning アプリケーションビルダーのページはレコードページ等のレイアウト用であり、ボタンの上書きはできません。\n- **D（Lightning フロー）**: フローを直接標準ボタンの上書きに指定することはできません。"
+          "explanation": "Lightning Experience で標準ボタン（編集ボタンなど）を上書きできるのは、**Lightning コンポーネント**です（C が正解）。具体的には `lightning:actionOverride` インターフェースを実装した Aura コンポーネント（または LWC をラップしたもの）をアクションの上書きに指定します。\n\n**他の選択肢が誤りの理由**\n- **A（Lightning アクション）**: クイックアクションはボタンの追加はできますが、標準ボタンの上書きには使えません。\n- **B（Lightning ページ）**: Lightning アプリケーションビルダーのページはレコードページ等のレイアウト用であり、ボタンの上書きはできません。\n- **D（Lightning フロー）**: フローを直接標準ボタンの上書きに指定することはできません。"
         },
         {
           "n": 22,
@@ -5680,15 +5680,15 @@
             },
             {
               "key": "B",
-              "text": "トランザクションの非同期性のため、Apex ガバナー制限を超えることはできません。"
+              "text": "トランザクションの非同期性のため、Apex ガバナ制限を超えることはできません。"
             },
             {
               "key": "C",
-              "text": "Apex ガバナー制限では、非同期制限レベルが使用されます。"
+              "text": "Apex ガバナ制限では、非同期制限レベルが使用されます。"
             },
             {
               "key": "D",
-              "text": "Apex クラスのコンストラクターを呼び出すときに、Apex ガバナー制限が省略されます。"
+              "text": "Apex クラスのコンストラクターを呼び出すときに、Apex ガバナ制限が省略されます。"
             }
           ],
           "answer": [
@@ -5696,7 +5696,7 @@
             "C"
           ],
           "multi": true,
-          "explanation": "バッチ Apex では、**`execute()` メソッドの各実行（各バッチチャンク）が独立したトランザクション**として扱われるため、ガバナ制限は実行のたびにリセットされます（A が正解）。また、バッチ Apex は非同期処理であるため、**非同期用のガバナ制限**（例: SOQL 取得行数やヒープサイズの上限が同期処理より大きい）が適用されます（C が正解）。\n\n他の選択肢が誤りの理由:\n- **B**: 非同期であってもガバナ制限は存在し、超過すれば例外が発生します。\n- **D**: コンストラクターの呼び出しでガバナ制限が免除されるという仕様はありません。"
+          "explanation": "バッチ Apex では、**`execute()` メソッドの各実行（各バッチチャンク）が独立したトランザクション**として扱われるため、ガバナ制限は実行のたびにリセットされます（A が正解）。また、バッチ Apex は非同期処理であるため、**非同期用のガバナ制限**（例: SOQL 取得行数やヒープサイズの上限が同期処理より大きい）が適用されます（C が正解）。\n\n**他の選択肢が誤りの理由**\n- **B**: 非同期であってもガバナ制限は存在し、超過すれば例外が発生します。\n- **D**: コンストラクターの呼び出しでガバナ制限が免除されるという仕様はありません。"
         },
         {
           "n": 23,
@@ -5705,15 +5705,15 @@
           "options": [
             {
               "key": "A",
-              "text": "「AccountControlles」から updateAccounts をインポートします。"
+              "text": "\"AccountController\" から updateAccounts をインポートします。"
             },
             {
               "key": "B",
-              "text": "「Salesforce/apex/AccountController:' から updateAccounts をインポートします。"
+              "text": "\"Salesforce/apex/AccountController:updateAccounts\" から updateAccounts をインポートします。"
             },
             {
               "key": "C",
-              "text": "「Account@ontroller.updateAccounts」から updateAccounts をインポートします。"
+              "text": "\"AccountController.updateAccounts\" から updateAccounts をインポートします。"
             },
             {
               "key": "D",
@@ -5724,7 +5724,7 @@
             "D"
           ],
           "multi": false,
-          "explanation": "LWC から Apex メソッドをインポートする正しい構文は **`import updateAccounts from '@salesforce/apex/AccountController.updateAccounts';`** です（D が正解）。スキーマは `@salesforce/apex/` で始まり、その後に `クラス名.メソッド名` をドット区切りで指定します（名前空間がある場合は `名前空間.クラス名.メソッド名`）。\n\n他の選択肢が誤りの理由:\n- **A**: クラス名のみの指定であり、`@salesforce/apex/` スキーマもメソッド名もありません。\n- **B**: 区切り文字がコロン（`:`）になっており、`@` も欠けています。正しくはドット区切りです。\n- **C**: `@salesforce/apex/` スキーマが欠けています。"
+          "explanation": "LWC から Apex メソッドをインポートする正しい構文は **`import updateAccounts from '@salesforce/apex/AccountController.updateAccounts';`** です（D が正解）。スキーマは `@salesforce/apex/` で始まり、その後に `クラス名.メソッド名` をドット区切りで指定します（名前空間がある場合は `名前空間.クラス名.メソッド名`）。\n\n**他の選択肢が誤りの理由**\n- **A**: クラス名のみの指定であり、`@salesforce/apex/` スキーマもメソッド名もありません。\n- **B**: 区切り文字がコロン（`:`）になっており、`@` も欠けています。正しくはドット区切りです。\n- **C**: `@salesforce/apex/` スキーマが欠けています。"
         },
         {
           "n": 24,
@@ -5737,7 +5737,7 @@
             },
             {
               "key": "B",
-              "text": "O Long"
+              "text": "Long"
             },
             {
               "key": "C",
@@ -5745,7 +5745,7 @@
             },
             {
               "key": "D",
-              "text": "dg Integer"
+              "text": "Integer"
             },
             {
               "key": "E",
@@ -5758,32 +5758,32 @@
             "E"
           ],
           "multi": true,
-          "explanation": "Apex での SOQL クエリの戻り値は 3 種類です。通常のクエリは **`List<sObject>`（リスト）** を返し（E）、結果が 1 件のみと確実な場合は **単一の `sObject`** に直接代入できます（C）。また `SELECT COUNT()` 形式のクエリは **`Integer`** を返します（D）。\n\n他の選択肢が誤りの理由:\n- **A（Double）/ B（Long）**: SOQL クエリ自体の戻り値の型としては定義されていません（集計結果の値は `AggregateResult` の中から取得します）。"
+          "explanation": "Apex での SOQL クエリの戻り値は 3 種類です。通常のクエリは **`List<sObject>`（リスト）** を返し（E）、結果が 1 件のみと確実な場合は **単一の `sObject`** に直接代入できます（C）。また `SELECT COUNT()` 形式のクエリは **`Integer`** を返します（D）。\n\n**他の選択肢が誤りの理由**\n- **A（Double）/ B（Long）**: SOQL クエリ自体の戻り値の型としては定義されていません（集計結果の値は `AggregateResult` の中から取得します）。"
         },
         {
           "n": 25,
           "category": "",
-          "text": "Apex で @lnvocableMethod アノテーションを使用する際の 3 つの考慮事項は何ですか?\n3つの回答を選択してください",
+          "text": "Apex で @InvocableMethod アノテーションを使用する際の 3 つの考慮事項は何ですか?\n3つの回答を選択してください",
           "options": [
             {
               "key": "A",
-              "text": "Apex クラスごとに、@invecableMethod アノテーションを使用するメソッドを 1 つだけ定義できます。"
+              "text": "Apex クラスごとに、@InvocableMethod アノテーションを使用するメソッドを 1 つだけ定義できます。"
             },
             {
               "key": "B",
-              "text": "@invecableMethod アノテーションを使用するメソッドには、複数の入力パラメータを設定できます。"
+              "text": "@InvocableMethod アノテーションを使用するメソッドには、複数の入力パラメータを設定できます。"
             },
             {
               "key": "C",
-              "text": "@invocablemethod アノテーションを使用するメソッドは、static として宣言する必要があります。"
+              "text": "@InvocableMethod アノテーションを使用するメソッドは、static として宣言する必要があります。"
             },
             {
               "key": "D",
-              "text": "GO @invocablemethod アノテーションを使用するメソッドは、戻り値を定義する必要があります。"
+              "text": "@InvocableMethod アノテーションを使用するメソッドは、戻り値を定義する必要があります。"
             },
             {
               "key": "E",
-              "text": "@invocableMethod アノテーションを使用するメソッドは、Public または Global として宣言できます。"
+              "text": "@InvocableMethod アノテーションを使用するメソッドは、public または global として宣言できます。"
             }
           ],
           "answer": [
@@ -5792,12 +5792,12 @@
             "E"
           ],
           "multi": true,
-          "explanation": "`@InvocableMethod` アノテーションの主な考慮事項は次のとおりです。**1 つの Apex クラスに定義できる `@InvocableMethod` は 1 つだけ**です（A が正解）。メソッドは **`static` として宣言する必要**があります（C が正解）。アクセス修飾子は **`public` または `global`** である必要があります（E が正解）。\n\n他の選択肢が誤りの理由:\n- **B**: 入力パラメータは**リスト型 1 つのみ**しか定義できず、複数のパラメータは指定できません。\n- **D**: 戻り値の定義は必須ではなく、`void` を返すメソッドも許可されています。"
+          "explanation": "`@InvocableMethod` アノテーションの主な考慮事項は次のとおりです。**1 つの Apex クラスに定義できる `@InvocableMethod` は 1 つだけ**です（A が正解）。メソッドは **`static` として宣言する必要**があります（C が正解）。アクセス修飾子は **`public` または `global`** である必要があります（E が正解）。\n\n**他の選択肢が誤りの理由**\n- **B**: 入力パラメータは**リスト型 1 つのみ**しか定義できず、複数のパラメータは指定できません。\n- **D**: 戻り値の定義は必須ではなく、`void` を返すメソッドも許可されています。"
         },
         {
           "n": 26,
           "category": "",
-          "text": "Universal Containersは最近、ClassicからLightning Experienceに移行しました。同社のビジネスプロセスの一つでは、ユーザーが商談詳細ページでカスタムボタンを押した際に、商談オブジェクトの特定の値をHTTP RESTコールアウト経由で外部の注文管理システムに送信することが求められています。\n例のフィールド:\n* 名前\n* 額\n* アカウント\nビジネス要件を満たすために開発者が実装する必要がある 2 つの方法はどれですか?\n2つの回答を選択してください。",
+          "text": "Universal Containersは最近、ClassicからLightning Experienceに移行しました。同社のビジネスプロセスの一つでは、ユーザーが商談詳細ページでカスタムボタンを押した際に、商談オブジェクトの特定の値をHTTP REST コールアウト経由で外部の注文管理システムに送信することが求められています。\n例のフィールド:\n* 名前\n* 額\n* アカウント\nビジネス要件を満たすために開発者が実装する必要がある 2 つの方法はどれですか?\n2つの回答を選択してください",
           "options": [
             {
               "key": "A",
@@ -5870,19 +5870,19 @@
             },
             {
               "key": "D",
-              "text": "aaS"
+              "text": "IaaS"
             }
           ],
           "answer": [
             "D"
           ],
           "multi": false,
-          "explanation": "100 台以上のサーバークラスタを一時的（1 か月間）に構築してスケーラビリティテストを行うようなケースでは、仮想サーバーなどのインフラ資源を必要な期間だけ調達できる **IaaS（Infrastructure as a Service）** が最適です（選択肢の「aaS」は OCR による欠落で、原典では IaaS です）。使った分だけ課金され、テスト終了後にすぐ解放できる点が要件に合致します。\n\n**他の選択肢が誤りの理由**\n- **A (PaaS)**: アプリケーションの実行基盤を提供するモデルで、サーバークラスタそのものを制御する用途には向きません。\n- **B (SaaS)**: 完成したアプリケーションを利用するモデルであり、自社開発ソフトウェアのテスト基盤にはなりません。\n- **C (BaaS)**: モバイルアプリ等のバックエンド機能を提供するモデルで、要件とは異なります。"
+          "explanation": "100 台以上のサーバークラスターを一時的（1 か月間）に構築してスケーラビリティテストを行うようなケースでは、仮想サーバーなどのインフラ資源を必要な期間だけ調達できる **IaaS（Infrastructure as a Service）** が最適です。使った分だけ課金され、テスト終了後にすぐ解放できる点が要件に合致します。\n\n**他の選択肢が誤りの理由**\n- **A (PaaS)**: アプリケーションの実行基盤を提供するモデルで、サーバークラスターそのものを制御する用途には向きません。\n- **B (SaaS)**: 完成したアプリケーションを利用するモデルであり、自社開発ソフトウェアのテスト基盤にはなりません。\n- **C (BaaS)**: モバイルアプリ等のバックエンド機能を提供するモデルで、要件とは異なります。"
         },
         {
           "n": 29,
           "category": "",
-          "text": "開発者は、既存の Payment クラスの実装を提供する CreditCardPayment クラスを作成する必要があります。\npublic virtual class Payment {\npublic virtual void makePayment(Decimal amount) {\n// implementation\n}\nWhich is the correct implementation?",
+          "text": "開発者は、既存の Payment クラスの実装を提供する CreditCardPayment クラスを作成する必要があります。\npublic virtual class Payment {\npublic virtual void makePayment(Decimal amount) {\n// implementation\n}\n正しい実装はどれですか?",
           "options": [
             {
               "key": "A",
@@ -5910,11 +5910,11 @@
         {
           "n": 30,
           "category": "",
-          "text": "次のコード スニペットは、2,000 件を超えるリード レコードがある環境で Lightning Web コンポーネントによって実行されます。\n```apex\n@AuraEnabled\npublic void static updateLeads() {\n    for (Lead thisLead : [SELECT Origin__c FROM Lead]) {\n        thisLead.LeadSource = thisLead.Origin__c;\n        update thisLead;\n    }\n}\n```\nApex トランザクション内でどのガバナー制限を超える可能性がありますか?",
+          "text": "次のコード スニペットは、2,000 件を超えるリード レコードがある環境で Lightning Web コンポーネントによって実行されます。\n```apex\n@AuraEnabled\npublic void static updateLeads() {\n    for (Lead thisLead : [SELECT Origin__c FROM Lead]) {\n        thisLead.LeadSource = thisLead.Origin__c;\n        update thisLead;\n    }\n}\n```\nApex トランザクション内でどのガバナ制限を超える可能性がありますか?",
           "options": [
             {
               "key": "A",
-              "text": "発行されたSOOLクエリの合計数"
+              "text": "発行された SOQL クエリの合計数"
             },
             {
               "key": "B",
@@ -5929,7 +5929,7 @@
             "B"
           ],
           "multi": false,
-          "explanation": "このコードは SOQL の結果をループしながら、レコード 1 件ごとに `update` を実行しています。同期トランザクションの **DML ステートメント数の上限は 150** なので、2,000 件を超えるリードが存在する環境では 151 件目の `update` で制限超過となります。\n\n**他の選択肢が誤りの理由**\n- **A**: SOQL クエリ（原文の SOOL は SOQL の誤記）はループの外で 1 回しか発行されないため、上限 100 回には達しません。\n- **C**: DML で処理されるレコード数の上限は 10,000 件で、1 件ずつの更新が 2,000 回でも合計 2,000 件にとどまり、この制限には達しません（その前に DML 回数の制限に抵触します）。"
+          "explanation": "このコードは SOQL の結果をループしながら、レコード 1 件ごとに `update` を実行しています。同期トランザクションの **DML ステートメント数の上限は 150** なので、2,000 件を超えるリードが存在する環境では 151 件目の `update` で制限超過となります。\n\n**他の選択肢が誤りの理由**\n- **A**: SOQL クエリはループの外で 1 回しか発行されないため、上限 100 回には達しません。\n- **C**: DML で処理されるレコード数の上限は 10,000 件で、1 件ずつの更新が 2,000 回でも合計 2,000 件にとどまり、この制限には達しません（その前に DML 回数の制限に抵触します）。"
         },
         {
           "n": 31,
@@ -5990,11 +5990,11 @@
         {
           "n": 33,
           "category": "",
-          "text": "リード開発者が「OrderRequest」という仮想クラスを作成します。次のコードスニペットをご覧ください。\nPublic class CustomerOrder {\n//code implementation\n}\n開発者は CustomerOrder クラス内で OrderRequest クラスをどのように使用できますか?",
+          "text": "リード開発者が「OrderRequest」という virtual クラスを作成します。次のコードスニペットをご覧ください。\npublic class CustomerOrder {\n//code implementation\n}\n開発者は CustomerOrder クラス内で OrderRequest クラスをどのように使用できますか?",
           "options": [
             {
               "key": "A",
-              "text": "(class=\"OrderRequest\"}public class CustomerOrder を拡張します"
+              "text": "(class=\"OrderRequest\")public class CustomerOrder を拡張します"
             },
             {
               "key": "B",
@@ -6006,23 +6006,23 @@
             },
             {
               "key": "D",
-              "text": "@Implements (class=\"OrderRequest\") パブリッククラス Customerorder"
+              "text": "@Implements (class=\"OrderRequest\") パブリッククラス CustomerOrder"
             }
           ],
           "answer": [
             "C"
           ],
           "multi": false,
-          "explanation": "`OrderRequest` は `virtual` クラスとして定義されているため、他のクラスから利用（継承）するには **`extends`** キーワードを使用します。`public class CustomerOrder extends OrderRequest` と宣言することで、`OrderRequest` のメソッドやプロパティを継承・オーバーライドできます。\n\n**他の選択肢が誤りの理由**\n- **A, D**: `@Implements(class=...)` のようなアノテーション構文は Apex に存在しません。\n- **B**: `implements` はインターフェースの実装に使うキーワードで、virtual クラスの継承には使えません（クラス名も `Order` になっており不正確です）。"
+          "explanation": "`OrderRequest` は virtual クラスとして定義されているため、他のクラスから利用（継承）するには **`extends`** キーワードを使用します。`public class CustomerOrder extends OrderRequest` と宣言することで、`OrderRequest` のメソッドやプロパティを継承・オーバーライドできます。\n\n**他の選択肢が誤りの理由**\n- **A, D**: `@Implements(class=...)` のようなアノテーション構文は Apex に存在しません。\n- **B**: `implements` はインターフェースの実装に使うキーワードで、virtual クラスの継承には使えません（クラス名も `Order` になっており不正確です）。"
         },
         {
           "n": 34,
           "category": "",
-          "text": "Universal Containers の管理者は、システム内で削除できるのは廃止されたコンテナのみであることを保証したいと考えています。ビジネス要件を満たすために、Salesforce 開発者は Container _c オブジェクト内の Status _c カスタム フィールドの選択リスト値として「廃止」を追加します。\n開発者が「廃止」ステータスのコンテナ レコードのみを削除できるようにするために使用できる 2 つのアプローチはどれですか。\n2つの回答を選択してください",
+          "text": "Universal Containers の管理者は、システム内で削除できるのは廃止されたコンテナのみであることを保証したいと考えています。ビジネス要件を満たすために、Salesforce 開発者は Container__c オブジェクト内の Status__c カスタム フィールドの選択リスト値として「廃止」を追加します。\n開発者が「廃止」ステータスのコンテナ レコードのみを削除できるようにするために使用できる 2 つのアプローチはどれですか。\n2つの回答を選択してください",
           "options": [
             {
               "key": "A",
-              "text": "レコードトリガーの欠陥の前"
+              "text": "レコードトリガーフローの前"
             },
             {
               "key": "B",
@@ -6042,7 +6042,7 @@
             "B"
           ],
           "multi": true,
-          "explanation": "削除操作を条件付きで阻止するには、削除の**前**に介入できる仕組みが必要です。**削除前（before delete）のレコードトリガーフロー**（選択肢 A の「欠陥」は「フロー」の誤記）と **Apex トリガー**（before delete で `addError` を使用）は、どちらもステータスが「廃止」でないレコードの削除をブロックできます。\n\n**他の選択肢が誤りの理由**\n- **C**: 削除後（after delete）のフローではレコードはすでに削除されており、削除を防ぐことはできません。\n- **D**: 検証ルールはレコードの作成・更新時にのみ評価され、削除時には実行されません。"
+          "explanation": "削除操作を条件付きで阻止するには、削除の**前**に介入できる仕組みが必要です。**削除前（before delete）のレコードトリガーフロー**と **Apex トリガー**（before delete で `addError` を使用）は、どちらもステータスが「廃止」でないレコードの削除をブロックできます。\n\n**他の選択肢が誤りの理由**\n- **C**: 削除後（after delete）のフローではレコードはすでに削除されており、削除を防ぐことはできません。\n- **D**: 検証ルールはレコードの作成・更新時にのみ評価され、削除時には実行されません。"
         },
         {
           "n": 35,
@@ -6059,7 +6059,7 @@
             },
             {
               "key": "C",
-              "text": "フィードバックに迅速に対応できるように、営業時間中に展開する必要があります。"
+              "text": "フィードバックに迅速に対応できるように、営業時間中にデプロイする必要があります。"
             },
             {
               "key": "D",
@@ -6080,11 +6080,11 @@
           "options": [
             {
               "key": "A",
-              "text": "@AuraEnabled(cacneable=true)"
+              "text": "@AuraEnabled(cacheable=true)"
             },
             {
               "key": "B",
-              "text": "@RemoteAction (cacheable-true)"
+              "text": "@RemoteAction(cacheable=true)"
             },
             {
               "key": "C",
@@ -6099,12 +6099,12 @@
             "A"
           ],
           "multi": false,
-          "explanation": "Apex メソッドを LWC のプロパティに **`@wire`** で接続するには、メソッドに **`@AuraEnabled(cacheable=true)`**（選択肢の cacneable は cacheable の誤記）を付与する必要があります。`cacheable=true` によりクライアント側でのキャッシュが有効になり、wire サービス経由での呼び出しが可能になります。\n\n**他の選択肢が誤りの理由**\n- **B, C**: `@RemoteAction` は Visualforce の JavaScript リモート処理用のアノテーションで、LWC では使用できません。\n- **D**: `@AuraEnabled` のみでは命令的（imperative）な呼び出しはできますが、wire でプロパティに接続するには `cacheable=true` が必須です。"
+          "explanation": "Apex メソッドを LWC のプロパティに **`@wire`** で接続するには、メソッドに **`@AuraEnabled(cacheable=true)`** を付与する必要があります。`cacheable=true` によりクライアント側でのキャッシュが有効になり、wire サービス経由での呼び出しが可能になります。\n\n**他の選択肢が誤りの理由**\n- **B, C**: `@RemoteAction` は Visualforce の JavaScript リモート処理用のアノテーションで、LWC では使用できません。\n- **D**: `@AuraEnabled` のみでは命令的（imperative）な呼び出しはできますが、wire でプロパティに接続するには `cacheable=true` が必須です。"
         },
         {
           "n": 37,
           "category": "",
-          "text": "Universal Hiring は、Salesforce を使用して求人応募を取得します。Salesforce 管理者は、マスター オブジェクトとして機能する Job__c と詳細として機能する Application_c の 2 つのカスタム オブジェクトを作成しました。\nJob__c オブジェクト内では、カスタムの複数選択選択リストである preferred _Locations__c に、その職位の承認済み州のリストが含まれています。各 Job_Application__c レコードは、マスター詳細関係を通じてシステム内の連絡先に関連付けられています。\n採用担当者は、連絡先の郵送先州の値が、Job_Application__c レコード内の Preferred Locations__c フィールドで選択された値と一致するかどうかを表示する機能を要求しました。採用担当者は、連絡先の郵送先州に変更が発生した場合でも、この値が同期されたままになることを望んでいます。\nビジネス要件を満たすために開発者が使用すべき推奨ツールは何ですか?",
+          "text": "Universal Hiring は、Salesforce を使用して求人応募を取得します。Salesforce 管理者は、マスター オブジェクトとして機能する Job__c と詳細として機能する Job_Application__c の 2 つのカスタム オブジェクトを作成しました。\nJob__c オブジェクト内では、カスタムの複数選択選択リストである Preferred_Locations__c に、その職位の承認済み州のリストが含まれています。各 Job_Application__c レコードは、マスター詳細関係を通じてシステム内の連絡先に関連付けられています。\n採用担当者は、連絡先の郵送先州の値が、Job_Application__c レコード内の Preferred_Locations__c フィールドで選択された値と一致するかどうかを表示する機能を要求しました。採用担当者は、連絡先の郵送先州に変更が発生した場合でも、この値が同期されたままになることを望んでいます。\nビジネス要件を満たすために開発者が使用すべき推奨ツールは何ですか?",
           "options": [
             {
               "key": "A",
@@ -6128,15 +6128,15 @@
         {
           "n": 38,
           "category": "",
-          "text": "次のコード スニペットの結果は何でしょうか?\npublic word doWork(Account acct) {\nfor (Integer i \\= 0; i <= 2007 i++) {\ninsert acct;\n}",
+          "text": "次のコード スニペットの結果は何でしょうか?\n```apex\npublic void doWork(Account acct) {\n    for (Integer i = 0; i <= 200; i++) {\n        insert acct;\n    }\n}\n```",
           "options": [
             {
               "key": "A",
-              "text": "アカウントが挿入されます。"
+              "text": "0 個のアカウントが挿入されます。"
             },
             {
               "key": "B",
-              "text": "アカウントが挿入されました。"
+              "text": "0 個のアカウントが挿入されました。"
             },
             {
               "key": "C",
@@ -6151,7 +6151,7 @@
             "A"
           ],
           "multi": false,
-          "explanation": "このコードはループ内で `insert` を 201 回実行しようとします。同期トランザクションの **DML ステートメント上限は 150 回**のため、151 回目で `LimitException` が発生します（さらに、同一の sObject インスタンスを再挿入しようとする時点でも例外になります）。ガバナ制限の例外は捕捉できず、**トランザクション全体がロールバック**されるため、結果として**アカウントは 1 件も挿入されません**（原典の選択肢は「0 accounts are inserted」です）。\n\n**他の選択肢が誤りの理由**\n- **B**: 例外発生時はトランザクション全体がロールバックされるため、途中まで成功した挿入も取り消されます。\n- **C, D**: 150 回目の DML の後に制限超過となるため、200 件や 201 件が確定することはありません。"
+          "explanation": "このコードはループ内で `insert` を 201 回実行しようとします。同期トランザクションの **DML ステートメント上限は 150 回**のため、151 回目で `LimitException` が発生します（さらに、同一の sObject インスタンスを再挿入しようとする時点でも例外になります）。ガバナ制限の例外は捕捉できず、**トランザクション全体がロールバック**されるため、結果として**挿入されるアカウントは 0 個**です。\n\n**他の選択肢が誤りの理由**\n- **B**: 例外発生時はトランザクション全体がロールバックされるため、途中まで成功した挿入も取り消されます。\n- **C, D**: 150 回目の DML の後に制限超過となるため、200 件や 201 件が確定することはありません。"
         },
         {
           "n": 39,
@@ -6160,19 +6160,19 @@
           "options": [
             {
               "key": "A",
-              "text": "カスタム リスト コントローラー拡張を備えた標準コントローラー"
+              "text": "カスタム リスト コントローラ拡張を備えた標準コントローラ"
             },
             {
               "key": "B",
-              "text": "recorasetvar ページ属性を持つカスタム リスト コントローラ"
+              "text": "recordSetVar ページ属性を持つカスタム リスト コントローラ"
             },
             {
               "key": "C",
-              "text": "コントローラ拡張と <spex:listButton> タグ"
+              "text": "コントローラ拡張と <apex:listButton> タグ"
             },
             {
               "key": "D",
-              "text": "標準コントローラと recordsetvar ページ属性"
+              "text": "標準コントローラと recordSetVar ページ属性"
             }
           ],
           "answer": [
@@ -6212,30 +6212,30 @@
         {
           "n": 41,
           "category": "",
-          "text": "開発者は、ユーザーが複数の商談を作成できるページを作成しています。開発者は、現在のユーザーのデフォルトの商談レコード タイプを確認し、レコードを挿入する前にレコード タイプに基づいて特定のデフォルト値を設定するように求められます。\n開発者は現在のユーザーのデフォルトのレコード タイプをどのように見つけることができますか?",
+          "text": "開発者は、ユーザーが複数の商談を作成できるページを作成しています。開発者は、現在のユーザーのデフォルトの商談レコードタイプを確認し、レコードを挿入する前にレコードタイプに基づいて特定のデフォルト値を設定するように求められます。\n開発者は現在のユーザーのデフォルトのレコードタイプをどのように見つけることができますか?",
           "options": [
             {
               "key": "A",
-              "text": "挿入する前に、商談を作成し、現在のユーザーのデフォルトのレコード タイプのレコード ID を持つ商談レコード タイプを確認します。"
+              "text": "挿入する前に商談を作成し、現在のユーザーのデフォルトのレコードタイプのレコードIDを持つ商談レコードタイプであるかどうかを確認します。"
             },
             {
               "key": "B",
-              "text": "IDがuserinfo.getprofileID()に等しいプロファイルを照会し、プロファイル機会を使用します。getdefaultresoratype()メソッド、"
+              "text": "ID が UserInfo.getProfileId() に等しいプロファイルを照会し、Profile.Opportunity.getDefaultRecordType() メソッドを使用します。"
             },
             {
               "key": "C",
-              "text": "schema.Userinfo.Opportunity.getDefaultRecordType {) メソッドを使用します。"
+              "text": "Schema.UserInfo.Opportunity.getDefaultRecordType() メソッドを使用します。"
             },
             {
               "key": "D",
-              "text": "レコード タイプのリストを取得するには、opportunity.sobjectTyps.getDeacribse().getRecordTypeInfos {) を使用し、isDefaultRecordtypeMapping {) が true になるまで反復処理します。"
+              "text": "レコードタイプのリストを取得するには、Opportunity.SObjectType.getDescribe().getRecordTypeInfos() を使用し、isDefaultRecordTypeMapping() が true になるまで反復処理します。"
             }
           ],
           "answer": [
             "D"
           ],
           "multi": false,
-          "explanation": "現在のユーザーのデフォルトレコードタイプは、スキーマ記述メソッドで取得します。**`Opportunity.SObjectType.getDescribe().getRecordTypeInfos()`** でレコードタイプ情報のリストを取得し、各 `RecordTypeInfo` の **`isDefaultRecordTypeMapping()`** が `true` を返すものを探すのが正しい方法です（選択肢の綴りは OCR による乱れがありますが、原典はこのメソッドです）。\n\n**他の選択肢が誤りの理由**\n- **A**: レコードを実際に作成して確認する方法は非効率で、デフォルトレコードタイプの取得方法として不適切です。\n- **B**: プロファイルオブジェクトに `getDefaultRecordType()` のようなメソッドは存在しません。\n- **C**: `Schema.UserInfo.Opportunity.getDefaultRecordType()` という API は存在しません。"
+          "explanation": "現在のユーザーのデフォルトレコードタイプは、スキーマ記述メソッドで取得します。**`Opportunity.SObjectType.getDescribe().getRecordTypeInfos()`** でレコードタイプ情報のリストを取得し、各 `RecordTypeInfo` の **`isDefaultRecordTypeMapping()`** が `true` を返すものを探すのが正しい方法です。\n\n**他の選択肢が誤りの理由**\n- **A**: レコードを実際に作成して確認する方法は非効率で、デフォルトレコードタイプの取得方法として不適切です。\n- **B**: プロファイルオブジェクトに `getDefaultRecordType()` のようなメソッドは存在しません。\n- **C**: `Schema.UserInfo.Opportunity.getDefaultRecordType()` という API は存在しません。"
         },
         {
           "n": 42,
@@ -6296,19 +6296,19 @@
         {
           "n": 44,
           "category": "",
-          "text": "次のコード スニペットを検討してください。\n```apex\npublic class with sharing AccountsController {\n@AuraEnabled\npublic List<Account> getAllAccounts(){\nreturn [SELECT Id, Name, Industry FROM Account];\n}\n```\nApex テストクラス スニペット:\n@isTest\nprivate class with sharing AccountsController_Test {\n@testSetup\nprivate static void makeData(){\nUser user1 \\= [SELECT Id FROM User WHERE Profile.Name \\= 'System Administrator' AND isActive \\= true LIMIT 1]; User user2 \\= [SELECT Id FROM User WHERE Profile.Name \\= 'Standard User' AND UserName \\= 'test@test.\ncom' AND isActive \\= true LIMIT 1];\nTestUtils.insertAccounts(10, user1.Id);\nTestUtils.insertAccounts(20, user2.Id);\nprivate static void getAllAccounts_StandardUser_Test(){\nList<Account> result \\= AccountsController.getAllAccounts();\nSystem.assertEquals(20, result.size());\nテストクラスが実行されると、アサーションは失敗します。\nテストメソッドが正常に実行されるようにするには、開発者は Apex テストメソッドにどのような変更を実装する必要がありますか?",
+          "text": "次のコードスニペットを検討してください。\n```apex\npublic class with sharing AccountsController {\n@AuraEnabled\npublic List<Account> getAllAccounts(){\nreturn [SELECT Id, Name, Industry FROM Account];\n}\n```\nApex テストクラスのスニペット:\n@isTest\nprivate class with sharing AccountsController_Test {\n@testSetup\nprivate static void makeData(){\nUser user1 \\= [SELECT Id FROM User WHERE Profile.Name \\= 'System Administrator' AND isActive \\= true LIMIT 1]; User user2 \\= [SELECT Id FROM User WHERE Profile.Name \\= 'Standard User' AND UserName \\= 'test@test.\ncom' AND isActive \\= true LIMIT 1];\nTestUtils.insertAccounts(10, user1.Id);\nTestUtils.insertAccounts(20, user2.Id);\nprivate static void getAllAccounts_StandardUser_Test(){\nList<Account> result \\= AccountsController.getAllAccounts();\nSystem.assertEquals(20, result.size());\nテストクラスが実行されると、アサーションは失敗します。\nテストメソッドが正常に実行されるようにするには、開発者は Apex テストメソッドにどのような変更を実装する必要がありますか?",
           "options": [
             {
               "key": "A",
-              "text": "管理者ユーザーをメモリに照会し、行 15 と 16 を System.runAs(user); メソッド内に囲みます。"
+              "text": "管理者ユーザーを照会し、15 行目と 16 行目を System.runAs(user); メソッド内で囲みます。"
             },
             {
               "key": "B",
-              "text": "標準ユーザーをメモリに照会し、行 15 と 16 を System.runAs(); メソッド内に囲みます。"
+              "text": "標準ユーザーを照会し、15 行目と 16 行目を System.runAs(user); メソッド内で囲みます。"
             },
             {
               "key": "C",
-              "text": "12 行目に @isTest(seeAllData=true); を追加し、15 行目と 16 行目を Test.startTest(); と Test で囲みます。\nstopTest(); を実行します。"
+              "text": "12 行目に @isTest(SeeAllData=true); を追加し、15 行目と 16 行目を Test.startTest(); と Test.stopTest(); で囲みます。"
             },
             {
               "key": "D",
@@ -6324,7 +6324,7 @@
         {
           "n": 45,
           "category": "",
-          "text": "開発者は、アカウントの SOQL ステートメントの結果セットを反復処理することで、メモリ内でリソースを大量に消費するアクションを実行するメソッドを Apex クラスで特定しました。このメソッドは、変更をデータベースに保存するために DML ステートメントも実行します。\nトランザクション制御を確実にし、ガバナー制限の超過を回避するために、開発者がベストプラクティスとして実装する必要がある 2 つの手法はどれですか。* 2 つの回答を選択してください。",
+          "text": "開発者は、アカウントの SOQL ステートメントの結果セットを反復処理することで、メモリ内でリソースを大量に消費するアクションを実行するメソッドを Apex クラスで特定しました。このメソッドは、変更をデータベースに保存するために DML ステートメントも実行します。\nトランザクション制御を確実にし、ガバナ制限の超過を回避するために、開発者がベストプラクティスとして実装する必要がある 2 つの手法はどれですか。\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6336,11 +6336,11 @@
             },
             {
               "key": "C",
-              "text": "System.limit クラスを使用して、現在の CPU ガバナー制限の消費を監視します。"
+              "text": "Limits クラスを使用して、現在の CPU ガバナ制限の消費を監視します。"
             },
             {
               "key": "D",
-              "text": "データベースの整合性を強化するには、Database.Savepoint メソッドを使用します。"
+              "text": "データベースの整合性を強化するには、Database.setSavepoint() メソッドを使用します。"
             }
           ],
           "answer": [
@@ -6353,27 +6353,27 @@
         {
           "n": 46,
           "category": "",
-          "text": "開発者は、Visualforce ウィザードと連携して複数の sObject の作成と編集をサポートする単一のカスタム コントローラ クラスを持っています。ウィザードは、複数の Visualforce ページのユーザー入力と初期 URL のパラメータからデータを受け入れます。\nカスタム コントローラーを効果的にテストするために、ユニット テスト内で役立つ 3 つのステートメントはどれですか。\n3つの回答を選択してください",
+          "text": "開発者は、Visualforce ウィザードと連携して複数の sObject の作成と編集をサポートする単一のカスタムコントローラクラスを持っています。ウィザードは、複数の Visualforce ページのユーザー入力と初期 URL のパラメータからデータを受け入れます。\nカスタムコントローラを効果的にテストするために、ユニットテスト内で役立つ 3 つのステートメントはどれですか。\n3つの回答を選択してください。",
           "options": [
             {
               "key": "A",
-              "text": "String nextPage \\= controller.save().getUrl ();"
+              "text": "String nextPage \\= controller.save().getUrl();"
             },
             {
               "key": "B",
-              "text": "ApexPages.currentPage ().getParametera(}.put{'input', \"TeatValue');"
+              "text": "ApexPages.currentPage().getParameters().put('input', 'TestValue');"
             },
             {
               "key": "C",
-              "text": "insert pageret;"
+              "text": "insert pageRef;"
             },
             {
               "key": "D",
-              "text": "public Extendedcontroller (ApexPages.Standardcontraller entrl) { }"
+              "text": "public ExtendedController(ApexPages.StandardController controller) { }"
             },
             {
               "key": "E",
-              "text": "Test. setCurrentPage (pageRef) ;"
+              "text": "Test.setCurrentPage(pageRef);"
             }
           ],
           "answer": [
@@ -6387,7 +6387,7 @@
         {
           "n": 47,
           "category": "",
-          "text": "新機能開発の一環として、開発者は、ステートフル クライアントで実行されるタッチ イベントに応答できるレスポンシブ アプリケーションを構築するよう求められます。\nビジネス要件を完全にサポートするフレームワーク上に構築されている 2 つのテクノロジはどれですか。2 つの回答を選択してください。",
+          "text": "新機能開発の一環として、開発者は、ステートフルクライアントで実行されるタッチイベントに応答できるレスポンシブアプリケーションを構築するよう求められます。\nビジネス要件を完全にサポートするフレームワーク上に構築されている 2 つのテクノロジはどれですか。\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6403,7 +6403,7 @@
             },
             {
               "key": "D",
-              "text": "オーラコンポーネント"
+              "text": "Aura コンポーネント"
             }
           ],
           "answer": [
@@ -6416,23 +6416,23 @@
         {
           "n": 48,
           "category": "",
-          "text": "カスタム オブジェクト Trainer__c には、別のカスタム オブジェクト Gym__c への参照フィールドがあります。\nViridian City Gym とそのトレーナー全員のレコードを取得する SOQL クエリはどれですか?",
+          "text": "カスタムオブジェクト Trainer__c には、別のカスタムオブジェクト Gym__c への参照フィールドがあります。\nViridian City Gym とそのトレーナー全員のレコードを取得する SOQL クエリはどれですか?",
           "options": [
             {
               "key": "A",
-              "text": "Trainer_c から ID を選択し、Gym_r.Name を 'Viridian City Gym' に設定します。"
+              "text": "SELECT Id FROM Trainer__c WHERE Gym__r.Name \\= 'Viridian City Gym'"
             },
             {
               "key": "B",
-              "text": "SELECT Id、(SELECT Id FROM Trainer_c FROM Gym_c WHERE Name \\= 'Viridian City Gym\""
+              "text": "SELECT Id、(SELECT Id FROM Trainer__c FROM Gym__c WHERE Name \\= 'Viridian City Gym'"
             },
             {
               "key": "C",
-              "text": "SELECT Id、(SELECT Id FROM Trainers _r) FROM Gym_c WHERE Name \\= 'Viridian City Gym'"
+              "text": "SELECT Id、(SELECT Id FROM Trainers__r) FROM Gym__c WHERE Name \\= 'Viridian City Gym'"
             },
             {
               "key": "D",
-              "text": "IDを選択、(選択 Id FROM Trainers _c) FROM Gym_c WHERE Name \\= 'Viridian City Gym'"
+              "text": "SELECT Id、(SELECT Id FROM Trainers__c) FROM Gym__c WHERE Name \\= 'Viridian City Gym'"
             }
           ],
           "answer": [
@@ -6444,7 +6444,7 @@
         {
           "n": 49,
           "category": "",
-          "text": "開発者がバッチ メソッドまたは将来のメソッドのステータスに関する情報を見つけることができる 2 つの場所はどこですか?\n2つの回答を選択してください",
+          "text": "開発者がバッチメソッドまたは future メソッドのステータスに関する情報を見つけることができる 2 つの場所はどこですか?\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6496,16 +6496,16 @@
             "B"
           ],
           "multi": false,
-          "explanation": "外部システムとのデータ統合でレコードを正しく照合するには、**外部 ID 項目（External ID field）**を使用します。外部システム側の一意キーを外部 ID 項目に保持することで、upsert 操作により Salesforce ID を知らなくても既存レコードとの一致判定（更新か新規作成か）が自動的に行われます。\n\n**他の選択肢が誤りの理由**\n- **A**: 外部オブジェクトは外部データを Salesforce 内に保存せず仮想的に参照する仕組みで、レコードの照合（マッチング）用途ではありません。\n- **C**: 数式項目は表示用の計算値であり、統合時のキーとして upsert に使用できません。\n- **D**: ルックアップ項目は Salesforce 内部のレコード間の関連付けで、外部システムのキーとの照合には使えません。"
+          "explanation": "外部システムとのデータ統合でレコードを正しく照合するには、**外部IDフィールド（External ID Field）**を使用します。外部システム側の一意キーを外部IDフィールドに保持することで、upsert 操作により Salesforce ID を知らなくても既存レコードとの一致判定（更新か新規作成か）が自動的に行われます。\n\n**他の選択肢が誤りの理由**\n- **A**: 外部オブジェクトは外部データを Salesforce 内に保存せず仮想的に参照する仕組みで、レコードの照合（マッチング）用途ではありません。\n- **C**: 数式フィールドは表示用の計算値であり、統合時のキーとして upsert に使用できません。\n- **D**: ルックアップフィールドは Salesforce 内部のレコード間の関連付けで、外部システムのキーとの照合には使えません。"
         },
         {
           "n": 51,
           "category": "",
-          "text": "ISV Salesforce パートナーの Cloud Kicks Fitness は、管理パッケージ アプリケーションを開発しています。アプリケーション モジュールの 1 つでは、Apex クラス Bodyfat とそのメソッド calculateBodyFat () を使用して、ユーザーが体脂肪を計算できます。製品所有者は、ISV のパッケージ名前空間外でカスタマイズを開発するときに、アプリケーションの消費者がこのメソッドにアクセスできるようにしたいと考えています。\ncalculateBodyFat() がパッケージ名前空間の外部からアクセス可能であることを保証するために、開発者はどのようなアプローチを取るべきでしょうか?",
+          "text": "ISV Salesforce パートナーの Cloud Kicks Fitness は、管理パッケージアプリケーションを開発しています。アプリケーションモジュールの 1 つでは、Apex クラス Bodyfat とそのメソッド calculateBodyFat() を使用して、ユーザーが体脂肪を計算できます。製品所有者は、ISV のパッケージ名前空間外でカスタマイズを開発するときに、アプリケーションの消費者がこのメソッドにアクセスできるようにしたいと考えています。\ncalculateBodyFat() がパッケージ名前空間の外部からアクセス可能であることを保証するために、開発者はどのようなアプローチを取るべきでしょうか?",
           "options": [
             {
               "key": "A",
-              "text": "グローバル アクセス修飾子を使用してクラスとメソッドを宣言します。"
+              "text": "global アクセス修飾子を使用してクラスとメソッドを宣言します。"
             },
             {
               "key": "B",
@@ -6513,11 +6513,11 @@
             },
             {
               "key": "C",
-              "text": "クラスを public として宣言し、メソッドにグローバル アクセス修飾子を使用します。"
+              "text": "クラスを public として宣言し、メソッドに global アクセス修飾子を使用します。"
             },
             {
               "key": "D",
-              "text": "クラスをグローバルとして宣言し、メソッドに public アクセス修飾子を使用します。"
+              "text": "クラスを global として宣言し、メソッドに public アクセス修飾子を使用します。"
             }
           ],
           "answer": [
@@ -6529,7 +6529,7 @@
         {
           "n": 52,
           "category": "",
-          "text": "どの例外タイプをキャッチできないでしょうか?",
+          "text": "次の例外タイプのうち、キャッチできないものはどれですか?",
           "options": [
             {
               "key": "A",
@@ -6537,22 +6537,22 @@
             },
             {
               "key": "B",
-              "text": "リンク例外"
+              "text": "LimitException"
             },
             {
               "key": "C",
-              "text": "アクセス例外なし"
+              "text": "NoAccessException"
             },
             {
               "key": "D",
-              "text": "セルアウト例外"
+              "text": "CalloutException"
             }
           ],
           "answer": [
             "B"
           ],
           "multi": false,
-          "explanation": "選択肢 B は **LimitException**（機械翻訳で「リンク例外」と誤変換）を指しており、これはガバナ制限超過時に Salesforce プラットフォームがスローする例外で、**try-catch でキャッチできません**。ガバナ制限はマルチテナント環境を保護するための仕組みであり、超過するとトランザクションが即座に強制終了されます。\n\n**他の選択肢が誤りの理由**\n- **A（カスタム例外）**: `Exception` を継承した独自例外は通常どおり catch できます。\n- **C（NoAccessException）**: 権限不足時の例外で、catch 可能です。\n- **D（CalloutException）**: 外部コールアウト失敗時の例外で、catch 可能です。"
+          "explanation": "**LimitException** は、ガバナ制限超過時に Salesforce プラットフォームがスローする例外で、**try-catch でキャッチできません**。ガバナ制限はマルチテナント環境を保護するための仕組みであり、超過するとトランザクションが即座に強制終了されます。\n\n**他の選択肢が誤りの理由**\n- **A（カスタム例外）**: `Exception` を継承した独自例外は通常どおり catch できます。\n- **C（NoAccessException）**: 権限不足時の例外で、catch 可能です。\n- **D（CalloutException）**: 外部コールアウト失敗時の例外で、catch 可能です。"
         },
         {
           "n": 53,
@@ -6619,11 +6619,11 @@
         {
           "n": 55,
           "category": "",
-          "text": "次の Apex ステートメントがあるとします。\nアカウント myAccount \\= [アカウントから Id、名前を選択);\nSOQL クエリによって複数のアカウントが返された場合、何が起こりますか?",
+          "text": "次の Apex ステートメントがあるとします。\nAccount myAccount \\= [SELECT Id, Name FROM Account];\nSOQL クエリによって複数のアカウントが返された場合、何が起こりますか?",
           "options": [
             {
               "key": "A",
-              "text": "変数 myaccount は自動的に List データ型にキャストされます。"
+              "text": "変数 myAccount は自動的に List データ型にキャストされます。"
             },
             {
               "key": "B",
@@ -6631,7 +6631,7 @@
             },
             {
               "key": "C",
-              "text": "クエリが失敗し、デバッグ ログにエラーが書き込まれます。"
+              "text": "クエリが失敗し、デバッグログにエラーが書き込まれます。"
             },
             {
               "key": "D",
@@ -6647,7 +6647,7 @@
         {
           "n": 56,
           "category": "",
-          "text": "開発者が組織内でテストを実行する 2 つの方法は何ですか?\n2つの回答を選択してください",
+          "text": "開発者が組織内でテストを実行する 2 つの方法は何ですか?\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6676,7 +6676,7 @@
         {
           "n": 57,
           "category": "",
-          "text": "開発者が、キュー可能インターフェースを実装するクラスのキューに入れられたジョブのステータスを取得できる 2 つの方法は何ですか?\n2つの回答を選択してください",
+          "text": "開発者が、キュー可能インターフェースを実装するクラスのキューに入れられたジョブのステータスを取得できる 2 つの方法は何ですか?\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6705,23 +6705,23 @@
         {
           "n": 58,
           "category": "",
-          "text": "AW Computing の開発者は、カスタム オブジェクト Pricing Structure c 内に保存されたレコードを活用するプログラムによるカスタマイズをサポートするテスト クラスを作成するように求められています。AW Computing では、ストアの各アイテムに対して 500 を超えるレコードにわたる複雑な価格設定構造を持っています。\nテスト クラスの実行時に Pricing _Structure__c レコードが利用可能であることを保証するために、開発者が使用できる 2 つのアプローチはどれですか。\n2つの回答を選択してください",
+          "text": "AW Computing の開発者は、カスタムオブジェクト Pricing_Structure__c 内に保存されたレコードを活用するプログラムによるカスタマイズをサポートするテストクラスを作成するように求められています。AW Computing では、ストアの各アイテムに対して 500 を超えるレコードにわたる複雑な価格設定構造を持っています。\nテストクラスの実行時に Pricing_Structure__c レコードが利用可能であることを保証するために、開発者が使用できる 2 つのアプローチはどれですか。\n2つの回答を選択してください。",
           "options": [
             {
               "key": "A",
-              "text": "Test Date Factory クラスを使用します。"
+              "text": "Test Data Factory クラスを使用します。"
             },
             {
               "key": "B",
-              "text": "@TsTest (SeeAllData=true) アノテーションを使用します。"
+              "text": "@isTest(SeeAllData=true) アノテーションを使用します。"
             },
             {
               "key": "C",
-              "text": "Test.leadteat{) メソッドを使用します。"
+              "text": "Test.loadData() メソッドを使用します。"
             },
             {
               "key": "D",
-              "text": "クラス宣言で共有せずに使用します。"
+              "text": "クラス宣言で without sharing を使用します。"
             }
           ],
           "answer": [
@@ -6729,12 +6729,12 @@
             "C"
           ],
           "multi": true,
-          "explanation": "テストクラスで 500 件超の複雑な `Pricing_Structure__c` レコードを利用可能にするには、(1) **テストデータファクトリクラス**（Test Data Factory）で再利用可能なテストデータ生成ロジックを実装する方法と、(2) **`Test.loadData()` メソッド**（選択肢の「Test.leadteat」は OCR 誤り）で静的リソースの CSV からレコードを一括ロードする方法が適切です。どちらもテストを組織の実データから分離したまま大量データを準備できます。\n\n**他の選択肢が誤りの理由**\n- **B**: `@isTest(SeeAllData=true)` は組織の実データに依存するためテストが脆弱になり、ベストプラクティスに反します。\n- **D**: `without sharing` は共有ルールの適用有無を制御するキーワードであり、テストデータの準備とは無関係です。"
+          "explanation": "テストクラスで 500 件超の複雑な `Pricing_Structure__c` レコードを利用可能にするには、(1) **テストデータファクトリクラス**（Test Data Factory）で再利用可能なテストデータ生成ロジックを実装する方法と、(2) **`Test.loadData()` メソッド**で静的リソースの CSV からレコードを一括ロードする方法が適切です。どちらもテストを組織の実データから分離したまま大量データを準備できます。\n\n**他の選択肢が誤りの理由**\n- **B**: `@isTest(SeeAllData=true)` は組織の実データに依存するためテストが脆弱になり、ベストプラクティスに反します。\n- **D**: `without sharing` は共有ルールの適用有無を制御するキーワードであり、テストデータの準備とは無関係です。"
         },
         {
           "n": 59,
           "category": "",
-          "text": "開発者は、失注理由が空白の場合、営業マネージャー プロファイルを持つユーザー以外のユーザーが商談ステータスを「クローズ済み失注」に変更できないようにする必要があります。\nどの自動化によって、開発者はこの要件を最も効率的に満たすことができますか?",
+          "text": "開発者は、失注理由が空白の場合、営業マネージャープロファイルを持つユーザー以外のユーザーが商談のフェーズを「クローズ済み失注」に変更できないようにする必要があります。\nどの自動化によって、開発者はこの要件を最も効率的に満たすことができますか?",
           "options": [
             {
               "key": "A",
@@ -6757,7 +6757,7 @@
             "B"
           ],
           "multi": false,
-          "explanation": "「失注理由が空白の場合、営業マネージャープロファイル以外のユーザーは商談フェーズを『クローズ済み失注』に変更できない」という要件は、**入力チェック（検証ルール）のエラー条件数式**で最も効率的に実現できます。`ISPICKVAL(StageName, 'Closed Lost')`、`ISBLANK()`、`$Profile.Name` を組み合わせた数式のみで実装でき、コードもフローも不要です。\n\n**他の選択肢が誤りの理由**\n- **A（Apex トリガー）**: 宣言的手段で実現できる要件にコードを使うのは効率的ではありません。\n- **C（レコードトリガーフロー）**: 保存をブロックする単純な条件チェックには検証ルールの方が簡潔で保守性も高いです。\n- **D（承認プロセス）**: 承認申請の仕組みであり、項目値の入力チェックには適しません。"
+          "explanation": "「失注理由が空白の場合、営業マネージャープロファイル以外のユーザーは商談のフェーズを『クローズ済み失注』に変更できない」という要件は、**入力チェック（検証ルール）のエラー条件数式**で最も効率的に実現できます。`ISPICKVAL(StageName, 'Closed Lost')`、`ISBLANK()`、`$Profile.Name` を組み合わせた数式のみで実装でき、コードもフローも不要です。\n\n**他の選択肢が誤りの理由**\n- **A（Apex トリガー）**: 宣言的手段で実現できる要件にコードを使うのは効率的ではありません。\n- **C（レコードトリガーフロー）**: 保存をブロックする単純な条件チェックには検証ルールの方が簡潔で保守性も高いです。\n- **D（承認プロセス）**: 承認申請の仕組みであり、項目値の入力チェックには適しません。"
         },
         {
           "n": 60,
@@ -6774,11 +6774,11 @@
             },
             {
               "key": "C",
-              "text": "注文の可用性日付フィールドと COUNT ロールアップ サマリー フィールドのそれぞれに @ DAYS 数式を使用します。"
+              "text": "注文の可用性日付フィールドと COUNT ロールアップサマリー項目のそれぞれに DAYS 数式を使用します。"
             },
             {
               "key": "D",
-              "text": "最新の利用可能日フィールドで MAX ロールアップ サマリー フィールドを使用します。"
+              "text": "最新の利用可能日フィールドで MAX ロールアップサマリー項目を使用します。"
             }
           ],
           "answer": [
@@ -6846,7 +6846,7 @@
         {
           "n": 63,
           "category": "",
-          "text": "経営陣は、年間売上高が100万ドルを超える取引先に対して商談を自動的に作成するよう依頼しました。開発者は、この要件を満たすために、取引先オブジェクトに次のトリガを作成しました。\nfor (Account a : Trigger.new) {\nif (a.AnnualRevenue > 1000000) {\nList<Opportunity> oppList \\= [SELECT Id FROM Opportunity WHERE AccountId \\= :a.Id]; if (oppList.size() \\== 0) { Opportunity oppty \\= new Opportunity(Name \\= a.Name, StageName \\= 'Prospecting', CloseDate \\= System.\ntoday().addDays(30));\ninsert oppty;\n}\nユーザーはUIから取引先レコードを更新でき、年間売上高の高い取引先向けに作成された商談を確認できます。しかし、管理者がデータローダーを使用して179件の取引先リストをアップロードしようとすると、システム例外エラーが発生し、アップロードに失敗します。\n上記のコード セグメントを修正するために開発者が実行する必要がある 2 つのアクションはどれですか。\n2つの答えを選択してください",
+          "text": "経営陣は、年間売上高が100万ドルを超える取引先に対して商談を自動的に作成するよう依頼しました。開発者は、この要件を満たすために、取引先オブジェクトに次のトリガを作成しました。\nfor (Account a : Trigger.new) {\nif (a.AnnualRevenue > 1000000) {\nList<Opportunity> oppList \\= [SELECT Id FROM Opportunity WHERE AccountId \\= :a.Id]; if (oppList.size() \\== 0) { Opportunity oppty \\= new Opportunity(Name \\= a.Name, StageName \\= 'Prospecting', CloseDate \\= System.\ntoday().addDays(30));\ninsert oppty;\n}\nユーザーはUIから取引先レコードを更新でき、年間売上高の高い取引先向けに作成された商談を確認できます。しかし、管理者がデータローダーを使用して179件の取引先リストをアップロードしようとすると、システム例外エラーが発生し、アップロードに失敗します。\n上記のコード セグメントを修正するために開発者が実行する必要がある 2 つのアクションはどれですか。\n2 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6858,11 +6858,11 @@
             },
             {
               "key": "C",
-              "text": "機会を保存する DML を for ループの外側に移動します。"
+              "text": "商談を保存する DML を for ループの外側に移動します。"
             },
             {
               "key": "D",
-              "text": "データベース クエリを使用して機会を照会します。"
+              "text": "データベース クエリを使用して商談を照会します。"
             }
           ],
           "answer": [
@@ -6875,7 +6875,7 @@
         {
           "n": 64,
           "category": "",
-          "text": "変更セット展開の 3 つの特徴は何ですか?\n3 つの回答を選択してください。2 つの組織間で変更セットを送信するには、デプロイメント接続が必要です。",
+          "text": "変更セット展開の 3 つの特徴は何ですか?\n3 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6909,7 +6909,7 @@
         {
           "n": 65,
           "category": "",
-          "text": "Universal Containers は、新しい Salesforce アプリケーションを構築するために、完全に宣言型の開発を使用することを決定しました。\nこのアプリケーションのビジネス ロジック レイヤーを構築するために使用できる 2 つのオプションはどれですか?\n2つの回答を選択してください",
+          "text": "Universal Containers は、新しい Salesforce アプリケーションを構築するために、完全に宣言型の開発を使用することを決定しました。\nこのアプリケーションのビジネス ロジック レイヤーを構築するために使用できる 2 つのオプションはどれですか?\n2 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -6942,11 +6942,11 @@
           "options": [
             {
               "key": "A",
-              "text": "間接ロックアップ"
+              "text": "間接ルックアップ"
             },
             {
               "key": "B",
-              "text": "直接検索"
+              "text": "直接ルックアップ"
             },
             {
               "key": "C",
@@ -6954,14 +6954,14 @@
             },
             {
               "key": "D",
-              "text": "検索"
+              "text": "ルックアップ"
             }
           ],
           "answer": [
             "C"
           ],
           "multi": false,
-          "explanation": "外部の注文システムで採番された注文番号でレコードを識別し、Salesforce にインポートする場合、注文番号項目は**外部 ID（External ID）かつ一意（Unique）**として定義すべきです。外部 ID にすることでデータローダーや API の **upsert 操作**でレコードの照合キーとして使用でき、一意制約により重複レコードの作成を防止できます。\n\n**他の選択肢が誤りの理由**\n- **A（間接参照関係）**: 間接ルックアップは Salesforce Connect の外部オブジェクトと連携するための項目種別で、このシナリオには該当しません。\n- **B / D（参照関係）**: ルックアップは Salesforce 内の別レコードへの参照であり、外部システムのキー値の保持・照合には使えません。"
+          "explanation": "外部の注文システムで採番された注文番号でレコードを識別し、Salesforce にインポートする場合、注文番号項目は**外部 ID（External ID）かつ一意（Unique）**として定義すべきです。外部 ID にすることでデータローダーや API の **upsert 操作**でレコードの照合キーとして使用でき、一意制約により重複レコードの作成を防止できます。\n\n**他の選択肢が誤りの理由**\n- **A（間接ルックアップ）**: 間接ルックアップは Salesforce Connect の外部オブジェクトと連携するための項目種別で、このシナリオには該当しません。\n- **B / D（ルックアップ）**: ルックアップは Salesforce 内の別レコードへの参照であり、外部システムのキー値の保持・照合には使えません。"
         },
         {
           "n": 67,
@@ -6982,7 +6982,7 @@
             },
             {
               "key": "D",
-              "text": "フィールドレベルのアクセス チェックには、isAccessible () メソッドを使用する必要があります。"
+              "text": "フィールドレベルのアクセス チェックには、isAccessible() メソッドを使用する必要があります。"
             }
           ],
           "answer": [
@@ -7002,7 +7002,7 @@
             },
             {
               "key": "B",
-              "text": "セグメントイベント (}"
+              "text": "センドイベント()"
             },
             {
               "key": "C",
@@ -7017,7 +7017,7 @@
             "A"
           ],
           "multi": false,
-          "explanation": "Aura のアプリケーションイベントは、`$A.get(\"e.myNamespace:myAppEvent\")` でイベントインスタンスを取得し、**`fire()` メソッド**（選択肢の「発射()」は fire() の直訳）を呼び出して起動します。これはコンポーネントイベントでも同様で、`setParams()` で属性を設定した後に `fire()` を実行するのが標準的なパターンです。\n\n**他の選択肢が誤りの理由**\n- **B（sentEvent() 相当）**: そのようなメソッドは Aura フレームワークに存在しません。\n- **C（fireEvent() 相当）**: `fireEvent()` という API は Aura のイベント起動メソッドではありません。\n- **D（emit() 相当）**: `emit()` は Node.js 等のイベントモデルの用語で、Aura では使用しません。"
+          "explanation": "Aura のアプリケーションイベントは、`$A.get(\"e.myNamespace:myAppEvent\")` でイベントインスタンスを取得し、**`fire()` メソッド**（選択肢の「発射()」は fire() の直訳）を呼び出して起動します。これはコンポーネントイベントでも同様で、`setParams()` で属性を設定した後に `fire()` を実行するのが標準的なパターンです。\n\n**他の選択肢が誤りの理由**\n- **B（sendEvent() 相当）**: そのようなメソッドは Aura フレームワークに存在しません。\n- **C（fireEvent() 相当）**: `fireEvent()` という API は Aura のイベント起動メソッドではありません。\n- **D（emit() 相当）**: `emit()` は Node.js 等のイベントモデルの用語で、Aura では使用しません。"
         },
         {
           "n": 69,
@@ -7050,7 +7050,7 @@
         {
           "n": 70,
           "category": "",
-          "text": "開発者は、Apex クラス内のメソッドをインポートする Lightning Web コンポーネントを作成します。検証ボタンが押されると、メソッドが実行され、複雑な検証が実行されます。\nこの実装シナリオでは、MVC アーキテクチャに従ってコントローラーにどの 2 つのオプションがありますか?\n2つの回答を選択してください",
+          "text": "開発者は、Apex クラス内のメソッドをインポートする Lightning Web コンポーネントを作成します。検証ボタンが押されると、メソッドが実行され、複雑な検証が実行されます。\nこの実装シナリオでは、MVC アーキテクチャに従ってコントローラーにどの 2 つのオプションがありますか?\n2 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -7083,26 +7083,26 @@
           "options": [
             {
               "key": "A",
-              "text": "オーラ入力失敗"
+              "text": "aura:inputField"
             },
             {
               "key": "B",
-              "text": "強制入力に失敗しました"
+              "text": "force:inputField"
             },
             {
               "key": "C",
-              "text": "UI入力に失敗しました"
+              "text": "ui:inputField"
             },
             {
               "key": "D",
-              "text": "雷入力失敗"
+              "text": "lightning-input-field"
             }
           ],
           "answer": [
             "D"
           ],
           "multi": false,
-          "explanation": "選択肢 D は **`lightning-input-field`**（機械翻訳で「雷入力失敗」と誤変換）を指します。`lightning-record-edit-form` と組み合わせて使用する `lightning-input-field` は、**項目レベルセキュリティ（FLS）と CRUD 権限を自動的に尊重**するため、「特定の項目を特定のユーザーグループのみが表示・編集できる」というセキュリティ要件をコード追加なしで満たせます。\n\n**他の選択肢が誤りの理由**\n- **A（aura:inputField 相当）**: Aura の旧コンポーネントであり、LWC では使用できません。\n- **B（force:inputField 相当）**: 非推奨の Aura コンポーネントで、LWC では使用できません。\n- **C（ui:inputField 相当）**: `ui` 名前空間のコンポーネントは廃止されており、FLS も自動適用されません。"
+          "explanation": "`lightning-record-edit-form` と組み合わせて使用する **`lightning-input-field`** は、**項目レベルセキュリティ（FLS）と CRUD 権限を自動的に尊重**するため、「特定の項目を特定のユーザーグループのみが表示・編集できる」というセキュリティ要件をコード追加なしで満たせます。\n\n**他の選択肢が誤りの理由**\n- **A（aura:inputField）**: Aura の旧コンポーネントであり、LWC では使用できません。\n- **B（force:inputField）**: 非推奨の Aura コンポーネントで、LWC では使用できません。\n- **C（ui:inputField）**: `ui` 名前空間のコンポーネントは廃止されており、FLS も自動適用されません。"
         },
         {
           "n": 72,
@@ -7115,11 +7115,11 @@
             },
             {
               "key": "B",
-              "text": "try-catch ブロックは、ガバナー制限によってスローされた例外を処理します。"
+              "text": "try-catch ブロックは、ガバナ制限によってスローされた例外を処理します。"
             },
             {
               "key": "C",
-              "text": "ガバナー制限を超えたため、トランザクションは失敗します。"
+              "text": "ガバナ制限を超えたため、トランザクションは失敗します。"
             },
             {
               "key": "D",
@@ -7151,7 +7151,7 @@
             },
             {
               "key": "D",
-              "text": "次善のアクションを使用して、レコード条件を確認し、送信メッセージを送信できます。"
+              "text": "Next Best Action を使用して、レコード条件を確認し、送信メッセージを送信できます。"
             }
           ],
           "answer": [
@@ -7159,12 +7159,12 @@
             "B"
           ],
           "multi": true,
-          "explanation": "送信メッセージ（アウトバウンドメッセージ）は、**フロー（レコードトリガーフロー）のアクション**および**承認プロセスのアクション**として、レコードが条件を満たしたときに宣言的に送信できます。\n\n- **C（Apex トリガー）**: トリガーから送信メッセージ機能を直接呼び出すことはできず、実現するには HTTP コールアウトを自前で実装する必要があります。\n- **D（Lightning コンポーネント）**: UI コンポーネントであり、レコード条件に基づく自動送信の仕組みではありません。"
+          "explanation": "送信メッセージ（アウトバウンドメッセージ）は、**フロー（レコードトリガーフロー）のアクション**および**承認プロセスのアクション**として、レコードが条件を満たしたときに宣言的に送信できます。\n\n**他の選択肢が誤りの理由**\n- **C（エンタイトルメントプロセス）**: エンタイトルメントプロセスはケースのマイルストーンや SLA を管理する仕組みであり、レコード条件に応じて送信メッセージを送るアクションは提供していません。\n- **D（Next Best Action）**: レコメンデーションを提示するための機能であり、レコード条件を判定して送信メッセージを送るアクションは持ちません。"
         },
         {
           "n": 74,
           "category": "",
-          "text": "Universal Containers (UC) は、営業チーム向けに、すべての営業担当者が獲得した新規顧客ごとにスクリプト化された一連の手順を実行することを要求するプロセスを開発しています。\n情報収集の最初のステップでは、REST エンドポイントを介して UC の ERP システムをチェックし、顧客が存在するかどうかを確認する必要があります。顧客が存在する場合は、そのデータを Salesforce の営業担当者に提示する必要があります。\n要件を満たすために開発者が実装する必要がある 2 つはどれですか?\n2つの回答を選択してください",
+          "text": "Universal Containers (UC) は、営業チーム向けに、すべての営業担当者が獲得した新規顧客ごとにスクリプト化された一連の手順を実行することを要求するプロセスを開発しています。\n情報収集の最初のステップでは、REST エンドポイントを介して UC の ERP システムをチェックし、顧客が存在するかどうかを確認する必要があります。顧客が存在する場合は、そのデータを Salesforce の営業担当者に提示する必要があります。\n要件を満たすために開発者が実装する必要がある 2 つはどれですか?\n2 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -7249,7 +7249,7 @@
         {
           "n": 77,
           "category": "",
-          "text": "Aura コンポーネント内のどの 3 つのリソースに JavaScript 関数を含めることができますか?\n3つの回答を選択してください",
+          "text": "Aura コンポーネント内のどの 3 つのリソースに JavaScript 関数を含めることができますか?\n3 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -7339,7 +7339,7 @@
         {
           "n": 80,
           "category": "",
-          "text": "開発者がバッチメソッドまたは将来のメソッドのステータスに関する情報を見つけることができる 2 つの場所はどこですか?\n2つの回答を選択してください",
+          "text": "開発者がバッチメソッドまたは将来のメソッドのステータスに関する情報を見つけることができる 2 つの場所はどこですか?\n2 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -7372,7 +7372,7 @@
           "options": [
             {
               "key": "A",
-              "text": "セーブポイントと pacabase.rollback() を含めます。"
+              "text": "Savepoint と Database.rollback() を含めます。"
             },
             {
               "key": "B",
@@ -7424,7 +7424,7 @@
         {
           "n": 83,
           "category": "",
-          "text": "ユーザーがアカウントの郵便番号を編集する場合、「タイムゾーン」という名前のカスタム アカウント テキスト フィールドを、PostalCodeToTimezone__c カスタム オブジェクトの値に基づいて更新する必要があります。\nこの機能を実装するために使用できる自動化ツールはどれですか? 2 つの回答を選択してください",
+          "text": "ユーザーがアカウントの郵便番号を編集する場合、「タイムゾーン」という名前のカスタム アカウント テキスト フィールドを、PostalCodeToTimezone__c カスタム オブジェクトの値に基づいて更新する必要があります。\nこの機能を実装するために使用できる自動化ツールはどれですか?\n2つの回答を選択してください",
           "options": [
             {
               "key": "A",
@@ -7440,7 +7440,7 @@
             },
             {
               "key": "D",
-              "text": "高速フィールド更新レコードトリガーフロー"
+              "text": "高速フィールド更新レコードトリガフロー"
             }
           ],
           "answer": [
@@ -7457,7 +7457,7 @@
           "options": [
             {
               "key": "A",
-              "text": "テスト メソッドは、特定のユーザーとして実行するために system.runAs を使用しません。"
+              "text": "テスト メソッドは、特定のユーザーとして実行するために System.runAs() を使用しません。"
             },
             {
               "key": "B",
@@ -7485,19 +7485,19 @@
           "options": [
             {
               "key": "A",
-              "text": "データベース。レコードを挿入(true)"
+              "text": "Database.insert(records, true)"
             },
             {
               "key": "B",
-              "text": "レコードを挿入する"
+              "text": "insert records"
             },
             {
               "key": "C",
-              "text": "レコードを挿入 (false)"
+              "text": "insert (records, false)"
             },
             {
               "key": "D",
-              "text": "データベース。レコードを挿入します (false)"
+              "text": "Database.insert(records, false)"
             }
           ],
           "answer": [
@@ -7525,7 +7525,7 @@
             },
             {
               "key": "D",
-              "text": "求人情報を参照する応募者の数式フィールド\n####"
+              "text": "求人情報を参照する応募者の数式フィールド"
             }
           ],
           "answer": [
@@ -7537,7 +7537,7 @@
         {
           "n": 87,
           "category": "",
-          "text": "開発者は、更新前イベントでアカウント オブジェクトにトリガーを記述し、カウント フィールドを増分します。レコード トリガー フローも、アカウントが作成または更新されるたびにカウント フィールドを増分します。\nアカウントに他の自動化ロジックが実装されていないと仮定して、初期値ゼロでアカウントが挿入された場合、カウント フィールドの値は何ですか?",
+          "text": "開発者は、更新前イベントでアカウント オブジェクトにトリガーを記述し、カウント フィールドを増分します。レコードトリガフローも、アカウントが作成または更新されるたびにカウント フィールドを増分します。\nアカウントに他の自動化ロジックが実装されていないと仮定して、初期値ゼロでアカウントが挿入された場合、カウント フィールドの値は何ですか?",
           "options": [
             {
               "key": "A",
@@ -7594,7 +7594,7 @@
         {
           "n": 89,
           "category": "",
-          "text": "Aura コンポーネントで JavaScript リソースをロードするときの <ltng: require> タグの 3 つの機能は何ですか?\n3つの回答を選択してください",
+          "text": "Aura コンポーネントで JavaScript リソースをロードするときの <ltng:require> タグの 3 つの機能は何ですか?\n3つの回答を選択してください",
           "options": [
             {
               "key": "A",
@@ -7614,7 +7614,7 @@
             },
             {
               "key": "E",
-              "text": "外部でホストされているスクリプトをロードしています"
+              "text": "外部でホストされているスクリプトを読み込む"
             }
           ],
           "answer": [
@@ -7684,19 +7684,19 @@
         {
           "n": 92,
           "category": "",
-          "text": "開発者は、OpportunityLineltem トリガーをカバーするテスト クラスを作成しながら、組織内の標準価格表にアクセスしたいと考えています。\nどの方法で価格表にアクセスできますか?",
+          "text": "開発者は、OpportunityLineItem トリガーをカバーするテスト クラスを作成しながら、組織内の標準価格表にアクセスしたいと考えています。\nどの方法で価格表にアクセスできますか?",
           "options": [
             {
               "key": "A",
-              "text": "Test .getStandardPricebookid() を使用して標準価格表 ID を取得します。"
+              "text": "Test.getStandardPricebookId() を使用して標準価格表 ID を取得します。"
             },
             {
               "key": "B",
-              "text": "@isTest [SeeAllData=true|] を使用して、既存の標準価格表を削除します。"
+              "text": "@isTest(SeeAllData=true) を使用して、既存の標準価格表を削除します。"
             },
             {
               "key": "C",
-              "text": "@Testvisible を使用して、テスト メソッドが標準価格表を表示できるようにします。"
+              "text": "@TestVisible を使用して、テスト メソッドが標準価格表を表示できるようにします。"
             },
             {
               "key": "D",
@@ -7797,7 +7797,7 @@
         {
           "n": 96,
           "category": "",
-          "text": "開発者は、システム内に存在する ContactSearch Apex クラスのセキュリティ レビューを実行するように指示されています。開発者は、クラス内で次のメソッドをセキュリティ上の脅威として特定しました。\nist<連絡先> performSearch (String lastName} [\nreturn Database.query('SELECT Id, FirstName, LastName FROM Contact WHERE LastName Like s'+lastName+'s'\")?; 開発者がメソッドを更新して SOQL インジェクション攻撃を防ぐ 2 つの方法は何ですか?\n2つの回答を選択してください",
+          "text": "開発者は、システム内に存在する ContactSearch Apex クラスのセキュリティ レビューを実行するように指示されています。開発者は、クラス内で次のメソッドをセキュリティ上の脅威として特定しました。\n```apex\npublic List<Contact> performSearch(String lastName) {\n    return Database.query('SELECT Id, FirstName, LastName FROM Contact WHERE LastName LIKE \\'%' + lastName + '%\\'');\n}\n```\n開発者がメソッドを更新して SOQL インジェクション攻撃を防ぐ 2 つの方法は何ですか?\n2つの回答を選択してください",
           "options": [
             {
               "key": "A",
@@ -7805,11 +7805,11 @@
             },
             {
               "key": "B",
-              "text": "パラメータを使用する前に、sacapeSingleQuotes メソッドを使用してパラメータをサニタイズします。"
+              "text": "パラメータを使用する前に、String.escapeSingleQuotes() メソッドを使用してパラメータをサニタイズします。"
             },
             {
               "key": "C",
-              "text": "クラスで Readonly アノテーションと with sharing キーワードを使用します。"
+              "text": "クラスで @ReadOnly アノテーションと with sharing キーワードを使用します。"
             },
             {
               "key": "D",
@@ -7826,7 +7826,7 @@
         {
           "n": 97,
           "category": "",
-          "text": "アプリケーションを開発するメリットは何ですか",
+          "text": "アプリケーションを開発するメリットは何ですか?",
           "options": [
             {
               "key": "A",
@@ -7854,11 +7854,11 @@
         {
           "n": 98,
           "category": "",
-          "text": "Universal Containers には、カスタム オブジェクト「エンジニアリング サポート c」を使用してユーザーがエンジニアリング チームにサポートをリクエストできるサポート プロセスがあります。\nユーザーは、複数のエンジニアリング サポート __c レコードを 1 つの商談レコードに関連付けることができる必要があります。さらに、エンジニアリング サポート __c レコードに関する集計情報が商談レコードに表示される必要があります。\nこれらの要件をサポートするには、どの関係フィールドを実装する必要がありますか?",
+          "text": "Universal Containers には、カスタム オブジェクト「エンジニアリング サポート__c」を使用してユーザーがエンジニアリング チームにサポートをリクエストできるサポート プロセスがあります。\nユーザーは、複数のエンジニアリング サポート__c レコードを 1 つの商談レコードに関連付けることができる必要があります。さらに、エンジニアリング サポート__c レコードに関する集計情報が商談レコードに表示される必要があります。\nこれらの要件をサポートするには、どの関係フィールドを実装する必要がありますか?",
           "options": [
             {
               "key": "A",
-              "text": "商談からエンジニアリングへの参照フィールド _support__c"
+              "text": "商談からエンジニアリング サポート__c への参照フィールド"
             },
             {
               "key": "B",
@@ -7866,11 +7866,11 @@
             },
             {
               "key": "C",
-              "text": "商談からエンジニアリング サポートへのマスター詳細フィールド__c"
+              "text": "商談からエンジニアリング サポート__c へのマスター詳細フィールド"
             },
             {
               "key": "D",
-              "text": "エンジニアリング サポート __c から商談への参照フィールド"
+              "text": "エンジニアリング サポート__c から商談への参照フィールド"
             }
           ],
           "answer": [
