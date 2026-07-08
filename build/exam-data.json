@@ -5882,23 +5882,23 @@
         {
           "n": 29,
           "category": "",
-          "text": "開発者は、既存の Payment クラスの実装を提供する CreditCardPayment クラスを作成する必要があります。\npublic virtual class Payment {\npublic virtual void makePayment(Decimal amount) {\n// implementation\n}\n正しい実装はどれですか?",
+          "text": "開発者は、既存の Payment クラスの実装を提供する CreditCardPayment クラスを作成する必要があります。\n```apex\npublic virtual class Payment {\n    public virtual void makePayment(Decimal amount) {\n        // implementation\n    }\n}\n```\n正しい実装はどれですか?",
           "options": [
             {
               "key": "A",
-              "text": "public class CreditCardPayment extends Payment { public virtual void makePayment(Decimal amount){ /* implementation */ } }"
+              "text": "```apex\npublic class CreditCardPayment extends Payment {\n    public virtual void makePayment(Decimal amount){ /* implementation */ }\n}\n```"
             },
             {
               "key": "B",
-              "text": "public class CreditCardPayment implements Payment { public virtual void makePayment(Decimal amount) { /* implementation */ } }"
+              "text": "```apex\npublic class CreditCardPayment implements Payment {\n    public virtual void makePayment(Decimal amount) { /* implementation */ }\n}\n```"
             },
             {
               "key": "C",
-              "text": "public class CreditCardPayment implements Payment { public override void makePayment(Decimal amount) { /* implementation */ } }"
+              "text": "```apex\npublic class CreditCardPayment implements Payment {\n    public override void makePayment(Decimal amount) { /* implementation */ }\n}\n```"
             },
             {
               "key": "D",
-              "text": "public class CreditCardPayment extends Payment { public override void makePayment(Decimal amount) { /* implementation */ } }"
+              "text": "```apex\npublic class CreditCardPayment extends Payment {\n    public override void makePayment(Decimal amount) { /* implementation */ }\n}\n```"
             }
           ],
           "answer": [
@@ -5990,7 +5990,7 @@
         {
           "n": 33,
           "category": "",
-          "text": "リード開発者が「OrderRequest」という virtual クラスを作成します。次のコードスニペットをご覧ください。\npublic class CustomerOrder {\n//code implementation\n}\n開発者は CustomerOrder クラス内で OrderRequest クラスをどのように使用できますか?",
+          "text": "リード開発者が「OrderRequest」という virtual クラスを作成します。次のコードスニペットをご覧ください。\n```apex\npublic class CustomerOrder {\n    //code implementation\n}\n```\n開発者は CustomerOrder クラス内で OrderRequest クラスをどのように使用できますか?",
           "options": [
             {
               "key": "A",
@@ -6296,7 +6296,7 @@
         {
           "n": 44,
           "category": "",
-          "text": "次のコードスニペットを検討してください。\n```apex\npublic class with sharing AccountsController {\n@AuraEnabled\npublic List<Account> getAllAccounts(){\nreturn [SELECT Id, Name, Industry FROM Account];\n}\n```\nApex テストクラスのスニペット:\n@isTest\nprivate class with sharing AccountsController_Test {\n@testSetup\nprivate static void makeData(){\nUser user1 \\= [SELECT Id FROM User WHERE Profile.Name \\= 'System Administrator' AND isActive \\= true LIMIT 1]; User user2 \\= [SELECT Id FROM User WHERE Profile.Name \\= 'Standard User' AND UserName \\= 'test@test.\ncom' AND isActive \\= true LIMIT 1];\nTestUtils.insertAccounts(10, user1.Id);\nTestUtils.insertAccounts(20, user2.Id);\nprivate static void getAllAccounts_StandardUser_Test(){\nList<Account> result \\= AccountsController.getAllAccounts();\nSystem.assertEquals(20, result.size());\nテストクラスが実行されると、アサーションは失敗します。\nテストメソッドが正常に実行されるようにするには、開発者は Apex テストメソッドにどのような変更を実装する必要がありますか?",
+          "text": "次のコードスニペットを検討してください。\n```apex\npublic class with sharing AccountsController {\n    @AuraEnabled\n    public List<Account> getAllAccounts(){\n        return [SELECT Id, Name, Industry FROM Account];\n    }\n}\n```\nApex テストクラスのスニペット:\n```apex\n@isTest\nprivate class with sharing AccountsController_Test {\n    @testSetup\n    private static void makeData(){\n        User user1 = [SELECT Id FROM User WHERE Profile.Name = 'System Administrator' AND isActive = true LIMIT 1];\n        User user2 = [SELECT Id FROM User WHERE Profile.Name = 'Standard User' AND UserName = 'test@test.com' AND isActive = true LIMIT 1];\n        TestUtils.insertAccounts(10, user1.Id);\n        TestUtils.insertAccounts(20, user2.Id);\n    }\n\n    private static void getAllAccounts_StandardUser_Test(){\n        List<Account> result = AccountsController.getAllAccounts();\n        System.assertEquals(20, result.size());\n    }\n}\n```\nテストクラスが実行されると、アサーションは失敗します。\nテストメソッドが正常に実行されるようにするには、開発者は Apex テストメソッドにどのような変更を実装する必要がありますか?",
           "options": [
             {
               "key": "A",
@@ -6846,7 +6846,7 @@
         {
           "n": 63,
           "category": "",
-          "text": "経営陣は、年間売上高が100万ドルを超える取引先に対して商談を自動的に作成するよう依頼しました。開発者は、この要件を満たすために、取引先オブジェクトに次のトリガを作成しました。\nfor (Account a : Trigger.new) {\nif (a.AnnualRevenue > 1000000) {\nList<Opportunity> oppList \\= [SELECT Id FROM Opportunity WHERE AccountId \\= :a.Id]; if (oppList.size() \\== 0) { Opportunity oppty \\= new Opportunity(Name \\= a.Name, StageName \\= 'Prospecting', CloseDate \\= System.\ntoday().addDays(30));\ninsert oppty;\n}\nユーザーはUIから取引先レコードを更新でき、年間売上高の高い取引先向けに作成された商談を確認できます。しかし、管理者がデータローダーを使用して179件の取引先リストをアップロードしようとすると、システム例外エラーが発生し、アップロードに失敗します。\n上記のコード セグメントを修正するために開発者が実行する必要がある 2 つのアクションはどれですか。\n2 つの回答を選択してください。",
+          "text": "経営陣は、年間売上高が100万ドルを超える取引先に対して商談を自動的に作成するよう依頼しました。開発者は、この要件を満たすために、取引先オブジェクトに次のトリガを作成しました。\n```apex\nfor (Account a : Trigger.new) {\n    if (a.AnnualRevenue > 1000000) {\n        List<Opportunity> oppList = [SELECT Id FROM Opportunity WHERE AccountId = :a.Id];\n        if (oppList.size() == 0) {\n            Opportunity oppty = new Opportunity(Name = a.Name, StageName = 'Prospecting', CloseDate = System.today().addDays(30));\n            insert oppty;\n        }\n    }\n}\n```\nユーザーはUIから取引先レコードを更新でき、年間売上高の高い取引先向けに作成された商談を確認できます。しかし、管理者がデータローダーを使用して179件の取引先リストをアップロードしようとすると、システム例外エラーが発生し、アップロードに失敗します。\n上記のコード セグメントを修正するために開発者が実行する必要がある 2 つのアクションはどれですか。\n2 つの回答を選択してください。",
           "options": [
             {
               "key": "A",
@@ -7311,23 +7311,23 @@
         {
           "n": 79,
           "category": "",
-          "text": "以下のコンポーネント コード要件を参照してください。\n<lightning:layout multipleRows=\"true\">\n<lightning:layoutItem size=\"12\">{!v.account.Name}</lightning:layoutItem>\n<lightning:layoutItem size=\"12\">{!v.account.AccountNumber}</lightning:layoutItem>\n<lightning:layoutItem size=\"12\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:レイアウト>\n要件：\n* モバイル デバイスの場合、情報は 3 行に表示されます。\n* デスクトップとタブレットの場合、情報は 1 行に表示されます。\n要件 2 が期待どおりに表示されません。\nデスクトップとタブレットの要件を満たす正しいコンポーネント コードを持つオプションはどれですか。",
+          "text": "以下のコンポーネント コード要件を参照してください。\n```markup\n<lightning:layout multipleRows=\"true\">\n    <lightning:layoutItem size=\"12\">{!v.account.Name}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\">{!v.account.AccountNumber}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```\n要件：\n* モバイル デバイスの場合、情報は 3 行に表示されます。\n* デスクトップとタブレットの場合、情報は 1 行に表示されます。\n要件 2 が期待どおりに表示されません。\nデスクトップとタブレットの要件を満たす正しいコンポーネント コードを持つオプションはどれですか。",
           "options": [
             {
               "key": "A",
-              "text": "<lightning:layout multipleRows=\"true\">\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:\nlayoutItem>\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>"
+              "text": "```markup\n<lightning:layout multipleRows=\"true\">\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
             },
             {
               "key": "B",
-              "text": "<lightning:layout multipleRows=\"true\">\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n<lightning:layoutItem size=\"12\" largeDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:\nlayoutItem>\n<lightning:layoutItem size=\"12\" largeDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>"
+              "text": "```markup\n<lightning:layout multipleRows=\"true\">\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" largeDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" largeDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
             },
             {
               "key": "C",
-              "text": "<lightning:layout multipleRows=\"true\">\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.Name}</lightning:layoutItem>\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.AccountNumber}</lightning:\nlayoutItem>\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>"
+              "text": "```markup\n<lightning:layout multipleRows=\"true\">\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.Name}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.AccountNumber}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
             },
             {
               "key": "D",
-              "text": "<lightning:layout multipleRows=\"true\">\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.Name}<\n/lightning:layoutItem>\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.\nAccountNumber}</lightning:layoutItem>\n<lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.Industry}<\n/lightning:layoutItem>\n</lightning:layout>"
+              "text": "```markup\n<lightning:layout multipleRows=\"true\">\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:layoutItem>\n    <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
             }
           ],
           "answer": [
