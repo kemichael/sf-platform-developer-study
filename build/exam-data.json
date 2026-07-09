@@ -7908,6 +7908,2789 @@
           "explanation": "レコードの保存における実行順序（Order of Execution）では、リクエストがサーバーに送信される**前**の段階として、標準 UI の編集ページで保存した場合に**ブラウザ上で JavaScript 検証が実行**されます。この検証は主に**依存選択リスト（dependent picklist）** を含むレコードで行われるため、依存選択リストがあるこのシナリオでは、これが最初に実行されるステップです。\n\n**他の選択肢が誤りの理由**\n- **A**: 元のレコードの読み込みはサーバー側処理の最初のステップですが、ブラウザでの JavaScript 検証はそれより前に行われます。\n- **B**: 最大項目長などのシステム検証は、レコード読み込み・値の上書きの後に実行されます。\n- **C**: 新しい値による上書きはサーバー側処理の 2 番目のステップで、最初ではありません。"
         }
       ]
+    },
+    {
+      "id": "set5",
+      "title": "Set 5 — Platform Developer I 模擬試験（v2025-07-28, 97問）",
+      "questions": [
+        {
+          "n": 1,
+          "category": "",
+          "text": "Salesforce にデータをインポートおよびエクスポートする場合、正しい 2 つのステートメントはどれですか。\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "開発環境で大量のデータをインポートするときに、Bulk API を使用してストレージ制限を回避できます。"
+            },
+            {
+              "key": "B",
+              "text": "データインポートウィザードは、コンピュータにインストールされているアプリケーションです。"
+            },
+            {
+              "key": "C",
+              "text": "Bulk API を使用しても、開発環境のストレージ制限を回避できるわけではありません。"
+            },
+            {
+              "key": "D",
+              "text": "Developer サンドボックスと Developer Pro サンドボックスには、異なるストレージ制限があります。"
+            }
+          ],
+          "answer": [
+            "C",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "Bulk APIは大量データを効率よく処理する仕組みであって、ストレージ制限そのものを回避するものじゃないよ！だからCが正解。あとDeveloperサンドボックスとDeveloper Proサンドボックスはストレージ容量が違う（Pro の方が大きい）から、Dも正解！データインポートウィザードはブラウザから使うツールで、PCにインストールするアプリじゃないからBは誤り。"
+        },
+        {
+          "n": 2,
+          "category": "",
+          "text": "DML ステートメントの数など、特定のガバナーに使用されたリソースの量を返すメソッドが含まれている Apex クラスはどれですか。",
+          "options": [
+            {
+              "key": "A",
+              "text": "組織制限"
+            },
+            {
+              "key": "B",
+              "text": "制限"
+            },
+            {
+              "key": "C",
+              "text": "メッセージング"
+            },
+            {
+              "key": "D",
+              "text": "例外"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "DMLの発行数など、ガバナ制限の使用状況を返すメソッドが入っているのは Limits クラス（System.Limits）だよ！Limits.getDmlStatements() みたいなメソッドで今どれだけ使ったか確認できるんだ。"
+        },
+        {
+          "n": 3,
+          "category": "",
+          "text": "商談には、マスター詳細関係にないカスタム オブジェクトからロールアップされた金額が必要です。\nこれを実現するにはどうすればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Opportunity オブジェクトにトリガーを記述し、ツリー ソートを使用して Opportunity の下にある関連するすべての子オブジェクトの金額を合計します。"
+            },
+            {
+              "key": "B",
+              "text": "ストリーミング API を使用して、リアルタイムのロールアップ サマリーを作成します。"
+            },
+            {
+              "key": "C",
+              "text": "子オブジェクトにトリガーを記述し、集計関数を使用して、商談の下にある関連するすべての子オブジェクトの金額を合計します。"
+            },
+            {
+              "key": "D",
+              "text": "メタデータ API を使用して、リアルタイムのロールアップ サマリーを作成します。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "マスター詳細関係じゃないから標準のロールアップサマリーは使えないよ。この場合は子オブジェクト側にトリガーを書いて、集計関数（SUMなど）で商談に金額を合計するのが定番のやり方！"
+        },
+        {
+          "n": 4,
+          "category": "",
+          "text": "開発者は、Salesforce Classic ユーザーインターフェースでカスタム Lightning Web コンポーネントを利用できるようにする必要があります。これを実現するにはどのアプローチを使用できますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Lightning Web コンポーネントを Visualforce コンポーネントとして埋め込み、ページ レイアウトに直接追加します。"
+            },
+            {
+              "key": "B",
+              "text": "Lightning Out JavaScript ライブラリを使用して、Lightning Web コンポーネントを Visualforce ページに埋め込み、ページレイアウトに追加します。"
+            },
+            {
+              "key": "C",
+              "text": "カスタム コントローラを備えた Visualforce ページを使用して、Apex メソッドの呼び出しによって Lightning Web コンポーネントを呼び出します。"
+            },
+            {
+              "key": "D",
+              "text": "Lightning Web コンポーネントを Aura コンポーネントでラップし、Aura コンポーネントを Visualforce タブとして表示します。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "Salesforce Classicは LWC を直接サポートしていないから、LWCをAuraコンポーネントでラップして、そのAuraコンポーネントをVisualforceタブとして表示するのが公式に案内されている回避策だよ！"
+        },
+        {
+          "n": 5,
+          "category": "",
+          "text": "（質問全文）\nUniversal Containers は、商談が Closed/Won ステージに到達したときには編集できないようにしたいと考えています。\nこれを実現するために開発者が使用できる 2 つの戦略はどれですか?\n2つの回答を選択してください。",
+          "options": [
+            {
+              "key": "A",
+              "text": "自動的に起動される承認プロセスを使用します。"
+            },
+            {
+              "key": "B",
+              "text": "検証ルールを使用します。"
+            },
+            {
+              "key": "C",
+              "text": "保存前の Apex トリガーを使用します。"
+            },
+            {
+              "key": "D",
+              "text": "自動応答ルールを使用します。"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "Closed/Won後の編集を防ぐ定番の組み合わせは、検証ルール（IsClosedをチェックしてエラーにする）と、保存前Apexトリガー（before update でaddError）の2つ！自動応答ルールはメール自動返信の機能だから編集制御には関係ないよ。"
+        },
+        {
+          "n": 6,
+          "category": "",
+          "text": "開発者は、販売記録のリストを表示する Lightning Web コンポーネントを作成しています。\n営業担当者ユーザーは、各レコードの手数料フィールドを表示できる必要があります。営業アシスタントユーザーは、手数料フィールドを除くレコードのすべてのフィールドを表示できる必要があります。\nコンポーネントが両方のユーザーに対してエラーなしで機能するようにするには、これをどのように強制すればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "コンポーネントのデータを取得するSOQLでWITH SECURITY_ENFORCEDを使用します。"
+            },
+            {
+              "key": "B",
+              "text": "Security.stripInaccessible Le を使用して、現在のユーザーがアクセスできないフィールドを削除します。"
+            },
+            {
+              "key": "C",
+              "text": "Lightning Locker サービスを使用して、共有ルールと項目レベルのセキュリティを適用します。"
+            },
+            {
+              "key": "D",
+              "text": "Lightning データ サービスを使用して、販売レコードのコレクションを取得します。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "WITH SECURITY_ENFORCEDは権限がないフィールドがクエリに含まれてるとエラーで落ちちゃうから、「両方のユーザーでエラーなく動く」って要件には合わないんだ。Security.stripInaccessible()を使えば、取得後にアクセス権のないフィールドだけを黒く塗りつぶすみたいに除去できるから、エラーにならずに済むよ！"
+        },
+        {
+          "n": 7,
+          "category": "",
+          "text": "Universal Containers には、サードパーティの JavaScript フレームワークを使用して構築され、Visualforce ページを使用して公開された多数のカスタム アプリケーションがあります。同社は、これらのアプリケーションを更新して、Lightning Experience の外観と操作性に似たスタイルを適用したいと考えています。\nビジネス要求を最も迅速かつ効果的に満たすために、開発者は何をすべきでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "すべての Visualforce ページを Lightning コンポーネントとして書き換えます。"
+            },
+            {
+              "key": "B",
+              "text": "定義で属性 enableLightning を true に設定します。"
+            },
+            {
+              "key": "C",
+              "text": "カスタムアプリケーションで使用される Visualforce ページで、Lightning Experience、Lightning コミュニティ、モバイルアプリケーションで使用可能を有効にします。"
+            },
+            {
+              "key": "D",
+              "text": "Salesforce Lightning Design System CSS スタイルシートを JavaScript アプリケーションに組み込みます。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "全部書き直すのは時間がかかりすぎ！一番手早いのは、既存のJavaScriptアプリにSalesforce Lightning Design System（SLDS）のCSSを組み込んで見た目だけLightning風にすること。"
+        },
+        {
+          "n": 8,
+          "category": "",
+          "text": "匿名 Apex コードを実行する 2 つのユースケースは何ですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apex クラスを定期的に実行するようにスケジュールする"
+            },
+            {
+              "key": "B",
+              "text": "デプロイメント後に1回のトランザクションで15,000の非アクティブなアカウントを削除する"
+            },
+            {
+              "key": "C",
+              "text": "すべての連絡先を更新するバッチApexクラスを実行する"
+            },
+            {
+              "key": "D",
+              "text": "組織にユニットテストコードカバレッジを追加する"
+            }
+          ],
+          "answer": [
+            "A",
+            "B"
+          ],
+          "multi": true,
+          "explanation": "匿名Apexの定番の使い道は「Apexクラスを定期実行するスケジュールをその場で登録する（System.scheduleを匿名実行から呼ぶ）」と「デプロイ後の1回限りのデータ修正（15,000件の非アクティブアカウント削除など）」だよ！大量データを匿名実行の中でそのままループ処理するのはガバナ制限に引っかかりやすいし、匿名Apexのコードはユニットテストのカバレッジには一切カウントされないから注意！"
+        },
+        {
+          "n": 9,
+          "category": "",
+          "text": "継続的インテグレーションの一環として、開発者はデプロイメントとユニット テストの実行をスクリプト化するために何を使用すればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "VSコード"
+            },
+            {
+              "key": "B",
+              "text": "匿名で実行"
+            },
+            {
+              "key": "C",
+              "text": "Salesforce CLI"
+            },
+            {
+              "key": "D",
+              "text": "開発者コンソール"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "CI/CDでデプロイやユニットテスト実行をスクリプト化するなら Salesforce CLI（sf/sfdx コマンド）が定番！VSCodeやDeveloper Consoleは手動操作向けのツールだよ。"
+        },
+        {
+          "n": 10,
+          "category": "",
+          "text": "開発者は、Apex クラスのプライベート メソッドの単体テストをどのように記述すればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "SeeAllData アノテーションを使用します。"
+            },
+            {
+              "key": "B",
+              "text": "Apex クラスにテスト メソッドを追加します。"
+            },
+            {
+              "key": "C",
+              "text": "Apex クラスをグローバルとしてマークします。"
+            },
+            {
+              "key": "D",
+              "text": "@TestVisible アノテーションを使用します。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "privateメソッドはテストクラス（別クラス）から直接呼べないから、@TestVisibleアノテーションを付けてテストコンテキストからだけアクセスできるようにするのが正解！"
+        },
+        {
+          "n": 11,
+          "category": "",
+          "text": "Next Best Action 戦略では、Apex メソッドを呼び出す Enhance Element を使用して、さまざまな要因に基づいて連絡先の割引レベルを決定します。\nApex メソッドの正しい定義は何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "```apex\n@InvocableMethod\nglobal static List<List<Recommendation>> getLevel(List<ContactWrapper> input)\n{ /*implementation*/ }\n```"
+            },
+            {
+              "key": "B",
+              "text": "```apex\n@InvocableMethod\nglobal Recommendation getLevel(ContactWrapper input)\n{ /*implementation*/ }\n```"
+            },
+            {
+              "key": "C",
+              "text": "```apex\n@InvocableMethod\nglobal List<List<Recommendation>> getLevel(List<ContactWrapper> input)\n{ /*implementation*/ }\n```"
+            },
+            {
+              "key": "D",
+              "text": "```apex\n@InvocableMethod\nglobal static List<Recommendation> getLevel(List<ContactWrapper> input)\n{ /*implementation*/ }\n```"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "@InvocableMethodは「static」で宣言必須、しかも複数件まとめて処理できるように引数はList、戻り値もList<List<...>>（入力1件ごとに複数の結果を返せる形）にする必要があるよ。この条件を満たすのはAだけ！Cはstaticが付いてない、Bは引数も戻り値もリストになってない、Dは戻り値が二重リストになってないからそれぞれNG。"
+        },
+        {
+          "n": 12,
+          "category": "",
+          "text": "開発者はヘルパークラスを使用して新しい Apex トリガーを作成し、新しい Apex ヘルパークラスの 95% のカバレッジのみを実行するテストクラスを作成します。\n変更セットの運用環境へのデプロイがテスト カバレッジの警告で失敗します。\n「選択された Apex トリガーのテスト カバレッジは 0% です。少なくとも 1% のテスト カバレッジが必要です。」新しい Apex トリガーとヘルパー クラスを正常にデプロイするには、開発者は何をする必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "「すべてのテストを実行」メソッドを使用してテストを実行します。"
+            },
+            {
+              "key": "B",
+              "text": "テストクラスから失敗したテストメソッドを削除します"
+            },
+            {
+              "key": "C",
+              "text": "Apex トリガーをカバーするテストクラスとメソッドを作成します。"
+            },
+            {
+              "key": "D",
+              "text": "ヘルパー クラスのテスト クラス カバレッジを増やします。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "ヘルパークラスのテストだけじゃトリガー自体は1行も実行されないから、トリガーのカバレッジは0%のまま！トリガーが実際に発火するようにDMLを実行するテストメソッドを作ってあげる必要があるよ。"
+        },
+        {
+          "n": 13,
+          "category": "",
+          "text": "Candidate__c カスタム オブジェクトには Primaryld__c カスタム フィールドが存在します。このフィールドは各候補者の ID 番号を保存するために使用され、スキーマ定義では Unique としてマークされています。\nデータ拡充プロセスの一環として、Universal Containers には、システム内のすべての候補者の更新されたデータを含む CSV ファイルがあります。ファイルには、各候補者の主な情報がデータ ポイントとして含まれています。Universal Containers は、すべてのデータ行がシステム内の候補者に正しくマッピングされていることを確認しながら、この情報を Salesforce にアップロードしたいと考えています。\nデータのアップロードを効率化するために、開発者はどの手法を実装する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "CSV を candidate__c に関連するカスタム オブジェクトにアップロードします。"
+            },
+            {
+              "key": "B",
+              "text": "レコードを正しくマッピングするために挿入前トリガーを作成します。"
+            },
+            {
+              "key": "C",
+              "text": "Primarytd__c フィールド定義を更新して、外部 ID としてマークします。"
+            },
+            {
+              "key": "D",
+              "text": "レコードを正しくマッピングするために、保存前のフローを作成します。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "CSVの行を既存レコードに正しくマッピングしながら効率よく取り込みたいなら、一意な項目（Primaryld__c）を外部ID（External ID）としてマークするのが正解！これでData LoaderやData Import Wizardのupsertでその項目をキーにマッチングできるようになるよ。"
+        },
+        {
+          "n": 14,
+          "category": "",
+          "text": "組織内の Account オブジェクトには、Branch と呼ばれる子オブジェクトとのマスター詳細関係があります。次の自動化が存在します。\n* ロールアップサマリーフィールド\n* カスタム検証ルール\n* 重複ルール\n開発者はアカウント オブジェクトにトリガーを作成しました。\nトリガー コードをテストする際に開発者が考慮すべき 2 つのことは何ですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "ロールアップ サマリー フィールドにより、親レコードが保存されることがあります。"
+            },
+            {
+              "key": "B",
+              "text": "すべての DML 操作がデータベースにコミットされると、重複ルールが実行されます。"
+            },
+            {
+              "key": "C",
+              "text": "トリガーはトランザクション中に複数回起動される可能性があります。"
+            },
+            {
+              "key": "D",
+              "text": "検証ルールによりトリガーが再度起動します。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "ロールアップサマリーの再計算は親レコードの再保存を引き起こすことがあるし、トリガーは1トランザクション中に複数回（最大16階層まで）発火する可能性があるから、この2点はテスト時に要注意！重複ルールは保存の一部としてコミット前に走るし、検証ルールはトリガーを再発火させるものじゃないから、BとDは誤り。"
+        },
+        {
+          "n": 15,
+          "category": "",
+          "text": "Apex テストクラスで @testSetup アノテーションを使用することに関して正しい 2 つの記述はどれですか。\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "テストセットアップメソッドで作成されたレコードは、個々のテストメソッドでは更新できません。"
+            },
+            {
+              "key": "B",
+              "text": "テスト セットアップ メソッドでは、テスト データが 1 回挿入され、テスト クラス内のすべてのテスト メソッドで使用できるようになります。"
+            },
+            {
+              "key": "C",
+              "text": "@testSetup アノテーションで定義されたメソッドは、テスト クラス内の各テスト メソッドに対して 1 回実行され、システム制限にカウントされます。"
+            },
+            {
+              "key": "D",
+              "text": "@isTest(SeeAllData=True) アノテーションが使用されている場合、@testSetup アノテーションはサポートされません。"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "@testSetupで作ったデータはクラス内の全テストメソッドで使い回せるのがポイント（各テストは自動ロールバックされるから毎回きれいな状態で使えるよ）！ただし @isTest(SeeAllData=true) をクラスに付けると @testSetup は使えなくなる制約があるから、Dも正解。テストセットアップで作ったレコードは各テストメソッド内でふつうに更新できるからAは誤りだよ。"
+        },
+        {
+          "n": 16,
+          "category": "",
+          "text": "Universal Containers では、ユーザーが自分のアカウントに関する情報を入力できるようにするカスタム ユーザー インターフェイス コンポーネントを作成する必要があります。\nコンポーネントは、情報をデータベースに保存する前にユーザー入力を検証できる必要があります。\nこのコンポーネントを作成するのに最適なテクノロジは何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "フロー"
+            },
+            {
+              "key": "B",
+              "text": "Lightning Web コンポーネント"
+            },
+            {
+              "key": "C",
+              "text": "ビジュアルフォース"
+            },
+            {
+              "key": "D",
+              "text": "VUE JavaScript フレームワーク"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "保存前にユーザー入力をその場でバリデーションできるカスタムUIコンポーネントを作るなら、Lightning Web Componentが最適！JavaScriptで柔軟に入力チェックを組めるよ。"
+        },
+        {
+          "n": 17,
+          "category": "",
+          "text": "開発者は、Expense__c オブジェクトで次のトリガーを識別します。\nトリガーは、それぞれ削除前、挿入前、更新イベントの前に処理されます。\nトリガーのベスト プラクティスに従うために、開発者が実装する必要がある 2 つの手法はどれですか。\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Unity の 3 つのトリガーすべてが、すべてのイベントを含む Expense__c オブジェクトの単一のトリガーになります。"
+            },
+            {
+              "key": "B",
+              "text": "挿入前トリガーと更新前トリガーを統合し、削除アクションにフローを使用します。"
+            },
+            {
+              "key": "C",
+              "text": "レコードが保存されるときに適切なロジックを実行するためのヘルパー クラスを作成します。"
+            },
+            {
+              "key": "D",
+              "text": "Expense __c オブジェクトの 3 つのトリガーをすべて維持しますが、Apex ロジックをトリガー定義から移動します。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "Apexトリガーのベストプラクティスは「1オブジェクトにつき1トリガー」（イベントごとに分けない）と「ロジックはヘルパークラスに書いてトリガー本体は空にする」の2本柱！この基本に沿ってるのはAとCだよ。"
+        },
+        {
+          "n": 18,
+          "category": "",
+          "text": "ユーザーがアカウントの郵便番号を編集する場合、「タイムゾーン」という名前のカスタムアカウントテキストフィールドを、PostalCodeToTimezone__c という別のカスタムオブジェクトの値に基づいて更新する必要があります。\nこの機能を実装する最適な方法は何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Flow Builder を使用してフローを構築します。"
+            },
+            {
+              "key": "B",
+              "text": "アカウント承認プロセスを作成します。"
+            },
+            {
+              "key": "C",
+              "text": "数式フィールドを作成します。"
+            },
+            {
+              "key": "D",
+              "text": "アカウント割り当てルールを構築します。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "別オブジェクトの値を見て、保存されるテキスト項目を更新したいなら、レコードトリガーフロー（Flow Builder）を使うのが今の推奨アプローチ！数式フィールドは動的に計算されるだけで「値を保存」できないから、この要件には合わないよ。"
+        },
+        {
+          "n": 19,
+          "category": "",
+          "text": "開発者は、Apex クラスを使用するカスタム注文管理アプリを作成しました。注文は、Order オブジェクトと、Order と主従関係にある OrderlItem オブジェクトによって表されます。注文処理中に、注文が複数の注文に分割される場合があります。\nコードで既存の OrderItem レコードの一部を新しい Order レコードに移動できるようにするには、開発者は何をする必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apex クラス宣言に共有せずに追加します。"
+            },
+            {
+              "key": "B",
+              "text": "マスター詳細関係を外部参照関係に変更します。"
+            },
+            {
+              "key": "C",
+              "text": "OrderItem と Order の間にジャンクション オブジェクトを作成します。"
+            },
+            {
+              "key": "D",
+              "text": "マスター詳細関係の再印刷を許可するオプションを選択します。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "マスター詳細関係の子レコードは、デフォルトだと親を後から変更（再親設定）できないよ。それを可能にするには、関係の設定で「再親設定を許可する」オプションを有効にする必要があるんだ！"
+        },
+        {
+          "n": 20,
+          "category": "",
+          "text": "開発者は、親 Lightning Web コンポーネント内にネストされた子 Lightning Web コンポーネントを作成しました。親コンポーネントは、子コンポーネントに文字列値を渡す必要があります。\nこれを実現するにはどの 2 つの方法がありますか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "親コンポーネントは子コンポーネント内のパブリック メソッドを呼び出すことができます。"
+            },
+            {
+              "key": "B",
+              "text": "親コンポーネントはパブリックプロパティを使用して子コンポーネントにデータを渡すことができます。"
+            },
+            {
+              "key": "C",
+              "text": "親は Apex コントローラ クラスを使用して子コンポーネントにデータを送信できます。"
+            },
+            {
+              "key": "D",
+              "text": "親コンポーネントはカスタム イベントを使用して、子コンポーネントにデータを渡すことができます。"
+            }
+          ],
+          "answer": [
+            "A",
+            "B"
+          ],
+          "multi": true,
+          "explanation": "親から子への文字列渡しは、①子に公開（@api）されてるパブリックメソッドを親から呼び出す、②パブリックプロパティ（@apiプロパティ）にテンプレートで値を渡す、の2パターンが基本！カスタムイベントは逆方向（子→親）の通信だから、この場面では使わないよ。"
+        },
+        {
+          "n": 21,
+          "category": "",
+          "text": "Lightning Experience のアカウントの標準編集ボタンを上書きするには何を使用できますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "雷撃アクション"
+            },
+            {
+              "key": "B",
+              "text": "Lightning ページ"
+            },
+            {
+              "key": "C",
+              "text": "Lightning コンポーネント"
+            },
+            {
+              "key": "D",
+              "text": "雷流"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "標準の編集ボタンをLightning Experienceで上書きするには、設定の「ボタン、リンク、アクション」からLightningコンポーネントをオーバーライド先として登録するのが伝統的な方法だよ！"
+        },
+        {
+          "n": 22,
+          "category": "",
+          "text": "Batchable インターフェースを実装するときに Apex コードが Apex クラスの execute() メソッド内で実行される場合、ガバナ制限に関して正しい 2 つのステートメントはどれですか。\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apex ガバナ制限は、execute() メソッドの各反復ごとにリセットされます。"
+            },
+            {
+              "key": "B",
+              "text": "トランザクションの非同期性のため、Apex ガバナー制限を超えることはできません。"
+            },
+            {
+              "key": "C",
+              "text": "Apex ガバナー制限では、非同期制限レベルが使用されます。"
+            },
+            {
+              "key": "D",
+              "text": "Apex クラスのコンストラクターを呼び出すときに、Apex ガバナー制限が省略されます。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "Batchableのexecute()メソッドは、バッチの各チャンク（1回の実行単位）ごとにガバナ制限がリセットされるよ！しかも非同期処理なので、同期処理より緩い「非同期のガバナ制限」が適用されるんだ。非同期だからといって制限を超えられないわけじ�ゃないから、Bは誤り。"
+        },
+        {
+          "n": 23,
+          "category": "",
+          "text": "Lightning Web コンポーネントで使用するために、AccountController クラスに updateAccounts という Apex メソッドが含まれているコード ステートメントはどれですか。",
+          "options": [
+            {
+              "key": "A",
+              "text": "「AccountControlles」から updateAccounts をインポートします。"
+            },
+            {
+              "key": "B",
+              "text": "「Salesforce/apex/AccountController:' から updateAccounts をインポートします。"
+            },
+            {
+              "key": "C",
+              "text": "「Account@ontroller.updateAccounts」から updateAccounts をインポートします。"
+            },
+            {
+              "key": "D",
+              "text": "\"@salesforce/apex/AccountController.updateAccounts\" から updateAccounts をインポートします。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "LWCでApexメソッドをインポートするときの正しい書き方は \"@salesforce/apex/クラス名.メソッド名\" から名前付きインポートする形！これに合ってるのはDだけだよ。"
+        },
+        {
+          "n": 24,
+          "category": "",
+          "text": "SOQL クエリが返すことができる 3 つのデータ型はどれですか?\n3つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Double"
+            },
+            {
+              "key": "B",
+              "text": "O Long"
+            },
+            {
+              "key": "C",
+              "text": "sObject"
+            },
+            {
+              "key": "D",
+              "text": "dg Integer"
+            },
+            {
+              "key": "E",
+              "text": "List"
+            }
+          ],
+          "answer": [
+            "C",
+            "D",
+            "E"
+          ],
+          "multi": true,
+          "explanation": "SOQLクエリの戻り値になれるのは、sObject（1件）、sObjectのList（複数件）、そしてCOUNT()クエリのときのInteger、この3パターン！DoubleやLongは集計関数の結果型としては出てこないよ。"
+        },
+        {
+          "n": 25,
+          "category": "",
+          "text": "Apex で @lnvocableMethod アノテーションを使用する際の 3 つの考慮事項は何ですか?\n3つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apex クラスごとに、@invecableMethod アノテーションを使用するメソッドを 1 つだけ定義できます。"
+            },
+            {
+              "key": "B",
+              "text": "@invecableMethod アノテーションを使用するメソッドには、複数の入力パラメータを設定できます。"
+            },
+            {
+              "key": "C",
+              "text": "@invocablemethod アノテーションを使用するメソッドは、static として宣言する必要があります。"
+            },
+            {
+              "key": "D",
+              "text": "GO @invocablemethod アノテーションを使用するメソッドは、戻り値を定義する必要があります。"
+            },
+            {
+              "key": "E",
+              "text": "@invocableMethod アノテーションを使用するメソッドは、Public または Global として宣言できます。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C",
+            "E"
+          ],
+          "multi": true,
+          "explanation": "@InvocableMethodの制約は3つ：①1クラスにつき1メソッドまで、②staticとして宣言必須、③public または global で宣言できる（Winter'19以降）、この3点！引数は複数パラメータじゃなくList型を1つだけ受け取る決まりだから、Bは誤りだよ。"
+        },
+        {
+          "n": 26,
+          "category": "",
+          "text": "（質問全文）\nUniversal Containersは最近、ClassicからLightning Experienceに移行しました。同社のビジネスプロセスの一つでは、ユーザーが商談詳細ページでカスタムボタンを押した際に、商談オブジェクトの特定の値をHTTP RESTコールアウト経由で外部の注文管理システムに送信することが求められています。\n例のフィールド:\n* 名前\n* 額\n* アカウント\nビジネス要件を満たすために開発者が実装する必要がある 2 つの方法はどれですか?\n2つの回答を選択してください。",
+          "options": [
+            {
+              "key": "A",
+              "text": "HTTP REST コールアウトを実行するカスタム Visualforce クイックアクションを作成し、商談の詳細ページで使用します。"
+            },
+            {
+              "key": "B",
+              "text": "Opportunity オブジェクトに、@future (callout=true) を使用してヘルパー メソッドを呼び出して HTTP REST コールアウトを実行する更新後トリガーを作成します。"
+            },
+            {
+              "key": "C",
+              "text": "HTTP REST コールアウトを実行する Lightning コンポーネントのクイックアクションを作成し、商談の詳細ページで使用します。"
+            },
+            {
+              "key": "D",
+              "text": "Opportunity オブジェクトにリモート アクションを作成し、Opportunity が更新されるたびに HTTP REST コールアウトを実行する Apex 即時アクションを実行します。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "「ボタンを押したときだけ」外部システムへコールアウトしたいから、カスタムのクイックアクション（Visualforceベース or Lightningコンポーネントベース）から呼び出すのが正解！更新後トリガーでの自動コールアウトは「ボタンを押したとき」という要件とズレてて、更新されるたび毎回動いてしまうからB・Dは合わないよ。"
+        },
+        {
+          "n": 27,
+          "category": "",
+          "text": "開発者は、複数の Lightning Web コンポーネントを含むアプリを作成しています。\n子コンポーネントの 1 つはナビゲーションの目的で使用されます。ユーザーが子コンポーネントの「次へ」というボタンをクリックすると、親コンポーネントに通知して次のページに移動できるようにする必要があります。\nこれをどのように達成すればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "親のプロパティを更新します。"
+            },
+            {
+              "key": "B",
+              "text": "Apex コントローラ内のメソッドを呼び出します。"
+            },
+            {
+              "key": "C",
+              "text": "通知を発行します。"
+            },
+            {
+              "key": "D",
+              "text": "カスタム イベントを作成します。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "子コンポーネントから親コンポーネントへの通知は、カスタムイベントを発行（dispatchEvent）して、親側でイベントリスナーで受け取るのが基本パターンだよ！"
+        },
+        {
+          "n": 28,
+          "category": "",
+          "text": "ある会社のエンジニアリング部門では、100 台以上のサーバーのクラスターを必要とする社内開発ソフトウェアのスケーラビリティについて 1 か月間のテストを実施しています。次のモデルのうち、どのモデルを使用するのが最適ですか。",
+          "options": [
+            {
+              "key": "A",
+              "text": "PaaS"
+            },
+            {
+              "key": "B",
+              "text": "SaaS"
+            },
+            {
+              "key": "C",
+              "text": "BaaS"
+            },
+            {
+              "key": "D",
+              "text": "IaaS"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "100台超のサーバークラスタで自分たちのソフトウェアをテストしたいなら、生のコンピューティング基盤（サーバー、ネットワークなど）をレンタルできる IaaS（Infrastructure as a Service）が最適！PaaSやSaaSはもっと上のレイヤーを提供するモデルだから、この用途には合わないよ。"
+        },
+        {
+          "n": 29,
+          "category": "",
+          "text": "開発者は、既存の Payment クラスの実装を提供する CreditCardPayment クラスを作成する必要があります。\n```apex\npublic virtual class Payment {\n  public virtual void makePayment(Decimal amount) {\n    // implementation\n  }\n}\n```\nWhich is the correct implementation?",
+          "options": [
+            {
+              "key": "A",
+              "text": "public class CreditCardPayment extends Payment { public virtual void makePayment(Decimal amount){ /* implementation */ } }"
+            },
+            {
+              "key": "B",
+              "text": "public class CreditCardPayment implements Payment { public virtual void makePayment(Decimal amount) { /* implementation */ } }"
+            },
+            {
+              "key": "C",
+              "text": "public class CreditCardPayment implements Payment { public override void makePayment(Decimal amount) { /* implementation */ } }"
+            },
+            {
+              "key": "D",
+              "text": "public class CreditCardPayment extends Payment { public override void makePayment(Decimal amount) { /* implementation */ } }"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "Paymentは（インターフェースじゃなく）virtualクラスだから、継承するときは implements じゃなく extends を使うよ！しかもvirtualメソッドをオーバーライドするときは override キーワードが必須。両方満たしてるのはDだけ！"
+        },
+        {
+          "n": 30,
+          "category": "",
+          "text": "次のコード スニペットは、2,000 件を超えるリード レコードがある環境で Lightning Web コンポーネントによって実行されます。\nApex トランザクション内でどのガバナー制限を超える可能性がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "発行されたSOOLクエリの合計数"
+            },
+            {
+              "key": "B",
+              "text": "発行されたDMLステートメントの合計数"
+            },
+            {
+              "key": "C",
+              "text": "DML文の結果として処理されたレコードの合計数"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "2,000件超のレコードを1件ずつループでupdateするような書き方（ループの中でDMLを実行）だと、1トランザクションあたりDML文は150回までという制限にすぐ引っかかるよ！これがいわゆる「ループ内DML」のアンチパターンで、超えるのは「発行されたDMLステートメントの合計数」の制限。"
+        },
+        {
+          "n": 31,
+          "category": "",
+          "text": "「高」、「中」、「低」の値は、異なるオブジェクトにわたる複数の選択リストの共通値として識別されます。\n開発者が選択リストとその値のメンテナンスを効率化し、値を上記の値に制限するために実行できるアプローチは何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "各オブジェクトに選択リストを作成し、値を含むグローバル選択リスト値セットを使用します。"
+            },
+            {
+              "key": "B",
+              "text": "各オブジェクトに必須フィールドとして選択リストを作成し、「入力された順序ではなくアルファベット順に値を表示する」を選択します。"
+            },
+            {
+              "key": "C",
+              "text": "各オブジェクトに選択リストを作成し、データの整合性を確保するための検証ルールを追加します。"
+            },
+            {
+              "key": "D",
+              "text": "各オブジェクトに選択リストを作成し、「選択リストを値セットで定義された値に制限する」を選択します。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "複数オブジェクトで同じ選択肢（高・中・低）を使い回すなら、グローバル選択リスト値セットを1つ作って、各オブジェクトの選択リストをそこから参照するのが一番メンテしやすいやり方！値を変えたいときも1箇所直せば全部に反映されるよ。"
+        },
+        {
+          "n": 32,
+          "category": "",
+          "text": "Universal Containers には、特定のアカウントによってレンタルされているすべての Container__c のテーブルを表示する Visualforce ページがあります。最近、一部の顧客が 10,000 個を超えるコンテナをレンタルしているため、このページはビュー ステートの制限により失敗しています。\nページの読み込みエラーを解決するために、開発者は Visualforce ページについて何を変更する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "OffsetController を使用してページネーションを実装します。"
+            },
+            {
+              "key": "B",
+              "text": "StandardSetController を使用してページネーションを実装します。"
+            },
+            {
+              "key": "C",
+              "text": "SOQL オフセットで JavaScript リモート処理を使用します。"
+            },
+            {
+              "key": "D",
+              "text": "遅延読み込みと一時的なリスト変数を使用します。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "1万件超のレコードを一覧表示してビューステート制限に引っかかっているなら、StandardSetControllerを使ってページネーションを実装するのが定番の解決策！一度に画面が保持するレコード数を絞れるよ。"
+        },
+        {
+          "n": 33,
+          "category": "",
+          "text": "リード開発者が「OrderRequest」という仮想クラスを作成します。次のコードスニペットをご覧ください。\n```apex\npublic class CustomerOrder {\n  // code implementation\n}\n```\n開発者は CustomerOrder クラス内で OrderRequest クラスをどのように使用できますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "(class=\"OrderRequest\"}public class CustomerOrder を拡張します"
+            },
+            {
+              "key": "B",
+              "text": "パブリッククラス CustomerOrder は Order を実装します"
+            },
+            {
+              "key": "C",
+              "text": "パブリッククラス CustomerOrder は OrderRequest を拡張します"
+            },
+            {
+              "key": "D",
+              "text": "@Implements (class=\"OrderRequest\") パブリッククラス Customerorder"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "virtualクラス「OrderRequest」を継承して使いたいだけなら、そのまま extends するのが正解！implementsはインターフェース用のキーワードだから、クラスの継承には使えないよ。"
+        },
+        {
+          "n": 34,
+          "category": "",
+          "text": "Universal Containers の管理者は、システム内で削除できるのは廃止されたコンテナのみであることを保証したいと考えています。ビジネス要件を満たすために、Salesforce 開発者は Container__c オブジェクト内の Status__c カスタム フィールドの選択リスト値として「廃止」を追加します。\n開発者が「廃止」ステータスのコンテナ レコードのみを削除できるようにするために使用できる 2 つのアプローチはどれですか。\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "レコードトリガーフロー（削除前）を使用します。"
+            },
+            {
+              "key": "B",
+              "text": "Apexトリガー"
+            },
+            {
+              "key": "C",
+              "text": "レコードトリガーフロー（削除後）を使用します。"
+            },
+            {
+              "key": "D",
+              "text": "検証ルール"
+            }
+          ],
+          "answer": [
+            "A",
+            "B"
+          ],
+          "multi": true,
+          "explanation": "削除を止めるにはApexトリガー（削除前にステータスをチェックしてaddErrorする）か、削除前に評価できるレコードトリガーフローが使えるよ！検証ルールは挿入・更新のときしか走らなくて、削除操作には一切適用されないから、これはPDIのひっかけポイント！"
+        },
+        {
+          "n": 35,
+          "category": "",
+          "text": "サンドボックスから本番環境にデプロイする場合の 2 つの考慮事項は何ですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apex コードの少なくとも 75% は単体テストでカバーされる必要があります。"
+            },
+            {
+              "key": "B",
+              "text": "単体テストには System.assert メソッドの呼び出しが必要です。"
+            },
+            {
+              "key": "C",
+              "text": "フィードバックに迅速に対応できるように、営業時間中に展開する必要があります。"
+            },
+            {
+              "key": "D",
+              "text": "すべてのトリガーには、少なくとも 1 行のテスト カバレッジが必要です。"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "本番デプロイの条件は、Apexコードの少なくとも75%がユニットテストでカバーされていること、そしてすべてのトリガーに最低限のテストカバレッジ（1行以上）があること！System.assertの呼び出しは必須じゃないし、営業時間中のデプロイなんて考慮事項として推奨されてないよ。"
+        },
+        {
+          "n": 36,
+          "category": "",
+          "text": "Lightning Web コンポーネントのプロパティに接続できるようにするには、開発者は Apex メソッドでどのアノテーションを使用する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "@AuraEnabled(cacneable=true)"
+            },
+            {
+              "key": "B",
+              "text": "@RemoteAction (cacheable-true)"
+            },
+            {
+              "key": "C",
+              "text": "@RemoteAction"
+            },
+            {
+              "key": "D",
+              "text": "@AuraEnabled"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "LWCの@wireでApexメソッドの結果をプロパティにつなぎたいときは、@AuraEnabled(cacheable=true)を付ける必要があるよ！cacheable=trueがないと@wireでプロパティに直接つなげられないんだ。"
+        },
+        {
+          "n": 37,
+          "category": "",
+          "text": "Universal Hiring は、Salesforce を使用して求人応募を取得します。Salesforce 管理者は、マスター オブジェクトとして機能する Job__c と詳細として機能する Application__c の 2 つのカスタム オブジェクトを作成しました。\nJob__c オブジェクト内では、カスタムの複数選択選択リストである preferred _Locations__c に、その職位の承認済み州のリストが含まれています。各 Job_Application__c レコードは、マスター詳細関係を通じてシステム内の連絡先に関連付けられています。\n採用担当者は、連絡先の郵送先州の値が、Job_Application__c レコード内の Preferred Locations__c フィールドで選択された値と一致するかどうかを表示する機能を要求しました。採用担当者は、連絡先の郵送先州に変更が発生した場合でも、この値が同期されたままになることを望んでいます。\nビジネス要件を満たすために開発者が使用すべき推奨ツールは何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apex トリガー"
+            },
+            {
+              "key": "B",
+              "text": "ロールアップサマリーフィールド"
+            },
+            {
+              "key": "C",
+              "text": "レコードトリガーフロー"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "連絡先の郵送先州が変わるたびに同期させ続けたいなら、レコードトリガーフローで連絡先の変更を検知してJob_Application__c側を更新するのが今のおすすめアプローチ！ロールアップサマリーは合計や件数集計向けで、値の一致判定には使えないよ。"
+        },
+        {
+          "n": 38,
+          "category": "",
+          "text": "次のコード スニペットの結果は何でしょうか?\n```apex\nfor (Integer i = 0; i <= 200; i++) {\n  insert new Account(Name = 'Account ' + i);\n}\n```",
+          "options": [
+            {
+              "key": "A",
+              "text": "アカウントが挿入されます。"
+            },
+            {
+              "key": "B",
+              "text": "アカウントが挿入されました。"
+            },
+            {
+              "key": "C",
+              "text": "200 個のアカウントが挿入されます。"
+            },
+            {
+              "key": "D",
+              "text": "201 個のアカウントが挿入されました。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "for (Integer i = 0; i <= 200; i++) は i が0から200まで、合計201回ループするよ（<=200だから200も含む！）。「i<200」だと思って200回だと勘違いしがちなオフバイワンのひっかけ問題！各ループでアカウントが1件挿入される想定なら、答えは201個になるよ。"
+        },
+        {
+          "n": 39,
+          "category": "",
+          "text": "Universal Containers では、ユーザーが複数のレコードを編集できるようにする Visualforce ページを表示するリスト ボタンが必要です。\nこの要件をサポートする Visualforce 機能はどれですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "カスタム リスト コントローラー拡張を備えた標準コントローラー"
+            },
+            {
+              "key": "B",
+              "text": "recorasetvar ページ属性を持つカスタム リスト コントローラ"
+            },
+            {
+              "key": "C",
+              "text": "コントローラ拡張と <spex:listButton> タグ"
+            },
+            {
+              "key": "D",
+              "text": "標準コントローラと recordsetvar ページ属性"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "複数レコードをまとめて編集するVisualforceページをリストボタンから開きたいときは、標準コントローラ + recordSetVarページ属性の組み合わせが定番！これで選択した複数レコードをまとめてコントローラに渡せるよ。"
+        },
+        {
+          "n": 40,
+          "category": "",
+          "text": "開発者がアカウント オブジェクトにトリガーを作成しました。トリガーをテストしているときに、「トリガーの最大深度を超えました」というエラー メッセージが表示されます。\n考えられる原因は何でしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "開発者に適切なユーザー権限がありません。"
+            },
+            {
+              "key": "B",
+              "text": "トリガーが長すぎるため、ヘルパー クラスにリファクタリングする必要があります。"
+            },
+            {
+              "key": "C",
+              "text": "トリガーのコード カバレッジが十分ではありません。"
+            },
+            {
+              "key": "D",
+              "text": "トリガーが複数回実行されています"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "「トリガーの最大深度を超えました」というエラーは、同じトリガーが再帰的に何度も発火し続けているときに出るエラーだよ！典型的には、トリガー内の更新が原因で自分自身をまた呼び出してしまう無限ループ気味の動きが原因。"
+        },
+        {
+          "n": 41,
+          "category": "",
+          "text": "開発者は、ユーザーが複数の商談を作成できるページを作成しています。開発者は、現在のユーザーのデフォルトの商談レコード タイプを確認し、レコードを挿入する前にレコード タイプに基づいて特定のデフォルト値を設定するように求められます。\n開発者は現在のユーザーのデフォルトのレコード タイプをどのように見つけることができますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "挿入する前に、商談を作成し、現在のユーザーのデフォルトのレコード タイプのレコード ID を持つ商談レコード タイプを確認します。"
+            },
+            {
+              "key": "B",
+              "text": "IDがuserinfo.getprofileID()に等しいプロファイルを照会し、プロファイル機会を使用します。getdefaultresoratype()メソッド、"
+            },
+            {
+              "key": "C",
+              "text": "schema.Userinfo.Opportunity.getDefaultRecordType {) メソッドを使用します。"
+            },
+            {
+              "key": "D",
+              "text": "レコード タイプのリストを取得するには、opportunity.sobjectTyps.getDeacribse().getRecordTypeInfos {) を使用し、isDefaultRecordtypeMapping {) が true になるまで反復処理します。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "現在のユーザーのデフォルトレコードタイプを調べる正式な方法は、SObjectType.getDescribe().getRecordTypeInfos()でレコードタイプの一覧を取得して、isDefaultRecordTypeMapping()がtrueになるものを探すこと！これがSchemaクラスを使った公式なやり方だよ。"
+        },
+        {
+          "n": 42,
+          "category": "",
+          "text": "組織には、レコード更新要素を使用して商談を編集する既存のフローがあります。開発者は、フローを更新して連絡先も作成し、作成された連絡先の ID を商談に保存する必要があります。\n開発者はフロー内でどの更新を行う必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "新しい更新レコード要素を追加します。"
+            },
+            {
+              "key": "B",
+              "text": "新しいロールバックレコード要素を追加します。"
+            },
+            {
+              "key": "C",
+              "text": "新しいレコード作成要素を追加します。"
+            },
+            {
+              "key": "D",
+              "text": "新しい Get Records 要素を追加します。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "連絡先も新しく作りたいなら、フローに「レコードを作成」要素を追加するのが正解！作成した連絡先のIDは、そのあと商談を更新する要素で参照できるようになるよ。"
+        },
+        {
+          "n": 43,
+          "category": "",
+          "text": "開発者は、外部 Web アプリケーションで使用されるカスタム SOAP Web サービスを実装する必要があります。\n開発者は、Web アプリケーションで使用されないヘルパー メソッドを Web サービス クラスの実装に含めることを選択します。\nどのコード セグメントがクラスとメソッドの正しい宣言を示していますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "```apex\nwebservice class WebServiceClass {\n  private Boolean helperMethod() { /* implementation ... */ }\n  global static String updateRecords() { /* implementation ... */ }\n}\n```"
+            },
+            {
+              "key": "B",
+              "text": "```apex\nglobal class WebServiceClass {\n  private Boolean helperMethod() { /* implementation ... */ }\n  webservice static String updateRecords() { /* implementation ... */ }\n}\n```"
+            },
+            {
+              "key": "C",
+              "text": "```apex\nwebservice class WebServiceClass {\n  private Boolean helperMethod() { /* implementation ... */ }\n  webservice static String updateRecords() { /* implementation ... */ }\n}\n```"
+            },
+            {
+              "key": "D",
+              "text": "```apex\nglobal class WebServiceClass {\n  private Boolean helperMethod() { /* implementation ... */ }\n  global String updateRecords() { /* implementation ... */ }\n}\n```"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "SOAP Web サービスとして外部公開するメソッドには webservice キーワードを付けて、しかもクラス自体は global で宣言する必要があるよ（webserviceキーワードはメソッドに付けるもので、クラスに付けるものじゃない）！外部に見せたくないヘルパーメソッドはprivateのままでOK。この形になっているのはBだけ！"
+        },
+        {
+          "n": 44,
+          "category": "",
+          "text": "次のコード スニペットを検討してください。\n```apex\npublic with sharing class AccountsController {\n  @AuraEnabled\n  public static List<Account> getAllAccounts(){\n    return [SELECT Id, Name, Industry FROM Account];\n  }\n}\n```\nApex テストクラス スニペット:\n```apex\n@isTest\nprivate class AccountsController_Test {\n  @testSetup\n  private static void makeData(){\n    User user1 = [SELECT Id FROM User WHERE Profile.Name = 'System Administrator' AND isActive = true LIMIT 1];\n    User user2 = [SELECT Id FROM User WHERE Profile.Name = 'Standard User' AND UserName = 'test@test.com' AND isActive = true LIMIT 1];\n    TestUtils.insertAccounts(10, user1.Id);\n    TestUtils.insertAccounts(20, user2.Id);\n  }\n  @isTest\n  private static void getAllAccounts_StandardUser_Test(){\n    List<Account> result = AccountsController.getAllAccounts();\n    System.assertEquals(20, result.size());\n  }\n}\n```\nテストクラスが実行されると、アサーションは失敗します。\nテストメソッドが正常に実行されるようにするには、開発者は Apex テストメソッドにどのような変更を実装する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "管理者ユーザーをメモリに照会し、行 15 と 16 を System.runAs(user); メソッド内に囲みます。"
+            },
+            {
+              "key": "B",
+              "text": "標準ユーザーをメモリに照会し、行 15 と 16 を System.runAs(); メソッド内に囲みます。"
+            },
+            {
+              "key": "C",
+              "text": "12 行目に @isTest(seeAllData=true); を追加し、15 行目と 16 行目を Test.startTest(); と Test で囲みます。\nstopTest(); を実行します。"
+            },
+            {
+              "key": "D",
+              "text": "14 行目に System.runAs(user); を追加し、15 行目を Test.startTest(); と Test.stopTest(); で囲みます。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "@testSetupで標準ユーザー用に20件のアカウントを作ってるのに、テストがそのまま実行されると（テストは実行者の権限で走るから）両方のユーザーのデータが見えてassertが20件と合わなくなる可能性があるよ。標準ユーザーをクエリして、その権限で処理を走らせる System.runAs(標準ユーザー) の中でメソッド呼び出しとassertを囲めば、標準ユーザーの視点から見た20件だけが返ってくるようになるんだ！"
+        },
+        {
+          "n": 45,
+          "category": "",
+          "text": "開発者は、アカウントの SOQL ステートメントの結果セットを反復処理することで、メモリ内でリソースを大量に消費するアクションを実行するメソッドを Apex クラスで特定しました。このメソッドは、変更をデータベースに保存するために DML ステートメントも実行します。\nトランザクション制御を確実にし、ガバナー制限の超過を回避するために、開発者がベストプラクティスとして実装する必要がある 2 つの手法はどれですか。* 2 つの回答を選択してください。",
+          "options": [
+            {
+              "key": "A",
+              "text": "@ReadOnly アノテーションを使用して、SOQL によって返される行数をバイパスします。"
+            },
+            {
+              "key": "B",
+              "text": "有効なデータのみがコミットされるように、部分的な DML ステートメントを使用します。"
+            },
+            {
+              "key": "C",
+              "text": "System.limit クラスを使用して、現在の CPU ガバナー制限の消費を監視します。"
+            },
+            {
+              "key": "D",
+              "text": "データベースの整合性を強化するには、Database.Savepoint メソッドを使用します。"
+            }
+          ],
+          "answer": [
+            "C",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "ガバナ制限の消費状況をSystem.Limitsクラスでこまめに監視しつつ、Database.Savepoint / Database.rollback()でトランザクションの整合性を制御するのがベストプラクティス！@ReadOnlyは特定の実行コンテキスト向けの特殊なアノテーションで汎用的な解決策じゃないから、ここでは使わないよ。"
+        },
+        {
+          "n": 46,
+          "category": "",
+          "text": "開発者は、Visualforce ウィザードと連携して複数の sObject の作成と編集をサポートする単一のカスタム コントローラ クラスを持っています。ウィザードは、複数の Visualforce ページのユーザー入力と初期 URL のパラメータからデータを受け入れます。\nカスタム コントローラーを効果的にテストするために、ユニット テスト内で役立つ 3 つのステートメントはどれですか。\n3つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "String nextPage = controller.save().getUrl ();"
+            },
+            {
+              "key": "B",
+              "text": "ApexPages.currentPage ().getParametera(}.put{'input', \"TeatValue');"
+            },
+            {
+              "key": "C",
+              "text": "insert pageret;"
+            },
+            {
+              "key": "D",
+              "text": "public Extendedcontroller (ApexPages.Standardcontraller entrl) { }"
+            },
+            {
+              "key": "E",
+              "text": "Test. setCurrentPage (pageRef) ;"
+            }
+          ],
+          "answer": [
+            "A",
+            "B",
+            "E"
+          ],
+          "multi": true,
+          "explanation": "複数ページ・URLパラメータを使うVisualforceウィザードのコントローラをテストするときは、①アクションメソッドの戻り値（PageReference）のURLを確認する、②ApexPages.currentPage().getParameters().put()でURLパラメータをシミュレートする、③Test.setCurrentPage()でテスト中の現在ページを設定する、の3つが役立つよ！"
+        },
+        {
+          "n": 47,
+          "category": "",
+          "text": "新機能開発の一環として、開発者は、ステートフル クライアントで実行されるタッチ イベントに応答できるレスポンシブ アプリケーションを構築するよう求められます。\nビジネス要件を完全にサポートするフレームワーク上に構築されている 2 つのテクノロジはどれですか。2 つの回答を選択してください。",
+          "options": [
+            {
+              "key": "A",
+              "text": "Lightning Web コンポーネント"
+            },
+            {
+              "key": "B",
+              "text": "Visualforce コンポーネント"
+            },
+            {
+              "key": "C",
+              "text": "Visualforce ページ"
+            },
+            {
+              "key": "D",
+              "text": "オーラコンポーネント"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "タッチイベントに応答するステートフルなレスポンシブアプリを完全にサポートしているのは、Lightning Web ComponentとAuraコンポーネントの2つ！どちらも本格的なコンポーネントフレームワークだよ。Visualforceはページベースの古い技術で、そこまでの機能はサポートしてないんだ。"
+        },
+        {
+          "n": 48,
+          "category": "",
+          "text": "カスタム オブジェクト Trainer__c には、別のカスタム オブジェクト Gym__c への参照フィールドがあります。\nViridian City Gym とそのトレーナー全員のレコードを取得する SOQL クエリはどれですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Trainer__c から ID を選択し、Gym__r.Name を 'Viridian City Gym' に設定します。"
+            },
+            {
+              "key": "B",
+              "text": "SELECT Id、(SELECT Id FROM Trainer__c FROM Gym__c WHERE Name = 'Viridian City Gym\""
+            },
+            {
+              "key": "C",
+              "text": "SELECT Id、(SELECT Id FROM Trainers__r) FROM Gym__c WHERE Name = 'Viridian City Gym'"
+            },
+            {
+              "key": "D",
+              "text": "IDを選択、(選択 Id FROM Trainers__c) FROM Gym__c WHERE Name = 'Viridian City Gym'"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "親から子への関連レコードをまとめて取るサブクエリは SELECT Id, (SELECT Id FROM 子リレーション名__r) FROM 親オブジェクト WHERE ... の形！Trainer__cからGym__cへの参照フィールドがあるときの子リレーション名は複数形の\"Trainers__r\"になるから、これに合っているのはCだよ。"
+        },
+        {
+          "n": 49,
+          "category": "",
+          "text": "開発者がバッチ メソッドまたは将来のメソッドのステータスに関する情報を見つけることができる 2 つの場所はどこですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "開発者コンソール"
+            },
+            {
+              "key": "B",
+              "text": "Apexジョブ"
+            },
+            {
+              "key": "C",
+              "text": "一時停止されたフローインタビューコンポーネント"
+            },
+            {
+              "key": "D",
+              "text": "Apex Flex キュー"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "バッチApexや将来メソッドの実行状況は、設定の「Apexジョブ」ページか、実行待ちのジョブが見える「Apex Flexキュー」で確認できるよ！"
+        },
+        {
+          "n": 50,
+          "category": "",
+          "text": "開発者は、従来のオンプレミス SQL データベースと統合しています。\n統合されるデータが Salesforce 内の適切なレコードと一致することを確認するために、開発者は何を使用すればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "外部オブジェクト"
+            },
+            {
+              "key": "B",
+              "text": "外部IDフィールド"
+            },
+            {
+              "key": "C",
+              "text": "数式フィールド"
+            },
+            {
+              "key": "D",
+              "text": "ルックアップフィールド"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "外部システムのデータをSalesforceの正しいレコードに一致させたいなら、外部IDフィールドを使うのが基本！Data Loaderのupsertでもこの項目をキーにマッチングできるよ。"
+        },
+        {
+          "n": 51,
+          "category": "",
+          "text": "ISV Salesforce パートナーの Cloud Kicks Fitness は、管理パッケージ アプリケーションを開発しています。アプリケーション モジュールの 1 つでは、Apex クラス Bodyfat とそのメソッド calculateBodyFat () を使用して、ユーザーが体脂肪を計算できます。製品所有者は、ISV のパッケージ名前空間外でカスタマイズを開発するときに、アプリケーションの消費者がこのメソッドにアクセスできるようにしたいと考えています。\ncalculateBodyFat() がパッケージ名前空間の外部からアクセス可能であることを保証するために、開発者はどのようなアプローチを取るべきでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "グローバル アクセス修飾子を使用してクラスとメソッドを宣言します。"
+            },
+            {
+              "key": "B",
+              "text": "public アクセス修飾子を使用してクラスとメソッドを宣言します。"
+            },
+            {
+              "key": "C",
+              "text": "クラスを public として宣言し、メソッドにグローバル アクセス修飾子を使用します。"
+            },
+            {
+              "key": "D",
+              "text": "クラスをグローバルとして宣言し、メソッドに public アクセス修飾子を使用します。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "管理パッケージの名前空間の外からアクセスできるようにするには、クラスとメソッドの両方に global アクセス修飾子を付ける必要があるよ！片方だけglobalにしても外部から呼び出せないんだ。"
+        },
+        {
+          "n": 52,
+          "category": "",
+          "text": "どの例外タイプをキャッチできないでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "カスタム例外"
+            },
+            {
+              "key": "B",
+              "text": "リンク例外"
+            },
+            {
+              "key": "C",
+              "text": "アクセス例外なし"
+            },
+            {
+              "key": "D",
+              "text": "セルアウト例外"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "CPU時間超過やヒープサイズ超過のようなガバナ制限系の例外（LimitException）の一部は、try/catchで捕まえられないよ！これはPDIでよく問われるポイントで、カスタム例外・CalloutException・NoAccessExceptionなどは普通にcatchできるんだ。"
+        },
+        {
+          "n": 53,
+          "category": "",
+          "text": "Visualforce ページで Lightning コンポーネントを作成するために必要な 3 つのコード行はどれですか。\n3つの回答を選択してください。",
+          "options": [
+            {
+              "key": "A",
+              "text": "$Lightning.use"
+            },
+            {
+              "key": "B",
+              "text": "$Lightning.useComponent"
+            },
+            {
+              "key": "C",
+              "text": "<apex:includeLightning/>"
+            },
+            {
+              "key": "D",
+              "text": "<apex:slds/>"
+            },
+            {
+              "key": "E",
+              "text": "$Lightning.createComponent"
+            }
+          ],
+          "answer": [
+            "A",
+            "C",
+            "E"
+          ],
+          "multi": true,
+          "explanation": "VisualforceページにLightningコンポーネントを表示するには、①<apex:includeLightning/>でLightning Outライブラリを読み込み、②$Lightning.use()でアプリを初期化し、③$Lightning.createComponent()でコンポーネントを生成、の3ステップが必要だよ！"
+        },
+        {
+          "n": 54,
+          "category": "",
+          "text": "次の Apex ステートメントがあるとします。\nアカウント myAccount = [アカウントから Id、名前を選択);\nSOQL クエリによって複数のアカウントが返された場合、何が起こりますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "変数 myaccount は自動的に List データ型にキャストされます。"
+            },
+            {
+              "key": "B",
+              "text": "未処理の例外がスローされ、コードが終了します。"
+            },
+            {
+              "key": "C",
+              "text": "クエリが失敗し、デバッグ ログにエラーが書き込まれます。"
+            },
+            {
+              "key": "D",
+              "text": "返された最初のアカウントは myAccount に割り当てられます。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "単一のsObject型の変数にSOQLクエリの結果を代入するとき、返ってきた行が2件以上あると「List has more than 1 row for assignment to SObject」という例外が発生してコードが止まっちゃうよ！"
+        },
+        {
+          "n": 55,
+          "category": "",
+          "text": "開発者が組織内でテストを実行する 2 つの方法は何ですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "ツール API"
+            },
+            {
+              "key": "B",
+              "text": "メタデータ API"
+            },
+            {
+              "key": "C",
+              "text": "バルクAPI"
+            },
+            {
+              "key": "D",
+              "text": "開発者コンソール"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "組織内でApexテストを実行する方法は、Tooling API経由で実行するか、Developer Consoleから直接実行するかの2パターンが定番！Metadata APIはデプロイ時にテストを走らせる仕組み、Bulk APIはデータロード用のAPIだから、テスト実行そのものの手段としては当てはまらないよ。"
+        },
+        {
+          "n": 56,
+          "category": "",
+          "text": "開発者が、キュー可能インターフェースを実装するクラスのキューに入れられたジョブのステータスを取得できる 2 つの方法は何ですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apexステータスページを表示する"
+            },
+            {
+              "key": "B",
+              "text": "Apexジョブページを表示する"
+            },
+            {
+              "key": "C",
+              "text": "AsyncApexJobオブジェクトをクエリする"
+            },
+            {
+              "key": "D",
+              "text": "Apex Flex キューを表示する"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "Queueableインターフェースを実装したジョブの状況は、設定の「Apexジョブ」ページで確認するか、AsyncApexJobオブジェクトをSOQLでクエリして調べられるよ！"
+        },
+        {
+          "n": 57,
+          "category": "",
+          "text": "AW Computing の開発者は、カスタム オブジェクト Pricing Structure c 内に保存されたレコードを活用するプログラムによるカスタマイズをサポートするテスト クラスを作成するように求められています。AW Computing では、ストアの各アイテムに対して 500 を超えるレコードにわたる複雑な価格設定構造を持っています。\nテスト クラスの実行時に Pricing _Structure__c レコードが利用可能であることを保証するために、開発者が使用できる 2 つのアプローチはどれですか。\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Test Date Factory クラスを使用します。"
+            },
+            {
+              "key": "B",
+              "text": "@TsTest (SeeAllData=true) アノテーションを使用します。"
+            },
+            {
+              "key": "C",
+              "text": "Test.leadteat{) メソッドを使用します。"
+            },
+            {
+              "key": "D",
+              "text": "クラス宣言で共有せずに使用します。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "500件超の複雑な価格設定データをテストで使いたいときは、テストデータファクトリクラスでコードから組み立てるか、Test.loadData()と静的リソース（CSV）を使って事前に用意したデータを読み込むのが定番！@isTest(SeeAllData=true)で実データに依存するのはベストプラクティスに反するからNGだよ。"
+        },
+        {
+          "n": 58,
+          "category": "",
+          "text": "開発者は、失注理由が空白の場合、営業マネージャー プロファイルを持つユーザー以外のユーザーが商談ステータスを「クローズ済み失注」に変更できないようにする必要があります。\nどの自動化によって、開発者はこの要件を最も効率的に満たすことができますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Opportunity オブジェクトの Apex トリガー"
+            },
+            {
+              "key": "B",
+              "text": "Opportunity の検証ルールのエラー条件式"
+            },
+            {
+              "key": "C",
+              "text": "Opportunityオブジェクトのレコードトリガーフロー"
+            },
+            {
+              "key": "D",
+              "text": "商談オブジェクトの承認プロセス"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "「特定プロファイル以外は失注理由が空だとClosed Lostにできない」というシンプルな条件チェックは、検証ルールのエラー条件式でサクッと実装するのが一番効率的だよ！"
+        },
+        {
+          "n": 59,
+          "category": "",
+          "text": "Universal Containers (UC) は、注文と注文明細項目の間にマスター詳細関係を持つ、すぐに使用できる注文管理を使用します。\nUC は各注文明細項目の入手可能日を保存し、すべての注文明細項目が入手可能な場合にのみ注文が発送されます。\n注文の予想出荷日を計算するにはどの方法を使用すればよいですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "最新の利用可能日フィールドごとに 2 つの LATEST 数式を使用します。"
+            },
+            {
+              "key": "B",
+              "text": "最新の利用可能日フィールドごとに CEILING 数式を使用します。"
+            },
+            {
+              "key": "C",
+              "text": "注文の可用性日付フィールドと COUNT ロールアップ サマリー フィールドのそれぞれに @ DAYS 数式を使用します。"
+            },
+            {
+              "key": "D",
+              "text": "最新の利用可能日フィールドで MAX ロールアップ サマリー フィールドを使用します。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "すべての注文明細が揃ってから出荷できるということは、出荷予定日＝各明細の入手可能日の中で「一番遅い日」になるよ！だから各明細の入手可能日フィールドに対してMAXのロールアップサマリーフィールドを注文側に作るのが正解！"
+        },
+        {
+          "n": 60,
+          "category": "",
+          "text": "Universal Containers (UC) は、Vendor と呼ばれるカスタム オブジェクトを使用します。Vendor カスタム オブジェクトは、標準の Account オブジェクトとマスター詳細関係を持ちます。\n社内での議論に基づいて、UC 管理者はマスター詳細関係を参照関係に変更しようとしましたが、変更できませんでした。\nこの変更が許可されなかった理由として考えられるものは何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "一部のベンダー レコードのアカウント フィールドに null が含まれています。"
+            },
+            {
+              "key": "B",
+              "text": "アカウント オブジェクトには、ベンダー オブジェクトのロールアップ サマリー フィールドがあります。"
+            },
+            {
+              "key": "C",
+              "text": "アカウント オブジェクトでは、カスタム フィールドのフィールド タイプを変更できません。"
+            },
+            {
+              "key": "D",
+              "text": "ベンダー オブジェクトの組織全体のデフォルトは、パブリック読み取り/書き込みです。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "マスター詳細関係を参照関係に変更できないのは、その関係を前提にしたロールアップサマリーフィールドが存在しているから！ロールアップサマリーはマスター詳細関係がないと成立しないので、先にロールアップサマリーを削除しない限り変更できないんだ。"
+        },
+        {
+          "n": 61,
+          "category": "",
+          "text": "Universal Containers は、Salesforce 組織内のすべてのデータと添付ファイルを月に 1 回バックアップしたいと考えています。\nこの要件を満たすために開発者はどのアプローチを使用すべきでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "レポートをスケジュールします。"
+            },
+            {
+              "key": "B",
+              "text": "データローダーのコマンドラインを使用します。"
+            },
+            {
+              "key": "C",
+              "text": "データ エクスポートのスケジュールされたジョブを定義します。"
+            },
+            {
+              "key": "D",
+              "text": "スケジュール可能な Apex クラスを作成します。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "組織のデータと添付ファイルを定期的にバックアップしたいなら、設定の「データ書き出し」でスケジュールされたエクスポートジョブを組むのが標準的な方法だよ！"
+        },
+        {
+          "n": 62,
+          "category": "",
+          "text": "経営陣は、年間売上高が100万ドルを超える取引先に対して商談を自動的に作成するよう依頼しました。開発者は、この要件を満たすために、取引先オブジェクトに次のトリガを作成しました。\nfor (Account a : Trigger.new) {\nif (a.AnnualRevenue > 1000000) {\nList<Opportunity> oppList = [SELECT Id FROM Opportunity WHERE AccountId = :a.Id]; if (oppList.size() == 0) { Opportunity oppty = new Opportunity(Name = a.Name, StageName = 'Prospecting', CloseDate = System.\ntoday().addDays(30));\ninsert oppty;\n}\n}\n}\nユーザーはUIから取引先レコードを更新でき、年間売上高の高い取引先向けに作成された商談を確認できます。しかし、管理者がデータローダーを使用して179件の取引先リストをアップロードしようとすると、システム例外エラーが発生し、アップロードに失敗します。\n上記のコード セグメントを修正するために開発者が実行する必要がある 2 つのアクションはどれですか。\n2つの答えを選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "for ループの外側にある既存の商談をクエリします。"
+            },
+            {
+              "key": "B",
+              "text": "作成時に商談のすべての必須フィールドが追加されているかどうかを確認します。"
+            },
+            {
+              "key": "C",
+              "text": "機会を保存する DML を for ループの外側に移動します。"
+            },
+            {
+              "key": "D",
+              "text": "データベース クエリを使用して機会を照会します。"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "forループの中でSOQLクエリとDMLを両方実行してるのがアウト！大量データだとSOQL発行数やDML文数の制限にすぐ引っかかっちゃう。既存商談のクエリをループの外に出して、商談を保存するDML（insert）もループの外にまとめて移動する（バルク化）のが正しい修正方法だよ。"
+        },
+        {
+          "n": 63,
+          "category": "",
+          "text": "変更セット展開の 3 つの特徴は何ですか?\n3 つの回答を選択してください。2 つの組織間で変更セットを送信するには、デプロイメント接続が必要です。",
+          "options": [
+            {
+              "key": "A",
+              "text": "変更セットはカスタム設定データを展開できます。"
+            },
+            {
+              "key": "B",
+              "text": "変更セットは関連する組織間でのみ使用できます。"
+            },
+            {
+              "key": "C",
+              "text": "デプロイメントは一方向の単一トランザクションで実行されます。"
+            },
+            {
+              "key": "D",
+              "text": "2 つの組織間で変更セットを送信するには、デプロイメント接続が必要です。"
+            },
+            {
+              "key": "E",
+              "text": "変更セットを使用してレコードを転送できます。"
+            }
+          ],
+          "answer": [
+            "B",
+            "C",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "チェンジセットは、デプロイメント接続でつながった関連組織間でしか使えなくて（B・D）、デプロイは一方向の単一トランザクションとして実行されるよ（C）。データ（レコード）そのものやカスタム設定のデータは移送できず、あくまでメタデータの移送手段だから注意！"
+        },
+        {
+          "n": 64,
+          "category": "",
+          "text": "Universal Containers は、新しい Salesforce アプリケーションを構築するために、完全に宣言型の開発を使用することを決定しました。\nこのアプリケーションのビジネス ロジック レイヤーを構築するために使用できる 2 つのオプションはどれですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "レコードトリガーフロー"
+            },
+            {
+              "key": "B",
+              "text": "バッチジョブ"
+            },
+            {
+              "key": "C",
+              "text": "リモートアクション"
+            },
+            {
+              "key": "D",
+              "text": "検証ルール"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "完全に宣言型（ノーコード）でビジネスロジック層を組みたいなら、レコードトリガーフローと検証ルールの2つが選択肢！バッチジョブやリモートアクションはApexコードが必要になるから、宣言型縛りの要件には合わないよ。"
+        },
+        {
+          "n": 65,
+          "category": "",
+          "text": "Universal Containers には、注文番号を使用して顧客とサービス エージェントの注文を識別する注文システムがあります。注文レコードは Salesforce にインポートされます。\nSalesforce で注文番号フィールドをどのように定義すればよいですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "間接ロックアップ"
+            },
+            {
+              "key": "B",
+              "text": "直接検索"
+            },
+            {
+              "key": "C",
+              "text": "外部IDと一意"
+            },
+            {
+              "key": "D",
+              "text": "検索"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "外部システムの注文番号でレコードを一意に識別・マッチングしたいから、その項目は「外部ID」かつ「一意」として定義するのが正解！これでupsert時に自動的にマッチングしてくれるよ。"
+        },
+        {
+          "n": 66,
+          "category": "",
+          "text": "開発者は Visualforce ページを Lightning Web コンポーネントに移行しています。\nVisualforce ページには、単一のレコードに関する情報が表示されます。開発者は、レコード データにアクセスするために Lightning Data Service を使用することにしました。\n開発者はどのようなセキュリティ上の考慮事項に注意する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Lightning データ サービスはフィールド レベルのセキュリティを無視します。"
+            },
+            {
+              "key": "B",
+              "text": "共有ルールを適用するには、with sharing キーワードを使用する必要があります。"
+            },
+            {
+              "key": "C",
+              "text": "Lightning データサービスは共有ルールとフィールドレベルのセキュリティを処理します。"
+            },
+            {
+              "key": "D",
+              "text": "フィールドレベルのアクセス チェックには、isAccessible () メソッドを使用する必要があります。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "Lightning Data Serviceは、共有ルールと項目レベルセキュリティの両方を自動的に守ってくれるのが大きなポイント！生のSOQLやApexだと自分でwith sharingやWITH SECURITY_ENFORCEDを書く必要があるけど、LDSならその手間がいらないんだ。"
+        },
+        {
+          "n": 67,
+          "category": "",
+          "text": "Aura アプリケーション イベントは従来のパブリッシュ/サブスクライブ モデルに従うため、イベントを起動するにはどの方法が使用されますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "発射()"
+            },
+            {
+              "key": "B",
+              "text": "セグメントイベント (}"
+            },
+            {
+              "key": "C",
+              "text": "ファイアイベント()"
+            },
+            {
+              "key": "D",
+              "text": "出力()"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "Auraのアプリケーションイベントを発火させるには、イベントオブジェクトの.fire()メソッドを呼ぶよ！$A.get(\"e.c:イベント名\")でイベントを取得して、.fire()で発火させるのが基本パターン。"
+        },
+        {
+          "n": 68,
+          "category": "",
+          "text": "開発者は Salesforce プラットフォーム上で新しいアプリケーションを設計しており、複数のテナントを効果的にサポートできることを確認したいと考えています。\nスケーラビリティと保守性を確保するために、開発者はどの設計フレームワークを考慮する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "ウォーターフォールモデル"
+            },
+            {
+              "key": "B",
+              "text": "Flux (ビュー、アクション、ディスパッチャ、ストア)"
+            },
+            {
+              "key": "C",
+              "text": "モデル・ビュー・コントローラ (MVC)"
+            },
+            {
+              "key": "D",
+              "text": "アジャイル開発"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "スケーラビリティと保守性を意識してアプリを設計するなら、View・Controller・Modelを分離するMVC（モデル・ビュー・コントローラ）設計パターンを意識するのが基本だよ！"
+        },
+        {
+          "n": 69,
+          "category": "",
+          "text": "開発者は、Apex クラス内のメソッドをインポートする Lightning Web コンポーネントを作成します。検証ボタンが押されると、メソッドが実行され、複雑な検証が実行されます。\nこの実装シナリオでは、MVC アーキテクチャに従ってコントローラーにどの 2 つのオプションがありますか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "HTML ファイル"
+            },
+            {
+              "key": "B",
+              "text": "Apexクラス"
+            },
+            {
+              "key": "C",
+              "text": "JavaScript ファイル"
+            },
+            {
+              "key": "D",
+              "text": "XMLファイル"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "LWCをMVCで捉えると、View＝HTMLファイル、Controller＝JavaScriptファイルとインポートしたApexクラス、という役割分担になるよ！複雑な検証をApexクラスに任せて、JSファイルがその呼び出しを制御する、という2つがコントローラー役だね。"
+        },
+        {
+          "n": 70,
+          "category": "",
+          "text": "開発者は、連絡先情報を収集するためのカスタム Lightning Web コンポーネントを構築するタスクを負っています。\nフォームは組織内のさまざまなタイプのユーザー間で共有されます。特定のフィールドのみが特定のユーザー グループによって編集および表示できるようにするというセキュリティ要件があります。\nセキュリティ要件をサポートするために、開発者は Lightning Web コンポーネントで何を使用すればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "オーラ入力失敗"
+            },
+            {
+              "key": "B",
+              "text": "強制入力に失敗しました"
+            },
+            {
+              "key": "C",
+              "text": "UI入力に失敗しました"
+            },
+            {
+              "key": "D",
+              "text": "雷入力失敗"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "LWCで項目レベルセキュリティを自動的に尊重してくれる入力コンポーネントは lightning-input-field（lightning-record-edit-form内で使う）だよ！ユーザーの権限に応じて自動的に編集可・不可・非表示が切り替わるんだ。"
+        },
+        {
+          "n": 71,
+          "category": "",
+          "text": "開発者は、レコードが特定の条件を満たしたときに送信メッセージを送信したいと考えています。\nこのユースケースを満たす 2 つの機能はどれですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Flow Builder を使用して、レコード条件を確認し、送信メッセージを送信できます。"
+            },
+            {
+              "key": "B",
+              "text": "承認プロセスを使用すると、レコードの条件を確認し、Apex コードなしで送信メッセージを送信できます。"
+            },
+            {
+              "key": "C",
+              "text": "エンタイトルメントプロセスを使用すると、レコード条件を確認し、Apex コードなしで送信メッセージを送信できます。"
+            },
+            {
+              "key": "D",
+              "text": "次善のアクションを使用して、レコード条件を確認し、送信メッセージを送信できます。"
+            }
+          ],
+          "answer": [
+            "A",
+            "B"
+          ],
+          "multi": true,
+          "explanation": "条件を満たしたら送信メッセージ（Outbound Message）を送るのは、Flow BuilderのアクションからでもApexコード無しで組めるし、承認プロセスのアクションとしても設定できるよ！エンタイトルメントプロセスやNext Best Actionは別の用途の機能だから当てはまらないよ。"
+        },
+        {
+          "n": 72,
+          "category": "",
+          "text": "Universal Containers (UC) は、営業チーム向けに、すべての営業担当者が獲得した新規顧客ごとにスクリプト化された一連の手順を実行することを要求するプロセスを開発しています。\n情報収集の最初のステップでは、REST エンドポイントを介して UC の ERP システムをチェックし、顧客が存在するかどうかを確認する必要があります。顧客が存在する場合は、そのデータを Salesforce の営業担当者に提示する必要があります。\n要件を満たすために開発者が実装する必要がある 2 つはどれですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "フロー"
+            },
+            {
+              "key": "B",
+              "text": "呼び出し可能なメソッド"
+            },
+            {
+              "key": "C",
+              "text": "将来のメソッド"
+            },
+            {
+              "key": "D",
+              "text": "トリガー"
+            }
+          ],
+          "answer": [
+            "A",
+            "B"
+          ],
+          "multi": true,
+          "explanation": "FlowはHTTP RESTコールアウトを直接実行できないから、コールアウトを行う呼び出し可能メソッド（Invocable Apexメソッド）を作って、それをフローから呼び出す構成が必要！フローがその結果を営業担当者にその場で提示する役割も担うよ。将来メソッドは結果を同期的に返せないから、この「その場で結果を見せたい」要件には向かないんだ。"
+        },
+        {
+          "n": 73,
+          "category": "",
+          "text": "クレジットカード会社は、サービス エージェントが破損または盗難にあったクレジットカードを処理するための機能を実装する必要があります。顧客からの電話を受けた場合、サービス エージェントは多くの情報を収集する必要があります。この機能を実装するタスクは開発者に課せられます。\nこの要件を最も効率的に満たすために、開発者は何を使用すべきでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "画面ベースのフロー"
+            },
+            {
+              "key": "B",
+              "text": "承認プロセス"
+            },
+            {
+              "key": "C",
+              "text": "Apexトリガー"
+            },
+            {
+              "key": "D",
+              "text": "Lightning コンポーネント"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "電話しながら順番に必要な情報をヒアリングしていく、という業務には画面ベースのフロー（Screen Flow）がぴったり！ノーコードでガイド付きの入力画面を組めるよ。"
+        },
+        {
+          "n": 74,
+          "category": "",
+          "text": "コードが実行されると、DML 例外がスローされます。\n例外が適切に処理されるようにするには、開発者はどのようにコードを変更すればよいでしょうか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "アップセット DML ステートメントを実装します。"
+            },
+            {
+              "key": "B",
+              "text": "変更データキャプチャを実装します。"
+            },
+            {
+              "key": "C",
+              "text": "DML の try/catch ブロックを実装します。"
+            },
+            {
+              "key": "D",
+              "text": "アカウントのリストから null 項目を削除します。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "DML例外がスローされて未処理のまま落ちてしまうコードは、DML文を try/catch ブロックで囲んで例外を適切にハンドリングするのが基本的な直し方だよ！"
+        },
+        {
+          "n": 75,
+          "category": "",
+          "text": "Aura コンポーネント内のどの 3 つのリソースに JavaScript 関数を含めることができますか?\n3つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "スタイル"
+            },
+            {
+              "key": "B",
+              "text": "レンダラー"
+            },
+            {
+              "key": "C",
+              "text": "コントローラー"
+            },
+            {
+              "key": "D",
+              "text": "デザイン"
+            },
+            {
+              "key": "E",
+              "text": "ヘルパー"
+            }
+          ],
+          "answer": [
+            "B",
+            "C",
+            "E"
+          ],
+          "multi": true,
+          "explanation": "AuraコンポーネントバンドルでJavaScriptの関数が書けるリソースは、コントローラー・ヘルパー・レンダラーの3つ！スタイル（CSS）とデザイン（設計時プロパティのXML）にはJavaScriptは書けないよ。"
+        },
+        {
+          "n": 76,
+          "category": "",
+          "text": "開発者は、大量のレコードを更新するためにバッチ Apex ジョブを作成し、ジョブがタイムアウトして完了しないというレポートを受け取ります。\n問題のトラブルシューティングに向けた最初のステップは何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "ジョブのステータスとログを表示するには、非同期ジョブ監視ページを確認します。"
+            },
+            {
+              "key": "B",
+              "text": "バッチジョブのデバッグログを確認します。"
+            },
+            {
+              "key": "C",
+              "text": "バッチ ジョブを無効にして、レコード数を減らして再作成します。"
+            },
+            {
+              "key": "D",
+              "text": "バッチ サイズを小さくして、システムの負荷を軽減します。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "バッチApexがタイムアウトして終わらないときの最初のステップは、まず非同期ジョブの状況を確認できる「Apexジョブ」ページでステータスやエラーを見ること！原因が分かってから、バッチサイズを調整するなどの対処に進むのが正しい順番だよ。"
+        },
+        {
+          "n": 77,
+          "category": "",
+          "text": "以下のコンポーネント コードを参照してください。\n```html\n<lightning:layout multipleRows=\"true\">\n  <lightning:layoutItem size=\"12\">{!v.account.Name}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\">{!v.account.AccountNumber}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```\n要件：\n* モバイル デバイスの場合、情報は 3 行に表示される。\n* デスクトップとタブレットの場合、情報は 1 行に表示される。\n\n要件2が期待どおりに表示されません。デスクトップとタブレットの要件を満たす正しいコンポーネント コードはどれですか。",
+          "options": [
+            {
+              "key": "A",
+              "text": "```html\n<lightning:layout multipleRows=\"true\">\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
+            },
+            {
+              "key": "B",
+              "text": "```html\n<lightning:layout multipleRows=\"true\">\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" largeDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" largeDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
+            },
+            {
+              "key": "C",
+              "text": "```html\n<lightning:layout multipleRows=\"true\">\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.Name}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.AccountNumber}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
+            },
+            {
+              "key": "D",
+              "text": "```html\n<lightning:layout multipleRows=\"true\">\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.Name}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.AccountNumber}</lightning:layoutItem>\n  <lightning:layoutItem size=\"12\" mediumDeviceSize=\"6\" largeDeviceSize=\"4\">{!v.account.Industry}</lightning:layoutItem>\n</lightning:layout>\n```"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "lightning:layoutItemはブレークポイントの指定を省略すると、より小さいブレークポイントの値を引き継ぐ仕組みになってるよ！mediumDeviceSize=\"4\"を指定すればタブレット幅で3項目×4=12（1行）に収まり、largeDeviceSize未指定でもそのまま4が引き継がれてデスクトップでも1行になるんだ。"
+        },
+        {
+          "n": 78,
+          "category": "",
+          "text": "開発者がバッチメソッドまたは将来のメソッドのステータスに関する情報を見つけることができる 2 つの場所はどこですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "Apex Flex キュー"
+            },
+            {
+              "key": "B",
+              "text": "開発者コンソール"
+            },
+            {
+              "key": "C",
+              "text": "Apexジョブ"
+            },
+            {
+              "key": "D",
+              "text": "一時停止中のフローインタビューコンポーネント"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ],
+          "multi": true,
+          "explanation": "バッチApexや将来メソッドの状況は、実行待ちが見える「Apex Flexキュー」か、実行状況全体が見える「Apexジョブ」ページで確認できるよ！"
+        },
+        {
+          "n": 79,
+          "category": "",
+          "text": "開発者は、Apex クラスを作成する際に、開発中のすべての機能が要件で指定されたとおりに処理されることを確認したいと考えています。\nApex クラスが仕様どおりに動作していることを確認するには、開発者はどのアプローチを使用する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "セーブポイントと pacabase.rollback() を含めます。"
+            },
+            {
+              "key": "B",
+              "text": "Apex クラスに try/catch ブロックを含めます。"
+            },
+            {
+              "key": "C",
+              "text": "開発者コンソールの Execute Anonymous ブロックでコードを実行します。"
+            },
+            {
+              "key": "D",
+              "text": "ビジネス ロジックを実行するテスト クラスを作成し、開発者コンソールでテストを実行します。"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "要件どおりに動くことをきちんと確認したいなら、その場限りの匿名実行じゃなくて、ビジネスロジックを検証するテストクラスをちゃんと書いて、Developer Consoleでテストを実行するのが専門的なやり方だよ！"
+        },
+        {
+          "n": 80,
+          "category": "",
+          "text": "Universal Containers (UC) は、配送プロセスを効率化しながら配送コストを削減したいと考えています。配送担当者は、複数のアカウントがデフォルトの集荷先住所を共有できるようにグローバル アドレスを実装するよう UC にアドバイスします。開発者は、このビジネス要件をサポートするオブジェクトと関係を作成する任務を負っており、セットアップ メニューを使用して「グローバル アドレス」というカスタム オブジェクトを作成します。\nビジネスニーズをサポートする最も効率的なモデルを作成するには、開発者はどのフィールドを追加する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "グローバル アドレス オブジェクトのマスター詳細フィールドをアカウント オブジェクトに追加します。"
+            },
+            {
+              "key": "B",
+              "text": "グローバル アドレス オブジェクトの参照フィールドをアカウント オブジェクトに追加します。"
+            },
+            {
+              "key": "C",
+              "text": "アカウント オブジェクトの参照フィールドをグローバル アドレス オブジェクトに追加します。"
+            },
+            {
+              "key": "D",
+              "text": "アカウント オブジェクトのマスター詳細フィールドをグローバル アドレス オブジェクトに追加します。"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "複数のAccountが1つのGlobal Addressを共有できるようにしたいなら、Account側にGlobal Addressへの参照（Lookup）フィールドを追加するのが正解！マスター詳細だと1つのGlobal Addressが1つのAccountにしか属せなくなっちゃうから、「複数のAccountで共有」という要件に合わないよ。"
+        },
+        {
+          "n": 81,
+          "category": "",
+          "text": "ユーザーがアカウントの郵便番号を編集する場合、「タイムゾーン」という名前のカスタム アカウント テキスト フィールドを、PostalCodeToTimezone__c カスタム オブジェクトの値に基づいて更新する必要があります。\nこの機能を実装するために使用できる自動化ツールはどれですか? 2 つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "クイックアクション"
+            },
+            {
+              "key": "B",
+              "text": "承認プロセス"
+            },
+            {
+              "key": "C",
+              "text": "アカウントトリガー"
+            },
+            {
+              "key": "D",
+              "text": "高速フィールド更新レコードトリガーフロー"
+            }
+          ],
+          "answer": [
+            "C",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "別オブジェクトの値を見て保存時にテキスト項目を更新するなら、Apexトリガー（プログラム的な手段）か、高速フィールド更新に対応したレコードトリガーフロー（保存前フロー）の2つが実装手段として使えるよ！"
+        },
+        {
+          "n": 82,
+          "category": "",
+          "text": "サンドボックスで作業中に、テスト ランナーで Apex テストを実行すると失敗します。ただし、匿名実行ウィンドウで Apex ロジックを実行すると、例外やエラーは発生せず成功します。\nメソッドがサンドボックス テスト フレームワークでは失敗したのに、開発者コンソールでは成功したのはなぜですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "テスト メソッドは、特定のユーザーとして実行するために system.runAs を使用しません。"
+            },
+            {
+              "key": "B",
+              "text": "テスト メソッドは @future メソッドを呼び出しています。"
+            },
+            {
+              "key": "C",
+              "text": "テスト メソッドはサンドボックス内の既存のデータに依存します。"
+            },
+            {
+              "key": "D",
+              "text": "テスト メソッドのコードに構文エラーがあります。"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "ApexのテストメソッドはSeeAllData=trueを付けない限り、サンドボックス内の既存データを見ることができないよ！だから既存データに依存したロジックは、匿名実行（実データが見える）では成功しても、テストメソッド（実データが見えない）では失敗しちゃうんだ。"
+        },
+        {
+          "n": 83,
+          "category": "",
+          "text": "他のレコードの挿入に失敗した場合に、レコード リスト内の一部のレコードを挿入できるようにするには、どのステートメントを使用する必要がありますか。",
+          "options": [
+            {
+              "key": "A",
+              "text": "データベース。レコードを挿入(true)"
+            },
+            {
+              "key": "B",
+              "text": "レコードを挿入する"
+            },
+            {
+              "key": "C",
+              "text": "レコードを挿入 (false)"
+            },
+            {
+              "key": "D",
+              "text": "データベース。レコードを挿入します (false)"
+            }
+          ],
+          "answer": [
+            "D"
+          ],
+          "multi": false,
+          "explanation": "一部のレコードが失敗しても、成功したレコードだけは登録したい（部分的な成功を許す）ときは、Database.insert(レコードリスト, false) のようにallOrNoneをfalseにして呼ぶのが正解！通常のinsert文やallOrNone=trueだと、1件でも失敗すると全部ロールバックされちゃうよ。"
+        },
+        {
+          "n": 84,
+          "category": "",
+          "text": "Universal Containers は、個人に関する情報を保存する Applicant オブジェクトと、仕事を表す Job オブジェクトを備えた採用アプリを構築しています。各応募者は複数の仕事に応募できます。\n応募者が求人に応募したことを表すために、開発者は何を実装する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "応募者と求人の間のジャンクションオブジェクト"
+            },
+            {
+              "key": "B",
+              "text": "応募者から求人への参照フィールド"
+            },
+            {
+              "key": "C",
+              "text": "応募者から求人へのマスター詳細フィールド"
+            },
+            {
+              "key": "D",
+              "text": "求人情報を参照する応募者の数式フィールド"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "1人の応募者が複数の求人に応募できる（多対多の関係）なら、ApplicantとJobの間にジャンクションオブジェクトを作るのが正しいデータモデルだよ！"
+        },
+        {
+          "n": 85,
+          "category": "",
+          "text": "開発者は、更新前イベントでアカウント オブジェクトにトリガーを記述し、カウント フィールドを増分します。レコード トリガー フローも、アカウントが作成または更新されるたびにカウント フィールドを増分します。\nアカウントに他の自動化ロジックが実装されていないと仮定して、初期値ゼロでアカウントが挿入された場合、カウント フィールドの値は何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "4"
+            },
+            {
+              "key": "B",
+              "text": "2"
+            },
+            {
+              "key": "C",
+              "text": "1"
+            },
+            {
+              "key": "D",
+              "text": "3"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "「更新前」イベントのトリガーは挿入（insert）では発火しないよ！だから新規挿入時にCountを増やせるのはレコードトリガーフロー側だけ。初期値0からスタートして挿入時にフローが1回カウントアップするから、最終的な値は1になるよ。"
+        },
+        {
+          "n": 86,
+          "category": "",
+          "text": "Lightning Web コンポーネントのカスタムイベントに当てはまる 2 つの特性はどれですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "@wire で装飾されたプロパティを使用して、カスタム イベントのペイロードでデータを渡すことができます。"
+            },
+            {
+              "key": "B",
+              "text": "データは、detail というプロパティを使用してカスタム イベントのペイロードに渡される場合があります。"
+            },
+            {
+              "key": "C",
+              "text": "デフォルトでは、カスタム イベントは、その直下のコンテナーと直下の子コンポーネントにのみ伝播します。"
+            },
+            {
+              "key": "D",
+              "text": "デフォルトでは、カスタム イベントはその直下のコンテナーにのみ伝播します。"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "LWCのカスタムイベントは detail というプロパティを使ってペイロード（データ）を渡すのが基本！そしてデフォルトでは、イベントは発行元の直下のコンテナ（リスナーを登録している親）までしか伝わらない（バブリングしない）よ。@wireプロパティはデータ取得用の仕組みで、イベントのペイロードとは別物だから、Aは誤りだよ。"
+        },
+        {
+          "n": 87,
+          "category": "",
+          "text": "Aura コンポーネントで JavaScript リソースをロードするときの <ltng: require> タグの 3 つの機能は何ですか?\n3つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "重複スクリプトの1回限りの読み込み"
+            },
+            {
+              "key": "B",
+              "text": "スクリプトを並列に読み込む"
+            },
+            {
+              "key": "C",
+              "text": "ドキュメントからファイルを読み込む"
+            },
+            {
+              "key": "D",
+              "text": "読み込み順序の指定"
+            },
+            {
+              "key": "E",
+              "text": "外部でホストされているスクリプトをロードしています"
+            }
+          ],
+          "answer": [
+            "A",
+            "D",
+            "E"
+          ],
+          "multi": true,
+          "explanation": "<ltng:require>タグは、同じスクリプトが複数箇所から要求されても1回だけ読み込む（重複防止）、依存関係がある場合に読み込み順序を指定できる、CSPで許可された外部ホストのスクリプトも読み込める、という3つの機能を持つよ！"
+        },
+        {
+          "n": 88,
+          "category": "",
+          "text": "（質問全文）\nVisualforce ページの内容を PDF として表示するコードはどれですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "<apex:page renderAs=\"application/pdf\">"
+            },
+            {
+              "key": "B",
+              "text": "<apex:page renderAs=\"pdf\">"
+            },
+            {
+              "key": "C",
+              "text": "<apex:page contentType=\"application/pdf\">"
+            },
+            {
+              "key": "D",
+              "text": "<apex:page contentType=\"pdf\">"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "VisualforceページをPDFとして表示したいときは <apex:page renderAs=\"pdf\"> と書くのが正解！contentTypeはブラウザに返すMIMEタイプの指定で、PDF変換そのものを行うのはrenderAs属性だよ。"
+        },
+        {
+          "n": 89,
+          "category": "",
+          "text": "Universal Containers は、マーケティング部門向けに新しい Lightning Web コンポーネントを開発しています。同社は、コンポーネントが微調整され、シームレスなユーザー エクスペリエンスが提供されることを確認したいと考えています。\nLightning コンポーネント フレームワークを使用する利点は何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "クライアント側レンダリングによるパフォーマンスの向上"
+            },
+            {
+              "key": "B",
+              "text": "アクセシビリティ標準の自動サポート"
+            },
+            {
+              "key": "C",
+              "text": "すべてのウェブブラウザとの互換性"
+            },
+            {
+              "key": "D",
+              "text": "サードパーティのライブラリとの簡単な統合"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "Lightningコンポーネントフレームワークを使うメリットとして公式にうたわれているのが、アクセシビリティ標準（WCAGなど）への対応がベースコンポーネントで自動的にサポートされること！開発者がゼロから対応を作り込まなくていいんだ。"
+        },
+        {
+          "n": 90,
+          "category": "",
+          "text": "開発者は、OpportunityLineltem トリガーをカバーするテスト クラスを作成しながら、組織内の標準価格表にアクセスしたいと考えています。\nどの方法で価格表にアクセスできますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "Test .getStandardPricebookid() を使用して標準価格表 ID を取得します。"
+            },
+            {
+              "key": "B",
+              "text": "@isTest [SeeAllData=true|] を使用して、既存の標準価格表を削除します。"
+            },
+            {
+              "key": "C",
+              "text": "@Testvisible を使用して、テスト メソッドが標準価格表を表示できるようにします。"
+            },
+            {
+              "key": "D",
+              "text": "Test.loadData() と静的リソースを使用して標準価格表を読み込みます。"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "テストクラスから標準価格表のIDを取得したいときは、Test.getStandardPricebookId()を使うのが正解！これでOpportunityLineItemのテストで標準価格表を安全に参照できるよ。"
+        },
+        {
+          "n": 91,
+          "category": "",
+          "text": "多くの開発者のチームが、本番組織と同じ構成を持つ独自の組織で作業します。\nこのシナリオに最適な組織の種類はどれですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "開発者サンドボックス"
+            },
+            {
+              "key": "B",
+              "text": "フルサンドボックス"
+            },
+            {
+              "key": "C",
+              "text": "開発者エディション"
+            },
+            {
+              "key": "D",
+              "text": "パートナー開発者エディション"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "本番と同じ構成（メタデータ）を持つ自分専用の作業環境を、複数の開発者それぞれに用意したいなら、Developer サンドボックスがぴったり！データまでコピーするFull サンドボックスは1個だけ作る大掛かりな用途向けだよ。"
+        },
+        {
+          "n": 92,
+          "category": "",
+          "text": "開発者は、システムに特定の条件が存在する場合に、Request__c レコードの作成を防止する必要があります。\n条件をチェックする RequestLogic クラスが存在します。\n正しい実装は何ですか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "```apex\ntrigger RequestTrigger on Request__c (before insert) {\n  RequestLogic.validateRecords(Trigger.new);\n}\n```"
+            },
+            {
+              "key": "B",
+              "text": "```apex\ntrigger RequestTrigger on Request__c (before insert) {\n  RequestLogic.validateRecords(trigger.new);\n}\n```"
+            },
+            {
+              "key": "C",
+              "text": "```apex\ntrigger RequestTrigger on Request__c (before insert) {\n  for (Request__c req : Trigger.new) {\n    if (!RequestLogic.isValid(req)) {\n      req.addError('Your request cannot be created at this time.');\n    }\n  }\n}\n```"
+            },
+            {
+              "key": "D",
+              "text": "```apex\ntrigger RequestTrigger on Request__c (after insert) {\n  for (Request__c req : Trigger.new) {\n    if (!RequestLogic.isValid(req)) {\n      req.addError('Your request cannot be created at this time.');\n    }\n  }\n}\n```"
+            }
+          ],
+          "answer": [
+            "C"
+          ],
+          "multi": false,
+          "explanation": "addError()でレコードの作成をブロックできるのは before トリガーだけ！after insertだと、その時点でレコードはもう作成済みだからブロックできないんだ。だから before insert の中でRequestLogicの判定結果に応じてaddError()を呼ぶCが正解だよ。"
+        },
+        {
+          "n": 93,
+          "category": "",
+          "text": "Aura コンポーネントとアプリケーション イベントの処理に関するベスト プラクティスはどれですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "コンポーネント イベントではなく、アプリケーション イベントを使用するようにしてください。"
+            },
+            {
+              "key": "B",
+              "text": "ロジックをヘルパーに配置することで、コンポーネント バンドル内のイベント ロジックを再利用します。"
+            },
+            {
+              "key": "C",
+              "text": "コンポーネント イベントを使用して、アプリケーション レベルで処理する必要があるアクションを伝達します。"
+            },
+            {
+              "key": "D",
+              "text": "イベント ハンドラーで低レベルのイベントを処理し、高レベルのイベントとして再起動します。"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ],
+          "multi": true,
+          "explanation": "イベント処理のロジックはヘルパーに入れてコンポーネントバンドル内で再利用できるようにするのがベストプラクティス！また、細かい（低レベルな）イベントはハンドラーで受け止めて、より意味のある（高レベルな）イベントとして再発行する設計もおすすめだよ。逆にコンポーネントイベントで済むところをアプリケーションイベントにするのは過剰設計になりがちだから避けようね。"
+        },
+        {
+          "n": 94,
+          "category": "",
+          "text": "開発者は、システム内に存在する ContactSearch Apex クラスのセキュリティ レビューを実行するように指示されています。開発者は、クラス内で次のメソッドをセキュリティ上の脅威として特定しました。\n```apex\npublic List<Contact> performSearch(String lastName) {\n  return Database.query('SELECT Id, FirstName, LastName FROM Contact WHERE LastName LIKE \\'%' + lastName + '%\\'');\n}\n```\n開発者がメソッドを更新して SOQL インジェクション攻撃を防ぐ 2 つの方法は何ですか?\n2つの回答を選択してください",
+          "options": [
+            {
+              "key": "A",
+              "text": "変数バインディングを使用し、動的クエリを静的 SOQL に置き換えます。"
+            },
+            {
+              "key": "B",
+              "text": "パラメータを使用する前に、sacapeSingleQuotes メソッドを使用してパラメータをサニタイズします。"
+            },
+            {
+              "key": "C",
+              "text": "クラスで Readonly アノテーションと with sharing キーワードを使用します。"
+            },
+            {
+              "key": "D",
+              "text": "パラメータに正規表現を使用して特殊文字を削除します。"
+            }
+          ],
+          "answer": [
+            "A",
+            "B"
+          ],
+          "multi": true,
+          "explanation": "SOQLインジェクションを防ぐ王道の対策は、①変数バインド（:変数名）を使って動的クエリを安全な形にする、②String.escapeSingleQuotes()でユーザー入力をサニタイズしてから使う、の2つ！with sharingや正規表現での文字除去は、Salesforceが公式に推奨するSOQLインジェクション対策ではないよ。"
+        },
+        {
+          "n": 95,
+          "category": "",
+          "text": "アプリケーションを開発するメリットは何ですか",
+          "options": [
+            {
+              "key": "A",
+              "text": "強制的なユニットテストとコードカバレッジのベストプラクティス"
+            },
+            {
+              "key": "B",
+              "text": "定義済みのコンピューティング リソースへのアクセス"
+            },
+            {
+              "key": "C",
+              "text": "ビッグデータ用に事前設定されたストレージ"
+            },
+            {
+              "key": "D",
+              "text": "無制限の処理能力とメモリ"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "PaaS（Platform as a Service）のようなプラットフォーム上でアプリを開発する一番のメリットは、あらかじめ用意されたコンピューティングリソースにそのままアクセスできること！サーバー調達や基盤構築の手間がいらないんだ。"
+        },
+        {
+          "n": 96,
+          "category": "",
+          "text": "Universal Containers には、カスタム オブジェクト「エンジニアリング サポート c」を使用してユーザーがエンジニアリング チームにサポートをリクエストできるサポート プロセスがあります。\nユーザーは、複数のエンジニアリング サポート __c レコードを 1 つの商談レコードに関連付けることができる必要があります。さらに、エンジニアリング サポート __c レコードに関する集計情報が商談レコードに表示される必要があります。\nこれらの要件をサポートするには、どの関係フィールドを実装する必要がありますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "商談からエンジニアリングへの参照フィールド _support__c"
+            },
+            {
+              "key": "B",
+              "text": "エンジニアリング サポート__c から商談へのマスター詳細フィールド"
+            },
+            {
+              "key": "C",
+              "text": "商談からエンジニアリング サポートへのマスター詳細フィールド__c"
+            },
+            {
+              "key": "D",
+              "text": "エンジニアリング サポート __c から商談への参照フィールド"
+            }
+          ],
+          "answer": [
+            "B"
+          ],
+          "multi": false,
+          "explanation": "複数のEngineeringSupport__cを1つの商談にまとめつつ、商談側に集計情報（件数や合計など）を表示したいなら、ロールアップサマリーが使えるマスター詳細関係が必要！子であるEngineeringSupport__cから商談へのマスター詳細フィールドを作るのが正解だよ。"
+        },
+        {
+          "n": 97,
+          "category": "",
+          "text": "開発者がカスタム オブジェクトにトリガーを作成しました。このカスタム オブジェクトには、依存する選択リストもいくつかあります。\n実行ルールの順序によれば、どのステップが最初に実行されますか?",
+          "options": [
+            {
+              "key": "A",
+              "text": "元のレコードがデータベースから読み込まれます。"
+            },
+            {
+              "key": "B",
+              "text": "最大フィールド長に対してシステム検証が実行されます。"
+            },
+            {
+              "key": "C",
+              "text": "古い値は新しいレコード値で上書きされます。"
+            },
+            {
+              "key": "D",
+              "text": "JavaScript検証はブラウザで実行されます。\nSalesforce.PDI-JPN.v2025-07-19.q98"
+            }
+          ],
+          "answer": [
+            "A"
+          ],
+          "multi": false,
+          "explanation": "実行順序（Order of Execution）の一番最初のステップは、データベースから元のレコードを読み込むこと（新規レコードなら初期化）！そのあとに新しい値の上書き、システム検証、beforeトリガー…と続いていくよ。"
+        }
+      ]
     }
   ]
 }
